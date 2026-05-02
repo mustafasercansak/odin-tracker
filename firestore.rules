@@ -1,0 +1,71 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthed() {
+      return request.auth != null;
+    }
+
+    function isPetOwner(petId) {
+      return isAuthed() &&
+        get(/databases/$(database)/documents/pets/$(petId)).data.ownerId == request.auth.uid;
+    }
+
+    function hasSharedAccess(petId) {
+      return isAuthed() &&
+        exists(/databases/$(database)/documents/shared_access/$(petId + '_' + request.auth.uid));
+    }
+
+    function canReadPet(petId) {
+      return isPetOwner(petId) || hasSharedAccess(petId);
+    }
+
+    function getSharedRole(petId) {
+      return get(/databases/$(database)/documents/shared_access/$(petId + '_' + request.auth.uid)).data.role;
+    }
+
+    function canWritePet(petId) {
+      return isPetOwner(petId) ||
+        (hasSharedAccess(petId) && getSharedRole(petId) in ['editor', 'admin']);
+    }
+
+    // Users
+    match /users/{userId} {
+      allow read: if isAuthed();
+      allow write: if isAuthed() && request.auth.uid == userId;
+
+      match /usage/{doc} {
+        allow read, write: if isAuthed() && request.auth.uid == userId;
+      }
+    }
+
+    // Pets
+    match /pets/{petId} {
+      allow read: if canReadPet(petId);
+      allow create: if isAuthed();
+      allow update, delete: if canWritePet(petId);
+    }
+
+    // Health Records
+    match /health_records/{recordId} {
+      allow read: if canReadPet(resource.data.petId);
+      allow create: if isAuthed() && canWritePet(request.resource.data.petId);
+      allow update, delete: if canWritePet(resource.data.petId);
+    }
+
+    // Medications
+    match /medications/{medicationId} {
+      allow read: if canReadPet(resource.data.petId);
+      allow create: if isAuthed() && canWritePet(request.resource.data.petId);
+      allow update, delete: if canWritePet(resource.data.petId);
+    }
+
+    // Shared Access
+    match /shared_access/{docId} {
+      allow read: if isAuthed() &&
+        (resource.data.ownerId == request.auth.uid ||
+         resource.data.sharedWithUserId == request.auth.uid);
+      allow create, update, delete: if isPetOwner(resource.data.petId);
+    }
+  }
+}
