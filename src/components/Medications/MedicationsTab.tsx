@@ -1,13 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pill, Plus, Clock, CheckCircle2, AlertCircle, Calendar, ChevronDown, ChevronUp, Bell } from 'lucide-react';
+import { Pill, Plus, Clock, CheckCircle2, AlertCircle, Calendar, ChevronDown, ChevronUp, Bell, Trash2, Edit2 } from 'lucide-react';
 import { useMedications } from '@/hooks/queries/useMedications';
 import { useHealthRecords } from '@/hooks/queries/useHealthRecords';
+import { usePets } from '@/hooks/queries/usePets';
 import { useAppStore } from '@/store/useAppStore';
 import { calculateNextDose, isDoseOverdue } from '@/lib/medication-helpers';
 import { requestNotificationPermission } from '@/lib/messaging';
 import { useAuth } from '@/hooks/useAuth';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, isSameDay, isPast } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
 import toast from 'react-hot-toast';
 
@@ -18,9 +19,16 @@ interface MedicationsTabProps {
 export const MedicationsTab: React.FC<MedicationsTabProps> = ({ petId }) => {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
+  const { pets } = usePets();
+  const pet = pets.find(p => p.id === petId);
   const { medications, updateMedication, isLoading } = useMedications(petId);
   const { records, addRecord } = useHealthRecords(petId);
   const { setActiveModal } = useAppStore();
+
+  const canEdit = React.useMemo(() => {
+    if (!pet) return false;
+    return pet.role === 'owner' || pet.role === 'admin' || pet.role === 'editor';
+  }, [pet]);
   
   const [showPast, setShowPast] = React.useState(false);
   const [notifLoading, setNotifLoading] = React.useState(false);
@@ -45,6 +53,12 @@ export const MedicationsTab: React.FC<MedicationsTabProps> = ({ petId }) => {
 
   const activeMeds = medications.filter(m => m.active);
   const pastMeds = medications.filter(m => !m.active);
+  
+  const dueToday = activeMeds.filter(m => {
+    if (!m.nextDoseDue) return false;
+    const date = parseISO(m.nextDoseDue);
+    return isSameDay(date, new Date()) || isPast(date);
+  });
 
   const handleLogDose = async (med: any) => {
     try {
@@ -95,15 +109,63 @@ export const MedicationsTab: React.FC<MedicationsTabProps> = ({ petId }) => {
           >
             <Bell size={18} className={notifLoading ? 'animate-pulse' : ''} />
           </button>
-          <button 
-            onClick={() => setActiveModal('medication_add', { petId })}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-xl font-semibold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all"
-          >
-            <Plus size={18} />
-            <span>{t('medications.addMedication')}</span>
-          </button>
+          {canEdit && (
+            <button 
+              onClick={() => setActiveModal('medication_add', { petId })}
+              className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-xl font-semibold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all"
+            >
+              <Plus size={18} />
+              <span>{t('medications.addMedication')}</span>
+            </button>
+          )}
         </div>
       </div>
+
+      {/* Daily Schedule - NEW SECTION */}
+      {dueToday.length > 0 && (
+        <div className="bg-primary/5 border border-primary/20 rounded-3xl p-6 shadow-sm">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+              <Clock size={18} />
+            </div>
+            <h3 className="text-lg font-bold text-foreground">{t('medications.dueToday')}</h3>
+          </div>
+          
+          <div className="space-y-3">
+            {dueToday.sort((a, b) => new Date(a.nextDoseDue!).getTime() - new Date(b.nextDoseDue!).getTime()).map(med => {
+              const overdue = isDoseOverdue(med.nextDoseDue);
+              return (
+                <div key={`daily-${med.id}`} className="flex items-center justify-between p-4 bg-card border border-border rounded-2xl hover:border-primary/50 transition-all shadow-sm">
+                  <div className="flex items-center gap-4 min-w-0">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${overdue ? 'bg-destructive/10 text-destructive' : 'bg-primary/10 text-primary'}`}>
+                      <Pill size={20} />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-bold truncate">{med.name}</p>
+                      <p className="text-xs text-muted-foreground font-medium">
+                        {med.dosage} • {format(parseISO(med.nextDoseDue!), 'HH.mm')}
+                        {overdue && <span className="ml-2 text-destructive font-bold uppercase text-[10px] tracking-tighter">({t('medications.overdue')})</span>}
+                      </p>
+                    </div>
+                  </div>
+                  {canEdit && (
+                    <button 
+                      onClick={() => handleLogDose(med)}
+                      className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                        overdue 
+                          ? 'bg-destructive text-destructive-foreground hover:bg-destructive/90' 
+                          : 'bg-primary text-primary-foreground hover:bg-primary/90'
+                      }`}
+                    >
+                      {t('medications.logDose')}
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Missed/Overdue Alerts */}
       {(() => {
@@ -128,12 +190,14 @@ export const MedicationsTab: React.FC<MedicationsTabProps> = ({ petId }) => {
                     {t('medications.missedDoseDescription', { name: med.name })}
                   </p>
                 </div>
-                <button 
-                  onClick={() => handleLogDose(med)}
-                  className="px-4 py-2 bg-destructive text-destructive-foreground rounded-xl text-xs font-bold hover:bg-destructive/90 transition-colors shadow-sm"
-                >
-                  {t('medications.logDose')}
-                </button>
+                {canEdit && (
+                  <button 
+                    onClick={() => handleLogDose(med)}
+                    className="px-4 py-2 bg-destructive text-destructive-foreground rounded-xl text-xs font-bold hover:bg-destructive/90 transition-colors shadow-sm"
+                  >
+                    {t('medications.logDose')}
+                  </button>
+                )}
               </div>
             ))}
           </div>
@@ -173,12 +237,14 @@ export const MedicationsTab: React.FC<MedicationsTabProps> = ({ petId }) => {
                       </p>
                     </div>
                   </div>
-                  <button 
-                    onClick={() => setActiveModal('medication_edit', med)}
-                    className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground transition-colors"
-                  >
-                    <Calendar size={16} />
-                  </button>
+                  {canEdit && (
+                    <button 
+                      onClick={() => setActiveModal('medication_edit', med)}
+                      className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground transition-colors"
+                    >
+                      <Calendar size={16} />
+                    </button>
+                  )}
                 </div>
 
                 <div className="space-y-3 mb-6">
@@ -186,7 +252,7 @@ export const MedicationsTab: React.FC<MedicationsTabProps> = ({ petId }) => {
                     <Clock size={14} className={overdue ? 'text-destructive' : 'text-primary'} />
                     <span className={overdue ? 'text-destructive font-bold' : 'text-muted-foreground font-medium'}>
                       {med.nextDoseDue 
-                        ? `${t('medications.nextDose')}: ${format(parseISO(med.nextDoseDue), 'd MMM, HH:mm', { locale: dateLocale })}`
+                        ? `${t('medications.nextDose')}: ${format(parseISO(med.nextDoseDue), 'dd.MM.yyyy, HH.mm', { locale: dateLocale })}`
                         : t('medications.noSchedule')
                       }
                     </span>
@@ -194,22 +260,24 @@ export const MedicationsTab: React.FC<MedicationsTabProps> = ({ petId }) => {
                   {med.endDate && (
                     <div className="flex items-center gap-2 text-sm text-muted-foreground italic">
                       <Calendar size={14} />
-                      <span>{t('medications.endsOn')}: {format(parseISO(med.endDate), 'd MMM yyyy', { locale: dateLocale })}</span>
+                      <span>{t('medications.endsOn')}: {format(parseISO(med.endDate), 'dd.MM.yyyy', { locale: dateLocale })}</span>
                     </div>
                   )}
                 </div>
 
-                <button 
-                  onClick={() => handleLogDose(med)}
-                  className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all shadow-sm ${
-                    overdue 
-                      ? 'bg-destructive text-destructive-foreground shadow-destructive/20 hover:bg-destructive/90' 
-                      : 'bg-secondary text-foreground hover:bg-primary hover:text-primary-foreground'
-                  }`}
-                >
-                  <CheckCircle2 size={18} />
-                  {t('medications.logDose')}
-                </button>
+                {canEdit && (
+                  <button 
+                    onClick={() => handleLogDose(med)}
+                    className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all shadow-sm ${
+                      overdue 
+                        ? 'bg-destructive text-destructive-foreground shadow-destructive/20 hover:bg-destructive/90' 
+                        : 'bg-secondary text-foreground hover:bg-primary hover:text-primary-foreground'
+                    }`}
+                  >
+                    <CheckCircle2 size={18} />
+                    {t('medications.logDose')}
+                  </button>
+                )}
               </div>
             );
           })}
@@ -287,9 +355,19 @@ export const MedicationsTab: React.FC<MedicationsTabProps> = ({ petId }) => {
                           <p className="text-xs text-muted-foreground mt-1 italic">{log.notes}</p>
                         )}
                       </div>
-                      <div className="flex items-center gap-1.5 text-[11px] font-bold text-primary bg-primary/5 px-2.5 py-1 rounded-full whitespace-nowrap self-start sm:self-center">
-                        <Calendar size={12} />
-                        {format(parseISO(log.recordDate), 'd MMM, HH:mm', { locale: dateLocale })}
+                      <div className="flex items-center gap-2 self-start sm:self-center">
+                        <div className="flex items-center gap-1.5 text-[11px] font-bold text-primary bg-primary/5 px-2.5 py-1 rounded-full whitespace-nowrap">
+                          <Calendar size={12} />
+                          {format(parseISO(log.recordDate), 'dd.MM.yyyy, HH.mm', { locale: dateLocale })}
+                        </div>
+                        {canEdit && (
+                          <button 
+                            onClick={() => setActiveModal('record_edit', log)}
+                            className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground transition-colors"
+                          >
+                            <Edit2 size={14} />
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>

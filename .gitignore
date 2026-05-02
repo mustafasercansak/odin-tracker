@@ -27,3 +27,5 @@ functions/.secret.local
 *.njsproj
 *.sln
 *.sw?
+
+*tracker*.md

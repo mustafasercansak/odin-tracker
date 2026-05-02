@@ -51,6 +51,7 @@ export function useMedications(petId: string | null) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['medications', petId] });
+      queryClient.invalidateQueries({ queryKey: ['medications', 'all'] });
     },
   });
 
@@ -64,6 +65,7 @@ export function useMedications(petId: string | null) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['medications', petId] });
+      queryClient.invalidateQueries({ queryKey: ['medications', 'all'] });
     },
   });
 
@@ -73,6 +75,7 @@ export function useMedications(petId: string | null) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['medications', petId] });
+      queryClient.invalidateQueries({ queryKey: ['medications', 'all'] });
     },
   });
 
@@ -83,4 +86,29 @@ export function useMedications(petId: string | null) {
     updateMedication,
     deleteMedication,
   };
+}
+
+export function useAllMedications(petIds: string[]) {
+  return useQuery({
+    queryKey: ['medications', 'all', petIds],
+    queryFn: async () => {
+      if (!petIds || petIds.length === 0) return [];
+      
+      // Firestore 'in' query limit is 30 in newer versions, 10 in older. 
+      // We'll chunk if needed, but for typical user pet counts, this is fine.
+      const q = query(
+        collection(db, 'medications'),
+        where('petId', 'in', petIds.slice(0, 30))
+      );
+      
+      const snapshot = await getDocs(q);
+      const meds = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Medication[];
+      
+      return meds.sort((a, b) => {
+        if (a.active !== b.active) return a.active ? -1 : 1;
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      });
+    },
+    enabled: petIds.length > 0,
+  });
 }

@@ -58,6 +58,7 @@ export type WeightRecord = Extract<HealthRecord, { recordType: 'weight' }>
 export const healthRecordInputSchema = z.object({
   petId: z.string(),
   recordDate: z.string().min(1, 'Tarih zorunlu'),
+  recordTime: z.string().optional(),
   recordType: recordTypeSchema,
   description: z.string().min(1, 'Açıklama zorunlu'),
   notes: z.string().optional(),

@@ -12,6 +12,10 @@ import { useExtractionUsage } from '@/hooks/queries/useUsage';
 import { healthRecordInputSchema, type HealthRecordInput, type HealthRecord } from '@/schemas/healthRecord';
 import { uploadFile } from '@/lib/storage';
 import { MeasurementEditor } from '@/components/MeasurementEditor';
+import { CustomDateInput } from '@/components/CustomDateInput';
+import { CustomTimeInput } from '@/components/CustomTimeInput';
+import { format, parseISO } from 'date-fns';
+import { tr, enUS } from 'date-fns/locale';
 
 export const HealthRecordModal: React.FC = () => {
   const { t } = useTranslation();
@@ -43,7 +47,8 @@ export const HealthRecordModal: React.FC = () => {
     resolver: zodResolver(healthRecordInputSchema),
     defaultValues: isEdit ? {
       petId: recordToEdit.petId,
-      recordDate: recordToEdit.recordDate,
+      recordDate: recordToEdit.recordDate.split('T')[0],
+      recordTime: format(parseISO(recordToEdit.recordDate), 'HH:mm'),
       recordType: recordToEdit.recordType,
       description: recordToEdit.description,
       notes: recordToEdit.notes,
@@ -54,6 +59,7 @@ export const HealthRecordModal: React.FC = () => {
     } : {
       petId: (modalData as any)?.petId || '',
       recordDate: new Date().toISOString().split('T')[0],
+      recordTime: format(new Date(), 'HH:mm'),
       recordType: 'vet_visit',
       measurements: [],
     },
@@ -69,6 +75,7 @@ export const HealthRecordModal: React.FC = () => {
            reset({
             petId: recordToEdit.petId,
             recordDate: recordToEdit.recordDate.split('T')[0],
+            recordTime: format(parseISO(recordToEdit.recordDate), 'HH:mm'),
             recordType: recordToEdit.recordType,
             description: recordToEdit.description,
             notes: recordToEdit.notes,
@@ -82,6 +89,7 @@ export const HealthRecordModal: React.FC = () => {
           reset({
             petId: (modalData as any).petId,
             recordDate: new Date().toISOString().split('T')[0],
+            recordTime: format(new Date(), 'HH:mm'),
             recordType: 'vet_visit',
             description: '',
             notes: '',
@@ -183,10 +191,22 @@ export const HealthRecordModal: React.FC = () => {
         finalFileUrl = await uploadFile(file, path);
       }
 
+      // Combine date and time into a single ISO string
+      const finalDate = `${data.recordDate}T${data.recordTime || '00:00'}:00`;
+
       const payload = {
         ...data,
+        recordDate: finalDate,
         fileUrl: finalFileUrl || null,
       };
+      
+      // Remove temporary UI fields and clean undefined values for Firebase
+      delete (payload as any).recordTime;
+      Object.keys(payload).forEach(key => {
+        if ((payload as any)[key] === undefined) {
+          delete (payload as any)[key];
+        }
+      });
 
       if (isEdit && recordToEdit) {
         await updateRecord.mutateAsync({
@@ -213,15 +233,37 @@ export const HealthRecordModal: React.FC = () => {
       onClose={handleClose}
       title={isEdit ? t('healthRecords.editRecord') : t('healthRecords.addRecord')}
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 pb-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Record Date */}
-          <div>
-            <label className="block text-sm font-semibold mb-1.5">{t('healthRecords.recordDate')}</label>
-            <input
-              type="date"
-              {...register('recordDate')}
-              className={`w-full px-4 py-2.5 rounded-xl bg-input border ${errors.recordDate ? 'border-destructive' : 'border-border'} focus:ring-2 focus:ring-primary focus:border-transparent outline-none`}
+      <form 
+        aria-label="health-record-form"
+        onSubmit={handleSubmit(onSubmit)} 
+        className="space-y-6 pb-4"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Record Date & Time */}
+          <div className="md:col-span-2 flex flex-col sm:flex-row gap-4">
+            <Controller
+              name="recordDate"
+              control={control}
+              render={({ field }) => (
+                <CustomDateInput
+                  label={t('healthRecords.recordDate')}
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.recordDate?.message}
+                />
+              )}
+            />
+            <Controller
+              name="recordTime"
+              control={control}
+              render={({ field }) => (
+                <CustomTimeInput
+                  label={t('medications.time')}
+                  value={field.value || ''}
+                  onChange={field.onChange}
+                  error={errors.recordTime?.message}
+                />
+              )}
             />
           </div>
 
@@ -268,8 +310,9 @@ export const HealthRecordModal: React.FC = () => {
           {recordType === 'lab_test' && (
             <div className="md:col-span-2 space-y-6 animate-in slide-in-from-top-2 duration-200">
               <div>
-                <label className="block text-sm font-semibold mb-1.5">{t('healthRecords.labName')}</label>
+                <label htmlFor="lab-name-input" className="block text-sm font-semibold mb-1.5">{t('healthRecords.labName')}</label>
                 <input
+                  id="lab-name-input"
                   {...register('labName')}
                   className="w-full px-4 py-2.5 rounded-xl bg-input border border-border focus:ring-2 focus:ring-primary outline-none"
                   placeholder={t('healthRecords.labName')}
@@ -348,9 +391,12 @@ export const HealthRecordModal: React.FC = () => {
 
           {/* File Upload */}
           <div className="md:col-span-2">
-            <label className="block text-sm font-semibold mb-1.5">{t('healthRecords.file')}</label>
+            <label htmlFor="file-upload-input" className="block text-sm font-semibold mb-1.5">{t('healthRecords.file')}</label>
             <div className="relative group">
-              <div className="flex items-center gap-4 p-4 rounded-xl bg-input border border-border group-hover:border-primary transition-all">
+              <label 
+                htmlFor="file-upload-input"
+                className="flex items-center gap-4 p-4 rounded-xl bg-input border border-border group-hover:border-primary transition-all cursor-pointer"
+              >
                 <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center text-primary">
                   {file || fileUrl ? <FileText size={20} /> : <Upload size={20} />}
                 </div>
@@ -363,10 +409,11 @@ export const HealthRecordModal: React.FC = () => {
                   </p>
                 </div>
                 <ChevronRight size={20} className="text-muted-foreground" />
-              </div>
+              </label>
               <input 
+                id="file-upload-input"
                 type="file" 
-                className="absolute inset-0 opacity-0 cursor-pointer" 
+                className="absolute inset-0 opacity-0 cursor-pointer pointer-events-none" 
                 onChange={onFileChange}
                 accept="image/*,application/pdf"
               />

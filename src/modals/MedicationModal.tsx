@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
@@ -8,6 +8,10 @@ import { Modal } from '@/components/Modal';
 import { useAppStore } from '@/store/useAppStore';
 import { useMedications } from '@/hooks/queries/useMedications';
 import { medicationInputSchema, type MedicationInput, type Medication } from '@/schemas/medication';
+import { CustomDateInput } from '@/components/CustomDateInput';
+import { CustomTimeInput } from '@/components/CustomTimeInput';
+import { format, parseISO } from 'date-fns';
+import { calculateNextDose } from '@/lib/medication-helpers';
 
 export const MedicationModal: React.FC = () => {
   const { t } = useTranslation();
@@ -20,7 +24,7 @@ export const MedicationModal: React.FC = () => {
   const medToEdit = modalData as Medication;
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
     reset,
@@ -42,6 +46,8 @@ export const MedicationModal: React.FC = () => {
             frequency: medToEdit.frequency,
             startDate: medToEdit.startDate.split('T')[0],
             endDate: medToEdit.endDate?.split('T')[0],
+            nextDoseDate: medToEdit.nextDoseDue?.split('T')[0],
+            nextDoseTime: medToEdit.nextDoseDue?.includes('T') ? medToEdit.nextDoseDue.split('T')[1].substring(0, 5) : '09:00',
             notes: medToEdit.notes,
           });
         } else {
@@ -65,15 +71,38 @@ export const MedicationModal: React.FC = () => {
   const onSubmit = async (data: MedicationInput) => {
     setLoading(true);
     try {
+      const payload = { ...data };
+      
+      // Handle nextDoseDue merging
+      if ((payload as any).nextDoseDate) {
+        (payload as any).nextDoseDue = `${(payload as any).nextDoseDate}T${(payload as any).nextDoseTime || '09:00'}:00`;
+      }
+      
+      // Cleanup temporary UI fields
+      delete (payload as any).nextDoseDate;
+      delete (payload as any).nextDoseTime;
+
+      Object.keys(payload).forEach(key => {
+        if ((payload as any)[key] === undefined) {
+          delete (payload as any)[key];
+        }
+      });
+
       if (isEdit && medToEdit) {
         await updateMedication.mutateAsync({
           id: medToEdit.id,
-          ...data,
+          ...payload,
         });
       } else {
+        // For new medications, use nextDoseDue if set, otherwise default to startDate
+        if (!(payload as any).nextDoseDue) {
+          (payload as any).nextDoseDue = `${payload.startDate}T09:00:00`;
+        }
+        
         await addMedication.mutateAsync({
           petId: (modalData as any).petId,
-          ...data,
+          ...payload,
+          active: true,
         });
       }
       
@@ -105,7 +134,7 @@ export const MedicationModal: React.FC = () => {
           <div>
             <label className="block text-sm font-semibold mb-1.5">{t('medications.name')}</label>
             <input
-              {...register('name')}
+              {...control.register('name')}
               className={`w-full px-4 py-2.5 rounded-xl bg-input border ${errors.name ? 'border-destructive' : 'border-border'} focus:ring-2 focus:ring-primary outline-none`}
               placeholder={t('medications.name')}
             />
@@ -117,7 +146,7 @@ export const MedicationModal: React.FC = () => {
             <div>
               <label className="block text-sm font-semibold mb-1.5">{t('medications.dosage')}</label>
               <input
-                {...register('dosage')}
+                {...control.register('dosage')}
                 className={`w-full px-4 py-2.5 rounded-xl bg-input border ${errors.dosage ? 'border-destructive' : 'border-border'} focus:ring-2 focus:ring-primary outline-none`}
                 placeholder="e.g. 5mg, 1 tablet"
               />
@@ -128,7 +157,7 @@ export const MedicationModal: React.FC = () => {
             <div>
               <label className="block text-sm font-semibold mb-1.5">{t('medications.frequency')}</label>
               <select
-                {...register('frequency')}
+                {...control.register('frequency')}
                 className="w-full px-4 py-2.5 rounded-xl bg-input border border-border focus:ring-2 focus:ring-primary outline-none appearance-none"
               >
                 {Object.keys(t('medications.frequencies', { returnObjects: true })).map((freq) => (
@@ -140,25 +169,59 @@ export const MedicationModal: React.FC = () => {
             </div>
 
             {/* Start Date */}
-            <div>
-              <label className="block text-sm font-semibold mb-1.5">{t('medications.startDate')}</label>
-              <div className="relative">
-                <input
-                  type="date"
-                  {...register('startDate')}
-                  className="w-full px-4 py-2.5 rounded-xl bg-input border border-border focus:ring-2 focus:ring-primary outline-none"
+            <Controller
+              name="startDate"
+              control={control}
+              render={({ field }) => (
+                <CustomDateInput
+                  label={t('medications.startDate')}
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.startDate?.message}
+                />
+              )}
+            />
+
+            <Controller
+              name="endDate"
+              control={control}
+              render={({ field }) => (
+                <CustomDateInput
+                  label={t('medications.endDate')}
+                  value={field.value || ''}
+                  onChange={field.onChange}
+                  error={errors.endDate?.message}
+                />
+              )}
+            />
+
+            {/* Next Dose Due (Editable) */}
+            <div className="md:col-span-2 p-4 bg-primary/5 rounded-2xl border border-primary/10 space-y-4">
+              <p className="text-xs font-black text-primary uppercase tracking-widest">{t('medications.nextDose')}</p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Controller
+                  name="nextDoseDate"
+                  control={control}
+                  render={({ field }) => (
+                    <CustomDateInput
+                      label={t('healthRecords.recordDate')}
+                      value={field.value || ''}
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
+                <Controller
+                  name="nextDoseTime"
+                  control={control}
+                  render={({ field }) => (
+                    <CustomTimeInput
+                      label={t('medications.time')}
+                      value={field.value || ''}
+                      onChange={field.onChange}
+                    />
+                  )}
                 />
               </div>
-            </div>
-
-            {/* End Date */}
-            <div>
-              <label className="block text-sm font-semibold mb-1.5">{t('medications.endDate')} ({t('common.optional')})</label>
-              <input
-                type="date"
-                {...register('endDate')}
-                className="w-full px-4 py-2.5 rounded-xl bg-input border border-border focus:ring-2 focus:ring-primary outline-none"
-              />
             </div>
           </div>
 
@@ -166,7 +229,7 @@ export const MedicationModal: React.FC = () => {
           <div>
             <label className="block text-sm font-semibold mb-1.5">{t('medications.notes')}</label>
             <textarea
-              {...register('notes')}
+              {...control.register('notes')}
               rows={3}
               className="w-full px-4 py-2.5 rounded-xl bg-input border border-border focus:ring-2 focus:ring-primary outline-none resize-none"
               placeholder={t('medications.notes')}

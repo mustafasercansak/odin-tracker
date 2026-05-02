@@ -3,16 +3,26 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { usePets } from '@/hooks/queries/usePets';
 import { useAppStore } from '@/store/useAppStore';
-import { Plus, Heart, ChevronRight, Calendar, Info, Search } from 'lucide-react';
-import { format, parseISO } from 'date-fns';
-//import { loginSchema, type LoginInput } from '@/schemas/user';
+import { Plus, Heart, ChevronRight, Calendar, Info, Search, Clock, Pill, CheckCircle2, AlertCircle, Edit3 } from 'lucide-react';
+import { format, parseISO, isSameDay, isPast } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
+import { useAllMedications, useMedications } from '@/hooks/queries/useMedications';
+import { useHealthRecords } from '@/hooks/queries/useHealthRecords';
+import { calculateNextDose, isDoseOverdue } from '@/lib/medication-helpers';
+import toast from 'react-hot-toast';
 
 export default function Home() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { pets, isLoading } = usePets();
   const { setSelectedPetId, setActiveModal, searchQuery } = useAppStore();
+  
+  const petIds = React.useMemo(() => pets.map(p => p.id), [pets]);
+  const { data: allMedications, isLoading: medsLoading } = useAllMedications(petIds);
+  
+  // Need mutations for logging dose from Home
+  const { addRecord } = useHealthRecords(null); // We'll pass petId manually
+  const { updateMedication } = useMedications(null);
 
   // Self-healing: Ensure user exists in 'users' collection for sharing
   React.useEffect(() => {
@@ -50,6 +60,48 @@ export default function Home() {
 
   const dateLocale = i18n.language === 'tr' ? tr : enUS;
 
+  const { pendingMeds, completedMeds } = React.useMemo(() => {
+    if (!allMedications) return { pendingMeds: [], completedMeds: [] };
+    const active = allMedications.filter(m => m.active && m.nextDoseDue);
+    
+    const pending = active.filter(m => {
+      const date = parseISO(m.nextDoseDue!);
+      return isSameDay(date, new Date()) || isPast(date);
+    }).sort((a, b) => new Date(a.nextDoseDue!).getTime() - new Date(b.nextDoseDue!).getTime());
+
+    const completed = active.filter(m => {
+      const date = parseISO(m.nextDoseDue!);
+      return !isSameDay(date, new Date()) && !isPast(date);
+    }).sort((a, b) => new Date(a.nextDoseDue!).getTime() - new Date(b.nextDoseDue!).getTime());
+
+    return { pendingMeds: pending, completedMeds: completed };
+  }, [allMedications]);
+
+  const handleLogDose = async (med: any) => {
+    try {
+      const now = new Date().toISOString();
+      const nextDose = calculateNextDose(now, med.frequency);
+
+      await addRecord.mutateAsync({
+        petId: med.petId,
+        recordDate: now,
+        recordType: 'medication',
+        description: `${med.name} - ${med.dosage} (${t(`medications.frequencies.${med.frequency}`)})`,
+        notes: t('medications.doseLoggedAutomatically'),
+      });
+
+      await updateMedication.mutateAsync({
+        id: med.id,
+        nextDoseDue: nextDose.toISOString(),
+      });
+
+      toast.success(t('medications.doseLoggedSuccess'));
+    } catch (error) {
+      console.error('Error logging dose:', error);
+      toast.error(t('common.toasts.error'));
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
@@ -79,6 +131,140 @@ export default function Home() {
           <span className="hidden sm:inline font-extrabold">{t('pets.addPet')}</span>
         </button>
       </header>
+
+      {/* Global Daily Schedule */}
+      <section className="glass-panel rounded-4xl p-8 border-white/5 shadow-neon-soft relative overflow-hidden">
+        {/* Animated Background Pulse for the whole section */}
+        <div className="absolute -top-24 -left-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-pulse"></div>
+        
+        <div className="relative z-10">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-primary/20 flex items-center justify-center text-primary shadow-inner">
+                <Clock size={22} strokeWidth={2.5} />
+              </div>
+              <div>
+                <h2 className="text-xl font-black uppercase italic tracking-tight">{t('home.schedule') || 'GÜNLÜK PROGRAM'}</h2>
+                <p className="text-xs text-muted-foreground font-bold tracking-widest uppercase">
+                  {pendingMeds.length} {t('medications.title').toLowerCase()}
+                </p>
+              </div>
+            </div>
+            
+            {pendingMeds.some(m => isDoseOverdue(m.nextDoseDue)) && (
+              <span className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full animate-pulse">
+                {t('common.active')}
+              </span>
+            )}
+          </div>
+
+          {pendingMeds.length === 0 ? (
+            <div className="py-10 text-center bg-secondary/10 rounded-3xl border border-dashed border-white/5">
+              <CheckCircle2 size={32} className="mx-auto text-primary mb-3 opacity-20" />
+              <p className="text-muted-foreground font-bold italic">
+                {completedMeds.length > 0 ? t('medications.allDosesCompleted') || 'Tüm dozlar tamamlandı!' : t('medications.noActiveMedications')}
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {pendingMeds.map(med => {
+                const pet = pets.find(p => p.id === med.petId);
+                const overdue = isDoseOverdue(med.nextDoseDue);
+                const isDueToday = med.nextDoseDue && isSameDay(parseISO(med.nextDoseDue), new Date());
+                return (
+                  <div key={`home-due-${med.id}`} className="group flex flex-col p-4 bg-secondary/30 border border-white/5 rounded-2xl hover:border-primary/50 transition-all duration-300">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center text-primary group-hover:scale-110 transition-transform relative">
+                        {pet?.photoUrl ? (
+                          <img src={pet.photoUrl} alt={pet.name} className="w-full h-full object-cover rounded-xl" />
+                        ) : (
+                          <Pill size={20} />
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-xs font-black text-primary uppercase tracking-wider">{pet?.name}</p>
+                        <p className="font-bold truncate text-sm">{med.name}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between mt-auto pt-3 border-t border-white/5">
+                      <div className="text-[11px] font-bold">
+                        <span className={`uppercase ${isDueToday ? 'text-primary' : 'text-muted-foreground'}`}>
+                          {format(parseISO(med.nextDoseDue!), 'dd.MM.yyyy, HH.mm')}
+                        </span>
+                        {overdue && <span className="ml-2 text-destructive uppercase italic">! {t('medications.overdue')}</span>}
+                      </div>
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleLogDose(med);
+                        }}
+                        className={`p-2 rounded-xl transition-all ${
+                          overdue 
+                            ? 'bg-destructive text-destructive-foreground shadow-lg shadow-destructive/20 hover:scale-110' 
+                            : 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:scale-110'
+                        }`}
+                      >
+                        <CheckCircle2 size={16} strokeWidth={3} />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Completed Today Section */}
+          {completedMeds.length > 0 && (
+            <div className="mt-12 space-y-6">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-green-500/20 flex items-center justify-center text-green-500">
+                  <CheckCircle2 size={18} />
+                </div>
+                <h3 className="text-sm font-black uppercase tracking-widest text-muted-foreground">
+                  {t('medications.completedToday') || 'BUGÜN TAMAMLANANLAR'}
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 opacity-60">
+                {completedMeds.map(med => {
+                  const pet = pets.find(p => p.id === med.petId);
+                  return (
+                    <div key={`home-done-${med.id}`} className="flex items-center gap-3 p-3 bg-secondary/20 border border-white/5 rounded-2xl">
+                      <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center text-muted-foreground overflow-hidden">
+                        {pet?.photoUrl ? (
+                          <img src={pet.photoUrl} alt={pet.name} className="w-full h-full object-cover" />
+                        ) : (
+                          <Pill size={16} />
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[10px] font-bold text-muted-foreground uppercase">{pet?.name}</p>
+                        <p className="text-xs font-bold truncate">{med.name}</p>
+                        <p className="text-[10px] text-muted-foreground truncate">
+                          {med.dosage} - {t(`medications.frequencies.${med.frequency}`)}
+                        </p>
+                      </div>
+                      <div className="text-[10px] font-bold text-green-500 bg-green-500/10 px-2 py-0.5 rounded-full uppercase">
+                        {t('common.done')}
+                      </div>
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setActiveModal('medication_edit', med);
+                        }}
+                        className="p-1.5 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        <Edit3 size={14} />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
 
       {pets.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-32 px-6 glass-panel rounded-4xl text-center border-white/5">
@@ -149,7 +335,7 @@ export default function Home() {
                       <Calendar size={14} className="flex-shrink-0" />
                       <span>
                         {pet.dateOfBirth
-                          ? format(parseISO(pet.dateOfBirth), 'd MMMM yyyy', { locale: dateLocale })
+                          ? format(parseISO(pet.dateOfBirth), 'dd.MM.yyyy', { locale: dateLocale })
                           : '---'
                         }
                       </span>

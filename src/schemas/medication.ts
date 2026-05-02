@@ -3,6 +3,8 @@ import { z } from 'zod'
 export const frequencySchema = z.enum([
   'daily',
   'twice_daily',
+  'three_times_daily',
+  'four_times_daily',
   'every_other_day',
   'weekly',
   'as_needed',
@@ -30,6 +32,8 @@ export const medicationInputSchema = z.object({
   startDate: z.string().min(1, 'Başlangıç tarihi zorunlu'),
   endDate: z.string().optional(),
   notes: z.string().optional(),
+  nextDoseDate: z.string().optional(),
+  nextDoseTime: z.string().optional(),
 })
 
 export type Medication = z.infer<typeof medicationSchema>

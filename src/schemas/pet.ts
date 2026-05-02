@@ -25,5 +25,8 @@ export const petInputSchema = z.object({
   notes: z.string().optional(),
 })
 
-export type Pet = z.infer<typeof petSchema>
+export type Pet = z.infer<typeof petSchema> & {
+  isShared?: boolean;
+  role?: 'owner' | 'admin' | 'editor' | 'viewer';
+}
 export type PetInput = z.infer<typeof petInputSchema>

@@ -1,4 +1,8 @@
 {
+  "home": {
+    "schedule": "Günlük Program",
+    "todayTasks": "Bugün Yapılacaklar"
+  },
   "common": {
     "save": "Kaydet",
     "cancel": "İptal",
@@ -20,6 +24,7 @@
     "optional": "İsteğe bağlı",
     "user": "Kullanıcı",
     "active": "Aktif",
+    "done": "Tamam",
     "noResultsFor": "\"{{query}}\" için sonuç bulunamadı.",
     "yesterday": "Dün",
     "toasts": {
@@ -56,9 +61,9 @@
     }
   },
   "pets": {
-    "title": "Hayvanlarım",
-    "addPet": "Hayvan Ekle",
-    "editPet": "Hayvanı Düzenle",
+    "title": "Canlarım",
+    "addPet": "Yeni Can Ekle",
+    "editPet": "Bilgileri Güncelle",
     "deletePet": "Hayvanı Sil",
     "name": "İsim",
     "species": "Tür",
@@ -168,20 +173,26 @@
     "dosage": "Doz",
     "frequency": "Sıklık",
     "startDate": "Başlangıç",
-    "endDate": "Bitiş",
+    "endDate": "Bitiş (İsteğe bağlı)",
     "notes": "Notlar",
+    "time": "Saat",
     "nextDose": "Sonraki Doz",
+    "overdue": "Gecikti",
+    "allDosesCompleted": "Tüm dozlar tamamlandı!",
+    "completedToday": "Bugün Tamamlananlar",
+    "noActiveMedications": "Aktif tedavi bulunamadı.",
     "active": "Aktif",
     "inactive": "Pasif",
     "frequencies": {
       "daily": "Günlük",
       "twice_daily": "Günde 2 kez",
+      "three_times_daily": "Günde 3 kez",
+      "four_times_daily": "Günde 4 kez",
       "every_other_day": "Günaşırı",
       "weekly": "Haftalık",
       "as_needed": "Gerektiğinde"
     },
     "activeTreatments": "Aktif Tedaviler",
-    "noActiveMedications": "Aktif ilaç bulunmuyor.",
     "pastTreatments": "Geçmiş Tedaviler",
     "notificationsEnabled": "Bildirimler başarıyla açıldı",
     "notificationsDenied": "Bildirim izni reddedildi",
@@ -195,7 +206,8 @@
     "last7Days": "Son 7 Günlük Kayıtlar",
     "noHistory": "Henüz doz kaydı bulunmuyor.",
     "missedDoseAlert": "Geciken Doz Uyarısı",
-    "missedDoseDescription": "{{name}} ilacının dozu gecikmiş görünüyor. Lütfen en kısa sürede uygulayın."
+    "missedDoseDescription": "{{name}} ilacının dozu gecikmiş görünüyor. Lütfen en kısa sürede uygulayın.",
+    "dueToday": "Bugün Yapılacaklar"
   },
   "trends": {
     "title": "Trend Grafikleri",

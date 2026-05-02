@@ -1,4 +1,8 @@
 {
+  "home": {
+    "schedule": "Daily Schedule",
+    "todayTasks": "Today's Tasks"
+  },
   "common": {
     "save": "Save",
     "cancel": "Cancel",
@@ -20,16 +24,17 @@
     "optional": "Optional",
     "user": "User",
     "active": "Active",
-    "noResultsFor": "No results found for \"{{query}}\".",
+    "done": "Done",
+    "noResultsFor": "No results found for \"{{query}}\"",
     "yesterday": "Yesterday",
     "toasts": {
-      "saved": "Saved",
-      "deleted": "Deleted",
+      "saved": "Saved successfully",
+      "deleted": "Deleted successfully",
       "error": "An error occurred",
       "extractionStarted": "AI analysis started...",
       "extractionSuccess": "{{count}} values extracted",
       "extractionPartial": "{{count}} values have low confidence, please verify",
-      "extractionFailed": "Could not read data from image",
+      "extractionFailed": "Failed to extract data from image",
       "quotaExceeded": "Monthly quota exceeded"
     },
     "logout": "Logout"
@@ -47,18 +52,18 @@
     "hasAccount": "Already have an account?",
     "errors": {
       "user-not-found": "No user found with this email",
-      "wrong-password": "Wrong password",
+      "wrong-password": "Incorrect password",
       "email-already-in-use": "Email already in use",
       "weak-password": "Password is too weak",
-      "invalid-email": "Invalid email",
-      "network-request-failed": "Network request failed",
+      "invalid-email": "Invalid email address",
+      "network-request-failed": "Network connection error",
       "too-many-requests": "Too many failed attempts. Please wait"
     }
   },
   "pets": {
-    "title": "My Pets",
-    "addPet": "Add Pet",
-    "editPet": "Edit Pet",
+    "title": "My Loved Ones",
+    "addPet": "Add New Pet",
+    "editPet": "Update Info",
     "deletePet": "Delete Pet",
     "name": "Name",
     "species": "Species",
@@ -74,7 +79,7 @@
       "other": "Other"
     },
     "noPets": "No pets added yet",
-    "emptyDescription": "Create the first record to start tracking your friend's health data.",
+    "emptyDescription": "Create your first record to start tracking your pets' health data.",
     "lastCheck": "Last Check",
     "confirmDelete": "Are you sure you want to delete this pet?",
     "petNotFound": "Pet not found"
@@ -91,9 +96,9 @@
     "uploadFile": "Upload File",
     "labName": "Lab Name",
     "weightKg": "Weight (kg)",
-    "measurements": "Lab Values",
+    "measurements": "Lab Results",
     "addManually": "Add Manually",
-    "extractWithAI": "Fill with AI",
+    "extractWithAI": "Extract with AI",
     "recordTypes": {
       "medication": "Medication",
       "vet_visit": "Vet Visit",
@@ -102,7 +107,7 @@
       "weight": "Weight"
     },
     "nRecords": "{{count}} records",
-    "nMeasurements": "{{count}} values"
+    "nMeasurements": "{{count}} measurements"
   },
   "lab": {
     "parameters": {
@@ -121,7 +126,7 @@
       "urine_ph": "Urine pH",
       "hematocrit": "Hematocrit",
       "hemoglobin": "Hemoglobin",
-      "wbc": "White Blood Cells (WBC)",
+      "wbc": "White Blood Cell (WBC)",
       "platelets": "Platelets",
       "alt": "ALT",
       "ast": "AST",
@@ -142,8 +147,8 @@
     "parameter": "Parameter",
     "value": "Value",
     "unit": "Unit",
-    "refMin": "Min Ref",
-    "refMax": "Max Ref",
+    "refMin": "Ref Min",
+    "refMax": "Ref Max",
     "flag": "Flag",
     "extraction": {
       "loading1": "Uploading image...",
@@ -151,10 +156,10 @@
       "loading3": "Preparing results...",
       "summary": "{{total}} values extracted",
       "lowConfidenceSummary": ", {{count}} have low confidence, please verify",
-      "remaining": "{{remaining}} / {{limit}} extractions remaining this month",
+      "remaining": "Remaining this month: {{remaining}} / {{limit}}",
       "errors": {
         "quota_exceeded": "Monthly extraction quota exceeded. You can enter manually.",
-        "extraction_failed": "Could not extract values from image. Try entering manually.",
+        "extraction_failed": "Failed to extract values from image. Try entering manually.",
         "invalid_image": "Image format not supported.",
         "large_file": "File is larger than 5MB. Would you like to compress it?"
       }
@@ -168,20 +173,26 @@
     "dosage": "Dosage",
     "frequency": "Frequency",
     "startDate": "Start Date",
-    "endDate": "End Date",
+    "endDate": "End Date (Optional)",
     "notes": "Notes",
+    "time": "Time",
     "nextDose": "Next Dose",
+    "overdue": "Overdue",
+    "allDosesCompleted": "All doses completed!",
+    "completedToday": "Completed Today",
+    "noActiveMedications": "No active medications found.",
     "active": "Active",
     "inactive": "Inactive",
     "frequencies": {
       "daily": "Daily",
       "twice_daily": "Twice daily",
+      "three_times_daily": "3 times daily",
+      "four_times_daily": "4 times daily",
       "every_other_day": "Every other day",
       "weekly": "Weekly",
       "as_needed": "As needed"
     },
     "activeTreatments": "Active Treatments",
-    "noActiveMedications": "No active medications.",
     "pastTreatments": "Past Treatments",
     "notificationsEnabled": "Notifications enabled successfully",
     "notificationsDenied": "Notification permission denied",
@@ -192,10 +203,11 @@
     "endsOn": "Ends on",
     "logDose": "Log Dose",
     "doseHistory": "Dose History",
-    "last7Days": "Last 7 Days",
-    "noHistory": "No dose logs found yet.",
+    "last7Days": "Last 7 Days Records",
+    "noHistory": "No dose history yet.",
     "missedDoseAlert": "Missed Dose Alert",
-    "missedDoseDescription": "The dose for {{name}} seems to be missed or overdue. Please administer it as soon as possible."
+    "missedDoseDescription": "Dose of {{name}} seems to be missed. Please apply it as soon as possible.",
+    "dueToday": "Due Today"
   },
   "trends": {
     "title": "Trend Charts",
@@ -211,11 +223,11 @@
     "insufficientData": "Insufficient data for chart (at least 2 measurements required)",
     "latestValue": "Latest Value",
     "referenceRange": "Reference Range",
-    "unitMismatch": "Warning: Inconsistent units used for this parameter",
+    "unitMismatch": "Warning: Different units used for this parameter",
     "recentValues": "Recent Values"
   },
   "shares": {
-    "title": "Shared Access",
+    "title": "Access Sharing",
     "shareWith": "Share With",
     "email": "Email",
     "role": "Role",
@@ -227,9 +239,9 @@
     "currentAccess": "Current Access",
     "revokeAccess": "Revoke Access",
     "noShares": "No shares yet",
-    "description": "Share your friend's data with your veterinarian or family members.",
+    "description": "Share your pet's data with your vet or family members.",
     "shareSuccess": "Access shared successfully",
-    "revokeSuccess": "Access revoked",
+    "revokeSuccess": "Access revoked successfully",
     "existingAccess": "Existing Access",
     "invite": "Invite",
     "errors": {
@@ -239,7 +251,7 @@
   },
   "settings": {
     "title": "Settings",
-    "subtitle": "Manage app preferences and your data.",
+    "subtitle": "Manage application preferences and data.",
     "appSettings": "App Settings",
     "darkMode": "Dark Mode",
     "darkModeDescription": "Switch appearance to dark theme",
@@ -269,7 +281,7 @@
     "importErrorVersion": "Incompatible data version",
     "privacy": "Security & Privacy",
     "shareDataAnon": "Anonymous Data Sharing",
-    "shareDataAnonDescription": "Share your data anonymously for research (e.g., CKD statistics)",
+    "shareDataAnonDescription": "Share your data anonymously for research (e.g., Kidney failure statistics)",
     "anonymousShare": "Share lab values anonymously"
   },
   "tabs": {
@@ -287,7 +299,7 @@
     "petInfo": "Pet Information",
     "field": "Field",
     "value": "Value",
-    "labTrends": "Laboratory Trends",
+    "labTrends": "Lab Trends",
     "medicalHistory": "Medical History Summary"
   }
 }

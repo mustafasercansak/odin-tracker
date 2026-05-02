@@ -16,6 +16,10 @@ export function calculateNextDose(lastDoseAt: string, frequency: Frequency): Dat
       return addDays(lastDate, 1);
     case 'twice_daily':
       return addHours(lastDate, 12);
+    case 'three_times_daily':
+      return addHours(lastDate, 8);
+    case 'four_times_daily':
+      return addHours(lastDate, 6);
     case 'every_other_day':
       return addDays(lastDate, 2);
     case 'weekly':

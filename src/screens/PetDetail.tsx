@@ -13,12 +13,18 @@ import {
   Weight,
   FileText,
   FileDown,
-  Search
+  Search,
+  Trash2,
+  Shield,
+  Mail,
+  Share2
 } from 'lucide-react';
 import { usePets } from '@/hooks/queries/usePets';
 import { useHealthRecords, useLabRecords } from '@/hooks/queries/useHealthRecords';
 import { useMedications } from '@/hooks/queries/useMedications';
+import { useSharedAccess } from '@/hooks/queries/useSharedAccess';
 import { useAppStore } from '@/store/useAppStore';
+import { useAuth } from '@/hooks/useAuth';
 import { generatePetReport } from '@/lib/reportGenerator';
 import { format, parseISO } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
@@ -35,7 +41,9 @@ export default function PetDetail() {
   const { records, isLoading: recordsLoading } = useHealthRecords(id || null);
   const { labRecords } = useLabRecords(id || null);
   const { medications } = useMedications(id || null);
+  const { shares, revokeAccess, isLoading: sharesLoading } = useSharedAccess(id || null);
   const { setActiveModal, searchQuery } = useAppStore();
+  const { user } = useAuth();
 
   const filteredRecords = useMemo(() => {
     if (!searchQuery) return records;
@@ -86,6 +94,11 @@ export default function PetDetail() {
   };
 
   const pet = useMemo(() => pets.find(p => p.id === id), [pets, id]);
+  
+  const canEdit = useMemo(() => {
+    if (!pet) return false;
+    return pet.role === 'owner' || pet.role === 'admin' || pet.role === 'editor';
+  }, [pet]);
 
   if (petsLoading || recordsLoading) {
     return (
@@ -139,12 +152,14 @@ export default function PetDetail() {
               )}
               <span className="hidden sm:inline">{t('report.download')}</span>
             </button>
-            <button 
-              onClick={() => setActiveModal('pet_edit', pet)}
-              className="p-2 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground transition-colors"
-            >
-              <Edit2 size={18} />
-            </button>
+            {canEdit && (
+              <button 
+                onClick={() => setActiveModal('pet_edit', pet)}
+                className="p-2 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground transition-colors"
+              >
+                <Edit2 size={18} />
+              </button>
+            )}
           </div>
         </div>
 
@@ -167,7 +182,7 @@ export default function PetDetail() {
                 <Calendar size={14} className="text-primary" />
                 <span>
                   {pet.dateOfBirth 
-                    ? format(parseISO(pet.dateOfBirth), 'd MMMM yyyy', { locale: dateLocale })
+                    ? format(parseISO(pet.dateOfBirth), 'dd.MM.yyyy', { locale: dateLocale })
                     : '---'
                   }
                 </span>
@@ -209,13 +224,15 @@ export default function PetDetail() {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-bold">{t('healthRecords.title')}</h2>
-              <button 
-                onClick={() => setActiveModal('record_add', { petId: pet.id })}
-                className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-xl font-semibold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all"
-              >
-                <Plus size={18} />
-                <span>{t('healthRecords.addRecord')}</span>
-              </button>
+              {canEdit && (
+                <button 
+                  onClick={() => setActiveModal('record_add', { petId: pet.id })}
+                  className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-xl font-semibold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all"
+                >
+                  <Plus size={18} />
+                  <span>{t('healthRecords.addRecord')}</span>
+                </button>
+              )}
             </div>
 
             {records.length === 0 ? (
@@ -247,7 +264,7 @@ export default function PetDetail() {
                             {t(`healthRecords.recordTypes.${record.recordType}`)}
                           </h4>
                           <p className="text-sm text-muted-foreground">
-                            {format(parseISO(record.recordDate), 'd MMMM yyyy', { locale: dateLocale })}
+                            {format(parseISO(record.recordDate), 'dd.MM.yyyy', { locale: dateLocale })}
                           </p>
                         </div>
                       </div>
@@ -282,28 +299,75 @@ export default function PetDetail() {
         {activeTab === 'shared_access' && pet.id && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold">{t('tabs.sharedAccess')}</h2>
-              <button 
-                onClick={() => setActiveModal('share_pet', { petId: pet.id })}
-                className="flex items-center gap-2 px-4 py-2 bg-secondary text-foreground rounded-xl font-semibold hover:bg-secondary/80 transition-all"
-              >
-                <Plus size={18} />
-                <span>{t('shares.invite')}</span>
-              </button>
+              <div>
+                <h2 className="text-xl font-bold">{t('tabs.sharedAccess')}</h2>
+                <p className="text-sm text-muted-foreground mt-1">{t('shares.description')}</p>
+              </div>
+              {user?.uid === pet.ownerId && (
+                <button 
+                  onClick={() => setActiveModal('share_pet', { petId: pet.id })}
+                  className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-xl font-semibold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all"
+                >
+                  <Plus size={18} />
+                  <span>{t('shares.invite')}</span>
+                </button>
+              )}
             </div>
 
-            <div className="py-12 text-center bg-card border border-dashed border-border rounded-3xl">
-              <Users size={40} className="mx-auto text-muted-foreground mb-3 opacity-20" />
-              <p className="text-muted-foreground mb-6">
-                {t('shares.description')}
-              </p>
-              <button 
-                onClick={() => setActiveModal('share_pet', { petId: pet.id })}
-                className="px-6 py-2 bg-primary text-primary-foreground rounded-xl font-bold shadow-lg shadow-primary/20"
-              >
-                {t('shares.invite')}
-              </button>
-            </div>
+            {sharesLoading ? (
+              <div className="animate-pulse space-y-3">
+                <div className="h-20 bg-card rounded-2xl w-full"></div>
+                <div className="h-20 bg-card rounded-2xl w-full"></div>
+              </div>
+            ) : shares.length === 0 ? (
+              <div className="py-20 text-center bg-card border border-dashed border-border rounded-3xl">
+                <Share2 size={48} className="mx-auto text-muted-foreground mb-4 opacity-10" />
+                <p className="text-muted-foreground max-w-xs mx-auto mb-8 text-lg font-medium">
+                  {t('shares.noShares')}
+                </p>
+                {user?.uid === pet.ownerId && (
+                  <button 
+                    onClick={() => setActiveModal('share_pet', { petId: pet.id })}
+                    className="px-8 py-3 bg-secondary text-foreground rounded-xl font-bold hover:bg-secondary/80 transition-all"
+                  >
+                    {t('shares.invite')}
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {shares.map((share) => (
+                  <div key={share.id} className="flex items-center justify-between p-5 bg-card border border-border rounded-2xl hover:border-primary/30 transition-all group">
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center text-primary border border-border">
+                        <Mail size={20} />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-bold truncate text-lg leading-tight">{share.sharedWithEmail}</p>
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-bold uppercase tracking-wider mt-1">
+                          <Shield size={12} className="text-primary" />
+                          <span>{t(`shares.roles.${share.role}`)}</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Only owner can revoke */}
+                    {user?.uid === pet.ownerId && (
+                      <button 
+                        onClick={() => {
+                          if (window.confirm(t('common.confirmDelete'))) {
+                            revokeAccess.mutate(share.id);
+                          }
+                        }}
+                        className="p-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl transition-all"
+                      >
+                        <Trash2 size={20} />
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 

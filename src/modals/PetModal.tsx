@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
@@ -9,6 +9,7 @@ import { useAppStore } from '@/store/useAppStore';
 import { usePets } from '@/hooks/queries/usePets';
 import { petInputSchema, type PetInput, type Pet } from '@/schemas/pet';
 import { uploadFile } from '@/lib/storage';
+import { CustomDateInput } from '@/components/CustomDateInput';
 
 export const PetModal: React.FC = () => {
   const { t } = useTranslation();
@@ -25,7 +26,7 @@ export const PetModal: React.FC = () => {
   const petToEdit = modalData as Pet;
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
     reset,
@@ -89,19 +90,22 @@ export const PetModal: React.FC = () => {
         photoUrl = await uploadFile(imageFile, path);
       }
 
+      const payload = { ...data, photoUrl: photoUrl || undefined };
+      Object.keys(payload).forEach(key => {
+        if ((payload as any)[key] === undefined || (payload as any)[key] === '') {
+          delete (payload as any)[key];
+        }
+      });
+
       if (isEdit && petToEdit) {
         await updatePet.mutateAsync({
           id: petToEdit.id,
-          ...data,
-          photoUrl: photoUrl || undefined,
+          ...payload,
         });
-        toast.success(t('common.toasts.saved'));
       } else {
         await addPet.mutateAsync({
-          ...data,
-          photoUrl: photoUrl || undefined,
+          ...payload,
         });
-        toast.success(t('common.toasts.saved'));
       }
       
       handleClose();
@@ -119,7 +123,11 @@ export const PetModal: React.FC = () => {
       onClose={handleClose}
       title={isEdit ? t('pets.editPet') : t('pets.addPet')}
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form 
+        aria-label="pet-form"
+        onSubmit={handleSubmit(onSubmit)} 
+        className="space-y-6"
+      >
         {/* Photo Upload */}
         <div className="flex flex-col items-center gap-4">
           <div className="relative group">
@@ -142,7 +150,7 @@ export const PetModal: React.FC = () => {
           <div className="md:col-span-2">
             <label className="block text-sm font-semibold mb-1.5">{t('pets.name')}</label>
             <input
-              {...register('name')}
+              {...control.register('name')}
               className={`w-full px-4 py-2.5 rounded-xl bg-input border ${errors.name ? 'border-destructive' : 'border-border'} focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none`}
               placeholder={t('pets.name')}
             />
@@ -153,7 +161,7 @@ export const PetModal: React.FC = () => {
           <div>
             <label className="block text-sm font-semibold mb-1.5">{t('pets.species')}</label>
             <select
-              {...register('species')}
+              {...control.register('species')}
               className="w-full px-4 py-2.5 rounded-xl bg-input border border-border focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none appearance-none"
             >
               <option value="cat">{t('pets.species_values.cat')}</option>
@@ -168,21 +176,24 @@ export const PetModal: React.FC = () => {
           <div>
             <label className="block text-sm font-semibold mb-1.5">{t('pets.breed')}</label>
             <input
-              {...register('breed')}
+              {...control.register('breed')}
               className="w-full px-4 py-2.5 rounded-xl bg-input border border-border focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
               placeholder={t('pets.breed')}
             />
           </div>
 
-          {/* Date of Birth */}
-          <div>
-            <label className="block text-sm font-semibold mb-1.5">{t('pets.dateOfBirth')}</label>
-            <input
-              type="date"
-              {...register('dateOfBirth')}
-              className="w-full px-4 py-2.5 rounded-xl bg-input border border-border focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
-            />
-          </div>
+          <Controller
+            name="dateOfBirth"
+            control={control}
+            render={({ field }) => (
+              <CustomDateInput
+                label={t('pets.dateOfBirth')}
+                value={field.value || ''}
+                onChange={field.onChange}
+                error={errors.dateOfBirth?.message}
+              />
+            )}
+          />
 
           {/* Weight */}
           <div>
@@ -190,7 +201,7 @@ export const PetModal: React.FC = () => {
             <input
               type="number"
               step="0.1"
-              {...register('weightKg', { valueAsNumber: true })}
+              {...control.register('weightKg', { valueAsNumber: true })}
               className="w-full px-4 py-2.5 rounded-xl bg-input border border-border focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
               placeholder="0.0"
             />
@@ -200,7 +211,7 @@ export const PetModal: React.FC = () => {
           <div className="md:col-span-2">
             <label className="block text-sm font-semibold mb-1.5">{t('pets.notes')}</label>
             <textarea
-              {...register('notes')}
+              {...control.register('notes')}
               rows={3}
               className="w-full px-4 py-2.5 rounded-xl bg-input border border-border focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none resize-none"
               placeholder={t('pets.notes')}

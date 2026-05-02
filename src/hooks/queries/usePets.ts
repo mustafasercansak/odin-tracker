@@ -29,7 +29,11 @@ export function usePets() {
         where('ownerId', '==', user.uid)
       );
       const ownedSnapshot = await getDocs(ownedQ);
-      const ownedPets = ownedSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Pet[];
+      const ownedPets = ownedSnapshot.docs.map(doc => ({ 
+        id: doc.id, 
+        ...doc.data(),
+        role: 'owner' 
+      })) as any as Pet[];
 
       // 2. Fetch pets shared with the user
       const sharedQ = query(
@@ -42,7 +46,12 @@ export function usePets() {
       const sharedPetsPromises = sharedAccessRecords.map(async (record) => {
         const petDoc = await getDoc(doc(db, 'pets', record.petId));
         if (petDoc.exists()) {
-          return { id: petDoc.id, ...petDoc.data(), isShared: true } as any as Pet;
+          return { 
+            id: petDoc.id, 
+            ...petDoc.data(), 
+            isShared: true,
+            role: record.role 
+          } as any as Pet;
         }
         return null;
       });
@@ -63,12 +72,12 @@ export function usePets() {
     mutationFn: async (petData: Omit<Pet, 'id' | 'ownerId' | 'createdAt' | 'updatedAt'>) => {
       if (!user) throw new Error('Not authenticated');
       
-      const docRef = await addDoc(collection(db, 'pets'), {
+      const docRef = await addDoc(collection(db, 'pets'), cleanData({
         ...petData,
         ownerId: user.uid,
-        createdAt: new Date().toISOString(), // Using ISO string as per schemas in v2 usually
+        createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-      });
+      }));
       return docRef.id;
     },
     onSuccess: () => {
@@ -79,10 +88,10 @@ export function usePets() {
   const updatePet = useMutation({
     mutationFn: async ({ id, ...data }: Partial<Pet> & { id: string }) => {
       const docRef = doc(db, 'pets', id);
-      await updateDoc(docRef, {
+      await updateDoc(docRef, cleanData({
         ...data,
         updatedAt: new Date().toISOString(),
-      });
+      }));
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['pets', user?.uid] });
@@ -105,4 +114,14 @@ export function usePets() {
     updatePet,
     deletePet,
   };
+}
+
+function cleanData(data: any) {
+  const cleaned: any = {};
+  Object.keys(data).forEach(key => {
+    if (data[key] !== undefined) {
+      cleaned[key] = data[key];
+    }
+  });
+  return cleaned;
 }

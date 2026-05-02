@@ -92,8 +92,16 @@ export const Header: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <button className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors overflow-hidden">
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex flex-col items-end">
+            <span className="text-xs font-bold text-foreground leading-none">
+              {user?.displayName || user?.email?.split('@')[0]}
+            </span>
+            <span className="text-[10px] text-muted-foreground font-medium mt-1">
+              {user?.email}
+            </span>
+          </div>
+          <button className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:text-foreground transition-all overflow-hidden border border-border hover:border-primary/50 shadow-inner">
             {user?.photoURL ? (
               <img src={user.photoURL} alt={user.displayName || ''} className="w-full h-full object-cover" />
             ) : (
