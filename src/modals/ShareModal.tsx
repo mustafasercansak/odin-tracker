@@ -15,7 +15,7 @@ export const ShareModal: React.FC = () => {
   const { user } = useAuth();
   const { activeModal, setActiveModal, modalData } = useAppStore();
   const petId = (modalData as any)?.petId;
-  const { shares, sharePet, revokeAccess, isLoading } = useSharedAccess(petId || null);
+  const { shares, sharePet, revokeAccess, updateAccess, isLoading } = useSharedAccess(petId || null);
   
   const [loading, setLoading] = useState(false);
 
@@ -151,10 +151,24 @@ export const ShareModal: React.FC = () => {
                       <Mail size={14} />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-bold truncate">{share.sharedWithEmail}</p>
+                      <p className="text-sm font-bold truncate">
+                        {share.sharedWithDisplayName || share.sharedWithEmail}
+                      </p>
                       <div className="flex items-center gap-1 text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
                         <Shield size={10} />
-                        {t(`shares.roles.${share.role}`)}
+                        {user?.uid === (modalData as any)?.ownerId ? (
+                          <select
+                            value={share.role}
+                            onChange={(e) => updateAccess.mutate({ shareId: share.id, role: e.target.value })}
+                            className="bg-transparent font-bold uppercase tracking-wider text-muted-foreground hover:text-primary outline-none cursor-pointer border-none p-0 focus:ring-0"
+                          >
+                            <option value="viewer" className="bg-card text-foreground">{t('shares.roles.viewer')}</option>
+                            <option value="editor" className="bg-card text-foreground">{t('shares.roles.editor')}</option>
+                            <option value="admin" className="bg-card text-foreground">{t('shares.roles.admin')}</option>
+                          </select>
+                        ) : (
+                          t(`shares.roles.${share.role}`)
+                        )}
                       </div>
                     </div>
                   </div>

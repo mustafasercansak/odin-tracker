@@ -42,6 +42,7 @@ export const healthRecordSchema = z.discriminatedUnion('recordType', [
   }),
   baseRecordSchema.extend({
     recordType: z.literal('medication'),
+    medicationId: z.string().optional(),
   }),
   baseRecordSchema.extend({
     recordType: z.literal('vet_visit'),
@@ -62,6 +63,7 @@ export const healthRecordInputSchema = z.object({
   recordType: recordTypeSchema,
   description: z.string().min(1, 'Açıklama zorunlu'),
   notes: z.string().optional(),
+  medicationId: z.string().optional(),
   fileUrl: z.string().optional(),
   weightKg: z.number().optional(),
   labName: z.string().optional(),

@@ -23,6 +23,12 @@ export const registerSchema = loginSchema.extend({
   path: ['confirmPassword'],
 })
 
+export const profileInputSchema = z.object({
+  displayName: z.string().min(2, 'İsim en az 2 karakter olmalı'),
+  photoURL: z.string().optional(),
+})
+
 export type AppUser = z.infer<typeof userSchema>
 export type LoginInput = z.infer<typeof loginSchema>
 export type RegisterInput = z.infer<typeof registerSchema>
+export type ProfileInput = z.infer<typeof profileInputSchema>

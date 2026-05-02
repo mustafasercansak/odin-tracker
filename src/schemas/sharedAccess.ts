@@ -8,6 +8,7 @@ export const sharedAccessSchema = z.object({
   ownerId: z.string(),
   sharedWithUserId: z.string(),
   sharedWithEmail: z.string().email(),
+  sharedWithDisplayName: z.string().optional(),
   role: accessRoleSchema,
   createdAt: z.string(),
 })

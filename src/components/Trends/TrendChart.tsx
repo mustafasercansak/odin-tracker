@@ -44,6 +44,11 @@ export const TrendChart: React.FC<TrendChartProps> = ({ parameter, data }) => {
           <p className="text-lg font-bold text-primary">
             {point.value} <span className="text-sm font-medium">{point.unit}</span>
           </p>
+          {point.wasConverted && (
+            <p className="text-[10px] text-muted-foreground italic mb-1">
+              ({t('trends.convertedFrom', { value: point.originalValue, unit: point.originalUnit })})
+            </p>
+          )}
           {point.labName && (
             <p className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1">
               {point.labName}

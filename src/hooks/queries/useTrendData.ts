@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { subMonths, isAfter, parseISO } from 'date-fns';
 import { useLabRecords } from './useHealthRecords';
 import { type TrendsTimeRange } from '@/store/useAppStore';
+import { normalizeValue, convertValue } from '@/lib/unit-converters';
 
 export interface TrendDataPoint {
   date: string;
@@ -12,6 +13,9 @@ export interface TrendDataPoint {
   originalLabel?: string;
   referenceMin: number | null;
   referenceMax: number | null;
+  wasConverted?: boolean;
+  originalValue?: number;
+  originalUnit?: string;
 }
 
 export function useMeasurementSeries(
@@ -51,15 +55,29 @@ export function useMeasurementSeries(
       );
 
       matchingMeasurements.forEach((m) => {
+        const normalized = normalizeValue(m.value, m.unit, parameter);
+        
+        // Also normalize reference ranges if value was converted
+        let refMin = m.referenceMin;
+        let refMax = m.referenceMax;
+        
+        if (normalized.wasConverted) {
+          if (refMin !== null) refMin = convertValue(refMin, m.unit, normalized.unit, parameter);
+          if (refMax !== null) refMax = convertValue(refMax, m.unit, normalized.unit, parameter);
+        }
+
         points.push({
           date: record.recordDate,
-          value: m.value,
-          unit: m.unit,
+          value: normalized.value,
+          unit: normalized.unit,
           flag: m.flag,
           labName: record.labName,
           originalLabel: m.originalLabel,
-          referenceMin: m.referenceMin,
-          referenceMax: m.referenceMax,
+          referenceMin: refMin,
+          referenceMax: refMax,
+          wasConverted: normalized.wasConverted,
+          originalValue: m.value,
+          originalUnit: m.unit,
         });
       });
     });

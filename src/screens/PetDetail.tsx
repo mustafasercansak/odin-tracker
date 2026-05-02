@@ -41,7 +41,7 @@ export default function PetDetail() {
   const { records, isLoading: recordsLoading } = useHealthRecords(id || null);
   const { labRecords } = useLabRecords(id || null);
   const { medications } = useMedications(id || null);
-  const { shares, revokeAccess, isLoading: sharesLoading } = useSharedAccess(id || null);
+  const { shares, revokeAccess, updateAccess, isLoading: sharesLoading } = useSharedAccess(id || null);
   const { setActiveModal, searchQuery } = useAppStore();
   const { user } = useAuth();
 
@@ -343,10 +343,29 @@ export default function PetDetail() {
                         <Mail size={20} />
                       </div>
                       <div className="min-w-0">
-                        <p className="font-bold truncate text-lg leading-tight">{share.sharedWithEmail}</p>
-                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-bold uppercase tracking-wider mt-1">
+                        <p className="font-bold truncate text-lg leading-tight">
+                          {share.sharedWithDisplayName || share.sharedWithEmail}
+                        </p>
+                        {share.sharedWithDisplayName && (
+                          <p className="text-xs text-muted-foreground truncate">{share.sharedWithEmail}</p>
+                        )}
+                        <div className="flex items-center gap-1.5 mt-1">
                           <Shield size={12} className="text-primary" />
-                          <span>{t(`shares.roles.${share.role}`)}</span>
+                          {user?.uid === pet.ownerId ? (
+                            <select
+                              value={share.role}
+                              onChange={(e) => updateAccess.mutate({ shareId: share.id, role: e.target.value })}
+                              className="text-[10px] bg-transparent font-bold uppercase tracking-wider text-muted-foreground hover:text-primary outline-none cursor-pointer border-none p-0 focus:ring-0"
+                            >
+                              <option value="viewer" className="bg-card text-foreground">{t('shares.roles.viewer')}</option>
+                              <option value="editor" className="bg-card text-foreground">{t('shares.roles.editor')}</option>
+                              <option value="admin" className="bg-card text-foreground">{t('shares.roles.admin')}</option>
+                            </select>
+                          ) : (
+                            <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
+                              {t(`shares.roles.${share.role}`)}
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>

@@ -3,27 +3,25 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-background: #02040a;
-  --color-foreground: #f0f6fc;
-  --color-card: rgba(13, 17, 23, 0.7);
-  --color-card-foreground: #f0f6fc;
-  --color-popover: #0d1117;
-  --color-popover-foreground: #f0f6fc;
-  --color-primary: #38bdf8;
-  --color-primary-foreground: #02040a;
-  --color-secondary: rgba(33, 38, 45, 0.7);
-  --color-secondary-foreground: #f0f6fc;
-  --color-muted: #161b22;
-  --color-muted-foreground: #8b949e;
-  --color-accent: #1d2d50;
-  --color-accent-foreground: #38bdf8;
-  --color-destructive: #f85149;
-  --color-destructive-foreground: #ffffff;
-  --color-border: rgba(48, 54, 61, 0.7);
-  --color-input: #0d1117;
-  --color-ring: #38bdf8;
-  --color-info: #38bdf8;
-  --color-info-foreground: #ffffff;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 
   --radius-2xl: 1rem;
   --radius-3xl: 1.5rem;
@@ -31,6 +29,50 @@
 
   --shadow-glow: 0 0 20px rgba(56, 189, 248, 0.15);
   --shadow-neon: 0 0 15px rgba(56, 189, 248, 0.4);
+}
+
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: rgba(255, 255, 255, 0.8);
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #0ea5e9;
+  --primary-foreground: #ffffff;
+  --secondary: rgba(241, 245, 249, 0.8);
+  --secondary-foreground: #475569;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #e0f2fe;
+  --accent-foreground: #0ea5e9;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: rgba(226, 232, 240, 0.8);
+  --input: #ffffff;
+  --ring: #0ea5e9;
+}
+
+.dark {
+  --background: #020617;
+  --foreground: #f8fafc;
+  --card: rgba(15, 23, 42, 0.8);
+  --card-foreground: #f8fafc;
+  --popover: #0f172a;
+  --popover-foreground: #f8fafc;
+  --primary: #38bdf8;
+  --primary-foreground: #020617;
+  --secondary: rgba(30, 41, 59, 0.8);
+  --secondary-foreground: #94a3b8;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #1e293b;
+  --accent-foreground: #38bdf8;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: rgba(51, 65, 85, 0.8);
+  --input: #0f172a;
+  --ring: #38bdf8;
 }
 
 :root {
@@ -91,16 +133,20 @@ body::after {
 
 /* Hyper-Tech Components */
 .glass-panel {
-  background: rgba(13, 17, 23, 0.6);
+  background: var(--card);
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+.dark .glass-panel {
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
 .card-hyper {
-  background: linear-gradient(135deg, rgba(22, 27, 34, 0.4) 0%, rgba(13, 17, 23, 0.6) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.03);
+  background: var(--card);
+  border: 1px solid var(--border);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   overflow: hidden;
@@ -110,14 +156,15 @@ body::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(45deg, transparent, rgba(56, 189, 248, 0.03), transparent);
+  background: linear-gradient(45deg, transparent, var(--primary), transparent);
+  opacity: 0.05;
   transform: translateX(-100%);
   transition: transform 0.6s ease;
 }
 
 .card-hyper:hover {
-  transform: scale(1.03) translateY(-5px);
-  border-color: rgba(56, 189, 248, 0.3);
+  transform: scale(1.02) translateY(-5px);
+  border-color: var(--primary);
   box-shadow: var(--shadow-neon);
 }
 
@@ -126,8 +173,8 @@ body::after {
 }
 
 .btn-neon {
-  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-  color: #02040a;
+  background: var(--primary);
+  color: var(--primary-foreground);
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -138,7 +185,7 @@ body::after {
 .btn-neon:hover {
   filter: brightness(1.1);
   transform: translateY(-2px);
-  box-shadow: 0 0 25px rgba(56, 189, 248, 0.6);
+  box-shadow: 0 0 25px var(--primary);
 }
 
 /* Animations */

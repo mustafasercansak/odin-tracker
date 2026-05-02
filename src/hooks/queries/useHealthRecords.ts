@@ -96,3 +96,34 @@ export function useLabRecords(petId: string | null) {
     isLoading,
   };
 }
+
+export function useAllLabRecords(petIds: string[]) {
+  const queryClient = useQueryClient();
+
+  const allRecordsQuery = useQuery({
+    queryKey: ['healthRecords', 'all', petIds],
+    queryFn: async () => {
+      if (petIds.length === 0) return [];
+      
+      // Firestore 'in' query limited to 10-30 items, but we'll fetch all records for these pets
+      // For large number of pets, this might need optimization
+      const q = query(
+        collection(db, 'health_records'),
+        where('petId', 'in', petIds),
+        where('recordType', '==', 'lab_test')
+      );
+      
+      const snapshot = await getDocs(q);
+      const records = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as LabTestRecord[];
+      
+      return records.filter(r => r.measurements && r.measurements.length > 0)
+        .sort((a, b) => new Date(b.recordDate).getTime() - new Date(a.recordDate).getTime());
+    },
+    enabled: petIds.length > 0,
+  });
+
+  return {
+    labRecords: allRecordsQuery.data || [],
+    isLoading: allRecordsQuery.isLoading,
+  };
+}

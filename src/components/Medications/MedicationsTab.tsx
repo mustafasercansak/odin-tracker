@@ -1,11 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pill, Plus, Clock, CheckCircle2, AlertCircle, Calendar, ChevronDown, ChevronUp, Bell, Trash2, Edit2 } from 'lucide-react';
+import { Pill, Plus, Clock, CheckCircle2, AlertCircle, Calendar, ChevronDown, ChevronUp, Bell, Edit2 } from 'lucide-react';
 import { useMedications } from '@/hooks/queries/useMedications';
 import { useHealthRecords } from '@/hooks/queries/useHealthRecords';
 import { usePets } from '@/hooks/queries/usePets';
 import { useAppStore } from '@/store/useAppStore';
-import { calculateNextDose, isDoseOverdue } from '@/lib/medication-helpers';
+import { calculateNextDose, isDoseOverdue, calculateAdherence } from '@/lib/medication-helpers';
 import { requestNotificationPermission } from '@/lib/messaging';
 import { useAuth } from '@/hooks/useAuth';
 import { format, parseISO, isSameDay, isPast } from 'date-fns';
@@ -70,9 +70,10 @@ export const MedicationsTab: React.FC<MedicationsTabProps> = ({ petId }) => {
         petId,
         recordDate: now,
         recordType: 'medication',
+        medicationId: med.id,
         description: `${med.name} - ${med.dosage} (${t(`medications.frequencies.${med.frequency}`)})`,
         notes: t('medications.doseLoggedAutomatically'),
-      });
+      } as any);
 
       // 2. Update medication doc
       await updateMedication.mutateAsync({
@@ -245,6 +246,21 @@ export const MedicationsTab: React.FC<MedicationsTabProps> = ({ petId }) => {
                       <Calendar size={16} />
                     </button>
                   )}
+                </div>
+
+                <div className="mb-4">
+                  <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1.5">
+                    <span>{t('medications.adherence')}</span>
+                    <span className={calculateAdherence(records.filter(r => (r as any).medicationId === med.id), med.frequency) < 80 ? 'text-destructive' : 'text-green-500'}>
+                      %{calculateAdherence(records.filter(r => (r as any).medicationId === med.id), med.frequency)}
+                    </span>
+                  </div>
+                  <div className="h-1.5 w-full bg-secondary rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full transition-all duration-1000 ${calculateAdherence(records.filter(r => (r as any).medicationId === med.id), med.frequency) < 80 ? 'bg-destructive' : 'bg-green-500'}`}
+                      style={{ width: `${calculateAdherence(records.filter(r => (r as any).medicationId === med.id), med.frequency)}%` }}
+                    ></div>
+                  </div>
                 </div>
 
                 <div className="space-y-3 mb-6">

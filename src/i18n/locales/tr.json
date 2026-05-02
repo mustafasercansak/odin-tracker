@@ -3,6 +3,14 @@
     "schedule": "Günlük Program",
     "todayTasks": "Bugün Yapılacaklar"
   },
+  "insights": {
+    "title": "Sağlık Analizleri",
+    "significantIncrease": "{{param}} Önemli Artış",
+    "increaseDescription": "{{pet}} dostumuzun {{param}} değeri son ölçümde %{{percent}} artmış görünüyor. Lütfen takip edin.",
+    "backToNormal": "{{param}} Normale Döndü",
+    "normalDescription": "{{pet}} dostumuzun {{param}} değeri artık referans aralığında. Harika haber!",
+    "noInsights": "Şu an için analiz edilecek yeterli veri yok."
+  },
   "common": {
     "save": "Kaydet",
     "cancel": "İptal",
@@ -35,7 +43,9 @@
       "extractionSuccess": "{{count}} değer çıkarıldı",
       "extractionPartial": "{{count}} değerin güveni düşük, lütfen doğrulayın",
       "extractionFailed": "Görselden veri okunamadı",
-      "quotaExceeded": "Aylık kota doldu"
+      "quotaExceeded": "Aylık kota doldu",
+      "unauthorized": "Erişim izniniz yok",
+      "fileUploadFailed": "Dosya yüklenemedi (Firebase), ancak kayıt eklenecek."
     },
     "logout": "Çıkış Yap"
   },
@@ -94,6 +104,8 @@
     "notes": "Notlar",
     "file": "Dosya",
     "uploadFile": "Dosya Yükle",
+    "fileUploaded": "Dosya yüklendi",
+    "fileRequirements": "Maks 10MB • PDF, JPG, PNG",
     "labName": "Laboratuvar Adı",
     "weightKg": "Ağırlık (kg)",
     "measurements": "Lab Değerleri",
@@ -121,6 +133,7 @@
       "chloride": "Klor",
       "albumin": "Albümin",
       "total_protein": "Total Protein",
+      "globulin": "Globülin",
       "urine_specific_gravity": "İdrar Yoğunluğu (USG)",
       "upc_ratio": "UPC Oranı",
       "urine_ph": "İdrar pH",
@@ -132,7 +145,12 @@
       "ast": "AST",
       "alkp": "ALKP",
       "glucose": "Glükoz",
-      "t4": "T4 (Tiroid)"
+      "t4": "T4 (Tiroid)",
+      "bilirubin": "Bilirubin",
+      "alp": "ALP",
+      "ggt": "GGT",
+      "cholesterol": "Kolesterol",
+      "triglycerides": "Trigliserit"
     },
     "flags": {
       "high": "Yüksek",
@@ -207,7 +225,8 @@
     "noHistory": "Henüz doz kaydı bulunmuyor.",
     "missedDoseAlert": "Geciken Doz Uyarısı",
     "missedDoseDescription": "{{name}} ilacının dozu gecikmiş görünüyor. Lütfen en kısa sürede uygulayın.",
-    "dueToday": "Bugün Yapılacaklar"
+    "dueToday": "Bugün Yapılacaklar",
+    "adherence": "Uyum Oranı"
   },
   "trends": {
     "title": "Trend Grafikleri",
@@ -224,7 +243,8 @@
     "latestValue": "Son Değer",
     "referenceRange": "Referans Aralığı",
     "unitMismatch": "Uyarı: Bu parametrede farklı birimler kullanılmış",
-    "recentValues": "Son Değerler"
+    "recentValues": "Son Değerler",
+    "convertedFrom": "{{value}} {{unit}} biriminden dönüştürüldü"
   },
   "shares": {
     "title": "Erişim Paylaşımı",
@@ -282,7 +302,10 @@
     "privacy": "Güvenlik & Gizlilik",
     "shareDataAnon": "Anonim Veri Paylaşımı",
     "shareDataAnonDescription": "Araştırma için verilerini anonim olarak paylaş (Örn: Böbrek yetmezliği istatistikleri)",
-    "anonymousShare": "Lab değerlerini anonim olarak paylaş"
+    "anonymousShare": "Lab değerlerini anonim olarak paylaş",
+    "editProfile": "Profili Düzenle",
+    "displayName": "Görünen İsim",
+    "emailCannotBeChanged": "E-posta adresi değiştirilemez"
   },
   "tabs": {
     "healthRecords": "Sağlık",

@@ -25,7 +25,7 @@ import { tr, enUS } from 'date-fns/locale';
 export default function Settings() {
   const { t, i18n } = useTranslation();
   const { user, signOut } = useAuth();
-  const { theme, setTheme, setLocale } = useAppStore();
+  const { theme, setTheme, setLocale, setActiveModal } = useAppStore();
   const { data: usage } = useExtractionUsage();
   
   const [exporting, setExporting] = React.useState(false);
@@ -85,16 +85,27 @@ export default function Settings() {
       </header>
 
       {/* User Profile */}
-      <section className="bg-card border border-border rounded-3xl p-6 shadow-sm">
+      <section className="bg-card border border-border rounded-3xl p-6 shadow-sm flex items-center justify-between group">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-            <User size={32} />
+          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary overflow-hidden">
+            {user?.photoURL ? (
+              <img src={user.photoURL} alt={user.displayName || ''} className="w-full h-full object-cover" />
+            ) : (
+              <User size={32} />
+            )}
           </div>
           <div>
             <h2 className="text-xl font-bold">{user?.displayName || t('common.user')}</h2>
             <p className="text-sm text-muted-foreground">{user?.email}</p>
           </div>
         </div>
+        <button 
+          onClick={() => setActiveModal('profile_edit')}
+          className="p-2.5 rounded-xl bg-secondary text-muted-foreground hover:text-primary transition-all focus:ring-2 focus:ring-primary outline-none"
+          title={t('common.edit')}
+        >
+          <ChevronRight size={20} />
+        </button>
       </section>
 
       {/* App Settings */}

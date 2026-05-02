@@ -58,23 +58,31 @@ Canonical parameter names (use these when matching):
 creatinine, sdma, bun, phosphorus, potassium, calcium, sodium,
 chloride, albumin, total_protein, urine_specific_gravity, upc_ratio,
 urine_ph, hematocrit, hemoglobin, wbc, platelets, alt, ast, alkp,
-glucose, t4
+glucose, t4, bilirubin, alp, ggt, cholesterol, triglycerides
 
 Common Turkish/English aliases:
-- Kreatinin / Creatinine / CREA → creatinine
-- Üre / Urea / BUN → bun
-- Fosfor / Phosphorus / PHOS → phosphorus
-- Potasyum / Potassium / K → potassium
-- İdrar yoğunluğu / USG / Specific Gravity → urine_specific_gravity
-- İdrar protein/kreatinin / UPC → upc_ratio
+- Kreatinin / Creatinine / CREA / KREAT → creatinine
+- Üre / Urea / BUN / URE → bun
+- Fosfor / Phosphorus / PHOS / P → phosphorus
+- Potasyum / Potassium / K / POT → potassium
+- İdrar yoğunluğu / USG / Specific Gravity / YOĞUNLUK → urine_specific_gravity
+- İdrar protein/kreatinin / UPC / UP/CR → upc_ratio
+- Albümin / Albumin / ALB → albumin
+- Total Protein / TP / PROT → total_protein
+- Glukoz / Glucose / GLU / ŞEKER → glucose
+- Karaciğer enzimleri: ALT (SGPT), AST (SGOT), ALKP (ALP), GGT
+- Tiroid: T4, Free T4
 
 Confidence rules:
-- "low" if digit unclear, smudged, partially cut off, or your reading uncertain
-- "medium" if legible but slight ambiguity
-- "high" if clear
+- "low" if digit unclear, smudged, partially cut off, or your reading uncertain.
+- "medium" if legible but slight ambiguity.
+- "high" if clear.
 
 If a value is not in the canonical list, still extract it with snake_case parameter name.
 Never invent values. If you cannot read it, omit the row.
+If multiple pages are present in the image/document, extract ALL results from ALL pages.
+If reference ranges are missing in the report, set them to null.
+If a flag (H/L) is present, map it to high/low.
 `;
 
 export const extractLabResults = onCall({ 
@@ -160,29 +168,38 @@ export const extractLabResults = onCall({
       apiKey: process.env.ANTHROPIC_API_KEY,
     });
 
-    const message = await anthropic.messages.create({
-      model: "claude-3-haiku-20240307", //Haıku is fast and cheap for vision
-      max_tokens: 2048,
-      messages: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "image",
-              source: {
-                type: "base64",
-                media_type: contentType as any,
-                data: base64,
+      const message = await anthropic.messages.create({
+        model: "claude-3-5-sonnet-20241022", // Use a model that supports documents/vision better
+        max_tokens: 2048,
+        messages: [
+          {
+            role: "user",
+            content: [
+              contentType === 'application/pdf' 
+                ? {
+                    type: "document",
+                    source: {
+                      type: "base64",
+                      media_type: "application/pdf",
+                      data: base64,
+                    },
+                  }
+                : {
+                    type: "image",
+                    source: {
+                      type: "base64",
+                      media_type: contentType as any,
+                      data: base64,
+                    },
+                  },
+              {
+                type: "text",
+                text: EXTRACTION_PROMPT,
               },
-            },
-            {
-              type: "text",
-              text: EXTRACTION_PROMPT,
-            },
-          ],
-        },
-      ],
-    });
+            ],
+          },
+        ],
+      });
 
     const textContent = message.content[0];
     if (textContent.type !== 'text') {
@@ -199,7 +216,7 @@ export const extractLabResults = onCall({
       ...validated,
       extractionMetadata: {
         provider: 'anthropic',
-        model: 'claude-3-haiku-20240307',
+        model: 'claude-3-5-sonnet-20241022',
         extractedAt: new Date().toISOString(),
       }
     };

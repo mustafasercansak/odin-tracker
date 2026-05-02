@@ -3,6 +3,14 @@
     "schedule": "Daily Schedule",
     "todayTasks": "Today's Tasks"
   },
+  "insights": {
+    "title": "Health Insights",
+    "significantIncrease": "{{param}} Significant Increase",
+    "increaseDescription": "{{pet}}'s {{param}} level has increased by {{percent}}% in the latest measurement. Please monitor closely.",
+    "backToNormal": "{{param}} Back to Normal",
+    "normalDescription": "{{pet}}'s {{param}} level is now within the reference range. Great news!",
+    "noInsights": "Not enough data to analyze yet."
+  },
   "common": {
     "save": "Save",
     "cancel": "Cancel",
@@ -35,7 +43,9 @@
       "extractionSuccess": "{{count}} values extracted",
       "extractionPartial": "{{count}} values have low confidence, please verify",
       "extractionFailed": "Failed to extract data from image",
-      "quotaExceeded": "Monthly quota exceeded"
+      "quotaExceeded": "Monthly quota exceeded",
+      "unauthorized": "You don't have permission to access this",
+      "fileUploadFailed": "File upload failed, but record will be saved."
     },
     "logout": "Logout"
   },
@@ -94,6 +104,8 @@
     "notes": "Notes",
     "file": "File",
     "uploadFile": "Upload File",
+    "fileUploaded": "File uploaded",
+    "fileRequirements": "Max 10MB • PDF, JPG, PNG",
     "labName": "Lab Name",
     "weightKg": "Weight (kg)",
     "measurements": "Lab Results",
@@ -121,6 +133,7 @@
       "chloride": "Chloride",
       "albumin": "Albumin",
       "total_protein": "Total Protein",
+      "globulin": "Globulin",
       "urine_specific_gravity": "Urine Specific Gravity (USG)",
       "upc_ratio": "UPC Ratio",
       "urine_ph": "Urine pH",
@@ -132,7 +145,12 @@
       "ast": "AST",
       "alkp": "ALKP",
       "glucose": "Glucose",
-      "t4": "T4 (Thyroid)"
+      "t4": "T4 (Thyroid)",
+      "bilirubin": "Bilirubin",
+      "alp": "ALP",
+      "ggt": "GGT",
+      "cholesterol": "Cholesterol",
+      "triglycerides": "Triglycerides"
     },
     "flags": {
       "high": "High",
@@ -207,7 +225,8 @@
     "noHistory": "No dose history yet.",
     "missedDoseAlert": "Missed Dose Alert",
     "missedDoseDescription": "Dose of {{name}} seems to be missed. Please apply it as soon as possible.",
-    "dueToday": "Due Today"
+    "dueToday": "Due Today",
+    "adherence": "Adherence"
   },
   "trends": {
     "title": "Trend Charts",
@@ -224,7 +243,8 @@
     "latestValue": "Latest Value",
     "referenceRange": "Reference Range",
     "unitMismatch": "Warning: Different units used for this parameter",
-    "recentValues": "Recent Values"
+    "recentValues": "Recent Values",
+    "convertedFrom": "Converted from {{value}} {{unit}}"
   },
   "shares": {
     "title": "Access Sharing",
@@ -282,7 +302,10 @@
     "privacy": "Security & Privacy",
     "shareDataAnon": "Anonymous Data Sharing",
     "shareDataAnonDescription": "Share your data anonymously for research (e.g., Kidney failure statistics)",
-    "anonymousShare": "Share lab values anonymously"
+    "anonymousShare": "Share lab values anonymously",
+    "editProfile": "Edit Profile",
+    "displayName": "Display Name",
+    "emailCannotBeChanged": "Email address cannot be changed"
   },
   "tabs": {
     "healthRecords": "Health",

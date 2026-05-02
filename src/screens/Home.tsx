@@ -10,6 +10,7 @@ import { useAllMedications, useMedications } from '@/hooks/queries/useMedication
 import { useHealthRecords } from '@/hooks/queries/useHealthRecords';
 import { calculateNextDose, isDoseOverdue } from '@/lib/medication-helpers';
 import toast from 'react-hot-toast';
+import { HealthInsights } from '@/components/Home/HealthInsights';
 
 export default function Home() {
   const { t, i18n } = useTranslation();
@@ -37,9 +38,8 @@ export default function Home() {
         
         if (!userDoc.exists()) {
           await setDoc(userRef, {
-            uid: currentUser.uid,
             email: currentUser.email.toLowerCase(),
-            displayName: currentUser.displayName || 'User',
+            displayName: currentUser.displayName || null,
             createdAt: new Date().toISOString(),
           });
         }
@@ -86,6 +86,7 @@ export default function Home() {
         petId: med.petId,
         recordDate: now,
         recordType: 'medication',
+        medicationId: med.id,
         description: `${med.name} - ${med.dosage} (${t(`medications.frequencies.${med.frequency}`)})`,
         notes: t('medications.doseLoggedAutomatically'),
       });
@@ -132,8 +133,10 @@ export default function Home() {
         </button>
       </header>
 
+      {pets.length > 0 && <HealthInsights pets={pets} />}
+
       {/* Global Daily Schedule */}
-      <section className="glass-panel rounded-4xl p-8 border-white/5 shadow-neon-soft relative overflow-hidden">
+      <section className="glass-panel rounded-4xl p-8 border-border shadow-sm relative overflow-hidden">
         {/* Animated Background Pulse for the whole section */}
         <div className="absolute -top-24 -left-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-pulse"></div>
         
@@ -159,7 +162,7 @@ export default function Home() {
           </div>
 
           {pendingMeds.length === 0 ? (
-            <div className="py-10 text-center bg-secondary/10 rounded-3xl border border-dashed border-white/5">
+            <div className="py-10 text-center bg-secondary/10 rounded-3xl border border-dashed border-border">
               <CheckCircle2 size={32} className="mx-auto text-primary mb-3 opacity-20" />
               <p className="text-muted-foreground font-bold italic">
                 {completedMeds.length > 0 ? t('medications.allDosesCompleted') || 'Tüm dozlar tamamlandı!' : t('medications.noActiveMedications')}
@@ -172,7 +175,7 @@ export default function Home() {
                 const overdue = isDoseOverdue(med.nextDoseDue);
                 const isDueToday = med.nextDoseDue && isSameDay(parseISO(med.nextDoseDue), new Date());
                 return (
-                  <div key={`home-due-${med.id}`} className="group flex flex-col p-4 bg-secondary/30 border border-white/5 rounded-2xl hover:border-primary/50 transition-all duration-300">
+                  <div key={`home-due-${med.id}`} className="group flex flex-col p-4 bg-secondary/30 border border-border rounded-2xl hover:border-primary/50 transition-all duration-300">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center text-primary group-hover:scale-110 transition-transform relative">
                         {pet?.photoUrl ? (
@@ -187,7 +190,7 @@ export default function Home() {
                       </div>
                     </div>
                     
-                    <div className="flex items-center justify-between mt-auto pt-3 border-t border-white/5">
+                    <div className="flex items-center justify-between mt-auto pt-3 border-t border-border">
                       <div className="text-[11px] font-bold">
                         <span className={`uppercase ${isDueToday ? 'text-primary' : 'text-muted-foreground'}`}>
                           {format(parseISO(med.nextDoseDue!), 'dd.MM.yyyy, HH.mm')}
@@ -230,7 +233,7 @@ export default function Home() {
                 {completedMeds.map(med => {
                   const pet = pets.find(p => p.id === med.petId);
                   return (
-                    <div key={`home-done-${med.id}`} className="flex items-center gap-3 p-3 bg-secondary/20 border border-white/5 rounded-2xl">
+                    <div key={`home-done-${med.id}`} className="flex items-center gap-3 p-3 bg-secondary/20 border border-border rounded-2xl">
                       <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center text-muted-foreground overflow-hidden">
                         {pet?.photoUrl ? (
                           <img src={pet.photoUrl} alt={pet.name} className="w-full h-full object-cover" />
@@ -253,7 +256,7 @@ export default function Home() {
                           e.stopPropagation();
                           setActiveModal('medication_edit', med);
                         }}
-                        className="p-1.5 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-primary transition-colors"
+                        className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground hover:text-primary transition-colors"
                       >
                         <Edit3 size={14} />
                       </button>
@@ -267,7 +270,7 @@ export default function Home() {
       </section>
 
       {pets.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-32 px-6 glass-panel rounded-4xl text-center border-white/5">
+        <div className="flex flex-col items-center justify-center py-32 px-6 glass-panel rounded-4xl text-center border-border">
           <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center text-primary mb-8 shadow-neon animate-pulse">
             <Heart size={40} fill="currentColor" />
           </div>
@@ -361,7 +364,7 @@ export default function Home() {
           {/* Add New Pet Card */}
           <button
             onClick={() => setActiveModal('pet_add')}
-            className="flex flex-col items-center justify-center p-6 border border-dashed border-border rounded-xl hover:border-white/30 hover:bg-secondary/30 transition-all group"
+            className="flex flex-col items-center justify-center p-6 border border-dashed border-border rounded-xl hover:border-primary/30 hover:bg-secondary transition-all group"
           >
             <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground group-hover:text-primary transition-all mb-3">
               <Plus size={20} />

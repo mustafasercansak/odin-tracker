@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 import { 
   onAuthStateChanged, 
   type User,
-  signOut as firebaseSignOut
+  signOut as firebaseSignOut,
+  updateProfile as firebaseUpdateProfile
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { create } from 'zustand';
@@ -42,10 +43,23 @@ export function useAuth() {
     }
   };
 
+  const updateProfile = async (data: { displayName?: string; photoURL?: string }) => {
+    if (!auth.currentUser) return;
+    try {
+      await firebaseUpdateProfile(auth.currentUser, data);
+      // Force user object refresh in store
+      setUser({ ...auth.currentUser });
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      throw error;
+    }
+  };
+
   return {
     user,
     loading,
     isAuthenticated: !!user,
     signOut,
+    updateProfile,
   };
 }

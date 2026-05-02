@@ -6,7 +6,8 @@ import {
   getDocs, 
   addDoc, 
   deleteDoc, 
-  doc
+  doc,
+  updateDoc
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { type SharedAccess } from '@/schemas/sharedAccess';
@@ -27,7 +28,27 @@ export function useSharedAccess(petId: string | null) {
       const snapshot = await getDocs(q);
       const shares = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as SharedAccess[];
       
-      return shares.sort((a, b) => 
+      // Fetch current names from users collection to ensure they are up to date
+      const enrichedShares = await Promise.all(shares.map(async (share) => {
+        try {
+          const userSnapshot = await getDocs(query(collection(db, 'users'), where('email', '==', share.sharedWithEmail)));
+          if (!userSnapshot.empty) {
+             const userData = userSnapshot.docs[0].data();
+             const name = (userData.displayName && userData.displayName !== 'User') ? userData.displayName : null;
+             return { ...share, sharedWithDisplayName: name };
+          }
+        } catch (e) {
+          console.error('Error fetching user name:', e);
+        }
+        
+        // If we reach here, we didn't enrich. Strip 'User' from the original share if present.
+        if (share.sharedWithDisplayName === 'User') {
+          return { ...share, sharedWithDisplayName: null };
+        }
+        return share;
+      }));
+
+      return enrichedShares.sort((a, b) => 
         new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
       );
     },
@@ -48,6 +69,7 @@ export function useSharedAccess(petId: string | null) {
 
       const targetUser = userSnapshot.docs[0];
       const targetUserId = targetUser.id;
+      const targetUserData = targetUser.data();
 
       // 2. Check if already shared
       const existingQ = query(
@@ -67,6 +89,7 @@ export function useSharedAccess(petId: string | null) {
         ownerId,
         sharedWithUserId: targetUserId,
         sharedWithEmail: email.toLowerCase(),
+        sharedWithDisplayName: targetUserData.displayName || null,
         role,
         createdAt: new Date().toISOString(),
       });
@@ -85,10 +108,29 @@ export function useSharedAccess(petId: string | null) {
     },
   });
 
+  const updateAccess = useMutation({
+    mutationFn: async ({ shareId, role }: { shareId: string, role: string }) => {
+      await updateDoc(doc(db, 'shared_access', shareId), {
+        role,
+        updatedAt: new Date().toISOString(),
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['shared_access', petId] });
+      // dynamic import for toast to avoid top-level issues if not needed
+      import('react-hot-toast').then(({ toast }) => toast.success('Yetki güncellendi'));
+    },
+    onError: (err) => {
+      console.error('Update access failed:', err);
+      import('react-hot-toast').then(({ toast }) => toast.error('Yetki güncellenirken bir hata oluştu'));
+    }
+  });
+
   return {
     shares: sharesQuery.data || [],
     isLoading: sharesQuery.isLoading,
     sharePet,
     revokeAccess,
+    updateAccess,
   };
 }

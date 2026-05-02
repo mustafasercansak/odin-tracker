@@ -15,7 +15,6 @@ import { MeasurementEditor } from '@/components/MeasurementEditor';
 import { CustomDateInput } from '@/components/CustomDateInput';
 import { CustomTimeInput } from '@/components/CustomTimeInput';
 import { format, parseISO } from 'date-fns';
-import { tr, enUS } from 'date-fns/locale';
 
 export const HealthRecordModal: React.FC = () => {
   const { t } = useTranslation();
@@ -187,8 +186,14 @@ export const HealthRecordModal: React.FC = () => {
       let finalFileUrl = fileUrl;
 
       if (file) {
-        const path = `health_files/${data.petId}/${Date.now()}_${file.name}`;
-        finalFileUrl = await uploadFile(file, path);
+        try {
+          const path = `health_files/${data.petId}/${Date.now()}_${file.name}`;
+          finalFileUrl = await uploadFile(file, path);
+        } catch (uploadError) {
+          console.warn('File upload failed (possibly due to Firebase limits), proceeding without file:', uploadError);
+          // dynamic import for toast to avoid issues
+          import('react-hot-toast').then(({ toast }) => toast.error(t('common.toasts.fileUploadFailed')));
+        }
       }
 
       // Combine date and time into a single ISO string
@@ -402,10 +407,10 @@ export const HealthRecordModal: React.FC = () => {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">
-                    {file ? file.name : fileUrl ? 'Uploaded file' : t('healthRecords.uploadFile')}
+                    {file ? file.name : fileUrl ? t('healthRecords.fileUploaded') : t('healthRecords.uploadFile')}
                   </p>
                   <p className="text-xs text-muted-foreground uppercase tracking-wider font-bold">
-                    Max 10MB • PDF, JPG, PNG
+                    {t('healthRecords.fileRequirements')}
                   </p>
                 </div>
                 <ChevronRight size={20} className="text-muted-foreground" />

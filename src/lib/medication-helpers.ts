@@ -40,3 +40,35 @@ export function isDoseOverdue(nextDoseDue: string | undefined): boolean {
   if (!nextDoseDue) return false;
   return new Date() > parseISO(nextDoseDue);
 }
+
+/**
+ * Calculates medication adherence (percentage of doses logged vs expected) 
+ * for the last 7 days.
+ */
+export function calculateAdherence(
+  logs: { recordDate: string }[],
+  frequency: Frequency
+): number {
+  if (frequency === 'as_needed') return 100;
+
+  const now = new Date();
+  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  
+  const relevantLogs = logs.filter(l => parseISO(l.recordDate) >= sevenDaysAgo);
+  
+  let expectedDoses = 0;
+  switch (frequency) {
+    case 'daily': expectedDoses = 7; break;
+    case 'twice_daily': expectedDoses = 14; break;
+    case 'three_times_daily': expectedDoses = 21; break;
+    case 'four_times_daily': expectedDoses = 28; break;
+    case 'every_other_day': expectedDoses = 3.5; break;
+    case 'weekly': expectedDoses = 1; break;
+    default: expectedDoses = 7;
+  }
+
+  if (expectedDoses === 0) return 100;
+  
+  const score = (relevantLogs.length / expectedDoses) * 100;
+  return Math.min(Math.round(score), 100);
+}

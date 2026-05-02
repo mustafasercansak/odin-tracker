@@ -11,6 +11,7 @@ import { PetModal } from './modals/PetModal';
 import { HealthRecordModal } from './modals/HealthRecordModal';
 import { MedicationModal } from './modals/MedicationModal';
 import { ShareModal } from './modals/ShareModal';
+import { ProfileModal } from './modals/ProfileModal';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './lib/queryClient';
 
@@ -61,6 +62,7 @@ function App() {
         <HealthRecordModal />
         <MedicationModal />
         <ShareModal />
+        <ProfileModal />
         <Routes>
           {/* Public Routes */}
           <Route
