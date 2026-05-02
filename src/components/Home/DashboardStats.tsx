@@ -1,19 +1,16 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { type Pet } from '@/schemas/pet';
 import { useAllMedications } from '@/hooks/queries/useMedications';
 import { useAllLabRecords, useAllVaccinationRecords } from '@/hooks/queries/useHealthRecords';
 import { isDoseOverdue } from '@/lib/medication-helpers';
 import { parseISO, isPast, differenceInDays, isSameDay } from 'date-fns';
-import { 
-  Activity, 
-  AlertTriangle, 
-  Pill, 
-  Syringe, 
-  TrendingUp,
+import {
+  Activity,
+  AlertTriangle,
+  Pill,
+  Syringe,
   Shield,
-  Heart
 } from 'lucide-react';
 
 interface DashboardStatsProps {
@@ -22,7 +19,6 @@ interface DashboardStatsProps {
 
 export const DashboardStats: React.FC<DashboardStatsProps> = ({ pets }) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const petIds = React.useMemo(() => pets.map(p => p.id), [pets]);
   
   const { data: allMedications } = useAllMedications(petIds);

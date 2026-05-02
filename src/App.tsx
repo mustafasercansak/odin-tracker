@@ -8,6 +8,8 @@ import ForgotPassword from './screens/ForgotPassword';
 import Home from './screens/Home';
 import PetDetail from './screens/PetDetail';
 import Settings from './screens/Settings';
+import Medications from './screens/Medications';
+import Trends from './screens/Trends';
 import { PetModal } from './modals/PetModal';
 import { HealthRecordModal } from './modals/HealthRecordModal';
 import { MedicationModal } from './modals/MedicationModal';
@@ -23,20 +25,6 @@ import { queryClient } from './lib/queryClient';
 import { useAppStore } from './store/useAppStore';
 import { useEffect } from 'react';
 
-// Placeholders for global views (future tasks)
-const Medications = () => (
-  <div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-8 bg-card border border-dashed border-border rounded-3xl">
-    <h2 className="text-xl font-bold mb-2">Medications Overview</h2>
-    <p className="text-muted-foreground">Select a pet from the home screen to see their specific medications.</p>
-  </div>
-);
-
-const Trends = () => (
-  <div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-8 bg-card border border-dashed border-border rounded-3xl">
-    <h2 className="text-xl font-bold mb-2">Global Trends</h2>
-    <p className="text-muted-foreground">Select a pet from the home screen to see their health parameter trends.</p>
-  </div>
-);
 
 const LabExplanationModalWrapper = () => {
   const { activeModal, modalData } = useAppStore();

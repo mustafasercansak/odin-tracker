@@ -31,7 +31,7 @@ export const PetModal: React.FC = () => {
     formState: { errors },
     reset,
   } = useForm<PetInput>({
-    resolver: zodResolver(petInputSchema),
+    resolver: zodResolver(petInputSchema) as any,
   });
 
   // Sync form with modal data
