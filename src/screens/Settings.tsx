@@ -26,7 +26,7 @@ export default function Settings() {
   const { t, i18n } = useTranslation();
   const { user, signOut } = useAuth();
   const { theme, setTheme, setLocale } = useAppStore();
-  const { data: usage, isLoading: usageLoading } = useExtractionUsage();
+  const { data: usage } = useExtractionUsage();
   
   const [exporting, setExporting] = React.useState(false);
   const [importing, setImporting] = React.useState(false);

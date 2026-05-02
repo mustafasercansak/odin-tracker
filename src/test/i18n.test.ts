@@ -23,7 +23,7 @@ describe('i18n Localization Check', () => {
 
     // Check for empty translations
     const emptyInTr = trKeys.filter(k => {
-      const val = k.split('.').reduce((obj, key) => obj?.[key], tr);
+      const val = k.split('.').reduce((obj, key) => obj?.[key], tr as any);
       return typeof val === 'string' && val.trim() === '';
     });
 

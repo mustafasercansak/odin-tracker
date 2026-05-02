@@ -7,8 +7,7 @@ import {
   addDoc, 
   updateDoc, 
   deleteDoc, 
-  doc,
-  orderBy
+  doc
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { type Medication } from '@/schemas/medication';

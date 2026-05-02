@@ -93,13 +93,13 @@ export const PetModal: React.FC = () => {
         await updatePet.mutateAsync({
           id: petToEdit.id,
           ...data,
-          photoUrl: photoUrl || null,
+          photoUrl: photoUrl || undefined,
         });
         toast.success(t('common.toasts.saved'));
       } else {
         await addPet.mutateAsync({
           ...data,
-          photoUrl: photoUrl || null,
+          photoUrl: photoUrl || undefined,
         });
         toast.success(t('common.toasts.saved'));
       }
