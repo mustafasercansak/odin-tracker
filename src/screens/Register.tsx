@@ -35,6 +35,16 @@ export default function Register() {
         displayName: data.displayName,
       });
 
+      // Save user to Firestore 'users' collection for sharing search
+      const { setDoc, doc } = await import('firebase/firestore');
+      const { db } = await import('@/lib/firebase');
+      await setDoc(doc(db, 'users', userCredential.user.uid), {
+        uid: userCredential.user.uid,
+        email: data.email.toLowerCase(),
+        displayName: data.displayName,
+        createdAt: new Date().toISOString(),
+      });
+
       toast.success(t('common.success'));
       navigate('/');
     } catch (error: any) {

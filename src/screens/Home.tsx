@@ -14,6 +14,30 @@ export default function Home() {
   const { pets, isLoading } = usePets();
   const { setSelectedPetId, setActiveModal, searchQuery } = useAppStore();
 
+  // Self-healing: Ensure user exists in 'users' collection for sharing
+  React.useEffect(() => {
+    const syncUser = async () => {
+      const { auth } = await import('@/lib/firebase');
+      const currentUser = auth.currentUser;
+      if (currentUser && currentUser.email) {
+        const { setDoc, doc, getDoc } = await import('firebase/firestore');
+        const { db } = await import('@/lib/firebase');
+        const userRef = doc(db, 'users', currentUser.uid);
+        const userDoc = await getDoc(userRef);
+        
+        if (!userDoc.exists()) {
+          await setDoc(userRef, {
+            uid: currentUser.uid,
+            email: currentUser.email.toLowerCase(),
+            displayName: currentUser.displayName || 'User',
+            createdAt: new Date().toISOString(),
+          });
+        }
+      }
+    };
+    syncUser();
+  }, []);
+
   const filteredPets = React.useMemo(() => {
     if (!searchQuery) return pets;
     const query = searchQuery.toLowerCase();
