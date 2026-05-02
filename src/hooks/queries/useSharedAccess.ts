@@ -22,12 +22,15 @@ export function useSharedAccess(petId: string | null) {
       
       const q = query(
         collection(db, 'shared_access'),
-        where('petId', '==', petId),
-        orderBy('createdAt', 'desc')
+        where('petId', '==', petId)
       );
       
       const snapshot = await getDocs(q);
-      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as SharedAccess[];
+      const shares = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as SharedAccess[];
+      
+      return shares.sort((a, b) => 
+        new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+      );
     },
     enabled: !!petId,
   });

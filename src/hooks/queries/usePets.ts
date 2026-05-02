@@ -7,11 +7,12 @@ import {
   addDoc, 
   updateDoc, 
   deleteDoc, 
-  doc
+  doc,
+  getDoc
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/hooks/useAuth';
-import { type Pet } from '@/types';
+import { type Pet } from '@/schemas/pet';
 
 export function usePets() {
   const { user } = useAuth();
@@ -22,16 +23,36 @@ export function usePets() {
     queryFn: async () => {
       if (!user) return [];
       
-      const q = query(
+      // 1. Fetch pets owned by the user
+      const ownedQ = query(
         collection(db, 'pets'),
         where('ownerId', '==', user.uid)
       );
+      const ownedSnapshot = await getDocs(ownedQ);
+      const ownedPets = ownedSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Pet[];
+
+      // 2. Fetch pets shared with the user
+      const sharedQ = query(
+        collection(db, 'shared_access'),
+        where('sharedWithUserId', '==', user.uid)
+      );
+      const sharedSnapshot = await getDocs(sharedQ);
+      const sharedAccessRecords = sharedSnapshot.docs.map(doc => doc.data());
+
+      const sharedPetsPromises = sharedAccessRecords.map(async (record) => {
+        const petDoc = await getDoc(doc(db, 'pets', record.petId));
+        if (petDoc.exists()) {
+          return { id: petDoc.id, ...petDoc.data(), isShared: true } as any as Pet;
+        }
+        return null;
+      });
+
+      const sharedPets = (await Promise.all(sharedPetsPromises)).filter(p => p !== null) as Pet[];
+
+      // 3. Combine and sort
+      const allPets = [...ownedPets, ...sharedPets];
       
-      const snapshot = await getDocs(q);
-      const pets = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Pet[];
-      
-      // Sort in memory to avoid missing index errors
-      return pets.sort((a, b) => 
+      return allPets.sort((a, b) => 
         new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
       );
     },
