@@ -142,3 +142,30 @@ export function useAllLabRecords(petIds: string[]) {
     isLoading: allRecordsQuery.isLoading,
   };
 }
+export function useAllVaccinationRecords(petIds: string[]) {
+  const allRecordsQuery = useQuery({
+    queryKey: ['healthRecords', 'vaccinations', petIds],
+    queryFn: async () => {
+      if (petIds.length === 0) return [];
+      
+      const q = query(
+        collection(db, 'health_records'),
+        where('petId', 'in', petIds),
+        where('recordType', '==', 'vaccination')
+      );
+      
+      const snapshot = await getDocs(q);
+      const records = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as HealthRecord[];
+      
+      // Filter records that have a nextDoseDate and sort them by date (upcoming first)
+      return records.filter((r: any) => r.recordType === 'vaccination' && r.nextDoseDate)
+        .sort((a: any, b: any) => new Date(a.nextDoseDate!).getTime() - new Date(b.nextDoseDate!).getTime());
+    },
+    enabled: petIds.length > 0,
+  });
+
+  return {
+    vaccinationRecords: allRecordsQuery.data || [],
+    isLoading: allRecordsQuery.isLoading,
+  };
+}

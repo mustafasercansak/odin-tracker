@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
-import { Save, Upload, Sparkles, FileText, X, CheckCircle2, FlaskConical } from 'lucide-react';
+import { Save, Upload, Sparkles, FileText, X, CheckCircle2, FlaskConical, Syringe, Stethoscope, Pill, Scale, Activity } from 'lucide-react';
 import { Modal } from '@/components/Modal';
 import { useAppStore } from '@/store/useAppStore';
 import { useHealthRecords } from '@/hooks/queries/useHealthRecords';
@@ -85,6 +85,7 @@ export const HealthRecordModal: React.FC = () => {
         weightKg: (recordToEdit as any).weightKg,
         labName: (recordToEdit as any).labName,
         measurements: (recordToEdit as any).measurements || [],
+        nextDoseDate: (recordToEdit as any).nextDoseDate,
       });
       setFileUrl(recordToEdit.fileUrl || null);
     } else if (modalData) {
@@ -255,6 +256,7 @@ export const HealthRecordModal: React.FC = () => {
         if (data.measurements) payload.measurements = data.measurements;
         if (data.extractionMetadata) payload.extractionMetadata = data.extractionMetadata;
       }
+      if (data.recordType === 'vaccination' && data.nextDoseDate) payload.nextDoseDate = data.nextDoseDate;
       if (data.recordType === 'medication' && data.medicationId) payload.medicationId = data.medicationId;
 
       console.log('Sending payload to Firebase:', payload);
@@ -320,21 +322,32 @@ export const HealthRecordModal: React.FC = () => {
           <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1.5">
             {t('healthRecords.recordType')}
           </label>
-          <div className="grid grid-cols-5 gap-1.5">
-            {(['lab_test', 'vet_visit', 'medication', 'weight', 'symptom'] as const).map((type) => (
-              <button
-                key={type}
-                type="button"
-                onClick={() => setValue('recordType', type)}
-                className={`py-2 px-1 rounded-xl text-[11px] font-bold transition-all text-center ${
-                  recordType === type
-                    ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
-                    : 'bg-secondary text-muted-foreground hover:bg-secondary/80 hover:text-foreground'
-                }`}
-              >
-                {t(`healthRecords.recordTypes.${type}`)}
-              </button>
-            ))}
+          <div className="grid grid-cols-3 gap-1.5">
+            {(['lab_test', 'vet_visit', 'medication', 'weight', 'symptom', 'vaccination'] as const).map((type) => {
+              const Icon = 
+                type === 'lab_test' ? FlaskConical :
+                type === 'vet_visit' ? Stethoscope :
+                type === 'medication' ? Pill :
+                type === 'weight' ? Scale :
+                type === 'symptom' ? Activity :
+                Syringe;
+
+              return (
+                <button
+                  key={type}
+                  type="button"
+                  onClick={() => setValue('recordType', type)}
+                  className={`py-2 px-1 rounded-xl text-[10px] font-bold transition-all text-center flex flex-col items-center gap-1 border ${
+                    recordType === type
+                      ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 border-primary'
+                      : 'bg-secondary text-muted-foreground hover:bg-secondary/80 hover:text-foreground border-transparent'
+                  }`}
+                >
+                  <Icon size={14} />
+                  <span className="truncate w-full">{t(`healthRecords.recordTypes.${type}`)}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -673,9 +686,25 @@ export const HealthRecordModal: React.FC = () => {
                 )}
               </div>
             )}
+            
+            {recordType === 'vaccination' && (
+              <div className="animate-in slide-in-from-top-2 duration-200">
+                <Controller
+                  name="nextDoseDate"
+                  control={control}
+                  render={({ field }) => (
+                    <CustomDateInput
+                      label={t('healthRecords.nextDoseDate')}
+                      value={field.value || ''}
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
+              </div>
+            )}
 
             {/* File upload (vet_visit, symptom) */}
-            {(recordType === 'vet_visit' || recordType === 'symptom') && (
+            {(recordType === 'vet_visit' || recordType === 'symptom' || recordType === 'vaccination') && (
               <div className="animate-in slide-in-from-top-2 duration-200">
                 <label className="block text-sm font-semibold mb-1.5">{t('healthRecords.file')}</label>
                 <label

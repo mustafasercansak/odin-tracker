@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
 export type Theme = 'light' | 'dark' | 'system';
-export type Locale = 'tr' | 'en';
+export type Locale = 'tr' | 'en' | 'de' | 'es' | 'fr' | 'it' | 'ru' | 'pt' | 'nl' | 'ja' | 'zh';
 export type TrendsTimeRange = '3m' | '6m' | '1y' | 'all';
 
 interface AppState {

@@ -109,9 +109,11 @@
     "uploadFile": "Upload File",
     "fileUploaded": "File uploaded",
     "fileRequirements": "Max 10MB • PDF, JPG, PNG",
-    "labName": "Lab Name",
+    "labName": "Laboratory Name",
     "weightKg": "Weight (kg)",
-    "measurements": "Lab Results",
+    "nextDoseDate": "Next Dose Date",
+    "upcomingBoosters": "Upcoming Boosters",
+    "measurements": "Laboratory Results",
     "addManually": "Add Manually",
     "extractWithAI": "Extract with AI",
     "recordTypes": {
@@ -119,7 +121,8 @@
       "vet_visit": "Vet Visit",
       "symptom": "Symptom",
       "lab_test": "Lab Test",
-      "weight": "Weight"
+      "weight": "Weight",
+      "vaccination": "Vaccination"
     },
     "nRecords": "{{count}} records",
     "nMeasurements": "{{count}} measurements"
@@ -266,7 +269,7 @@
     "noParametersMatch": "No parameters match your search.",
     "selectParameterTitle": "No Chart Selected",
     "lastN": "Last {{n}} measurements",
-    "labs": "Laboratories"
+    "labs": "Labs"
   },
   "shares": {
     "title": "Access Sharing",
@@ -304,6 +307,10 @@
       "system": "System"
     },
     "language": "Language",
+    "languages": {
+      "en": "English",
+      "de": "German"
+    },
     "aiExtraction": "AI Extraction",
     "aiProviderName": "Hybrid AI (Claude/Gemini/GPT)",
     "aiProviderDescription": "Advanced Medical Vision OCR",

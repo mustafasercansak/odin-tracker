@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { usePets } from '@/hooks/queries/usePets';
 import { useAppStore } from '@/store/useAppStore';
-import { Plus, Heart, ChevronRight, Calendar, Info, Search, Clock, Pill, CheckCircle2, Edit3 } from 'lucide-react';
+import { Plus, Heart, ChevronRight, Calendar, Info, Search, Clock, Pill, CheckCircle2, Edit3, Syringe } from 'lucide-react';
 import { format, parseISO, isSameDay, isPast } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
 import { useAllMedications, useMedications } from '@/hooks/queries/useMedications';
-import { useHealthRecords } from '@/hooks/queries/useHealthRecords';
+import { useHealthRecords, useAllVaccinationRecords } from '@/hooks/queries/useHealthRecords';
 import { calculateNextDose, isDoseOverdue } from '@/lib/medication-helpers';
 import toast from 'react-hot-toast';
 import { HealthInsights } from '@/components/Home/HealthInsights';
@@ -20,6 +20,7 @@ export default function Home() {
   
   const petIds = React.useMemo(() => pets.map(p => p.id), [pets]);
   const { data: allMedications } = useAllMedications(petIds);
+  const { vaccinationRecords } = useAllVaccinationRecords(petIds);
   
   // Need mutations for logging dose from Home
   const { addRecord } = useHealthRecords(null); // We'll pass petId manually
@@ -66,8 +67,8 @@ export default function Home() {
 
   const dateLocale = i18n.language === 'tr' ? tr : enUS;
 
-  const { pendingMeds, completedMeds } = React.useMemo(() => {
-    if (!allMedications) return { pendingMeds: [], completedMeds: [] };
+  const { pendingMeds, completedMeds, futureVaccines } = React.useMemo(() => {
+    if (!allMedications) return { pendingMeds: [], completedMeds: [], futureVaccines: [] };
     const active = allMedications.filter(m => m.active && m.nextDoseDue);
     
     const pending = active.filter(m => {
@@ -80,8 +81,22 @@ export default function Home() {
       return !isSameDay(date, new Date()) && !isPast(date);
     }).sort((a, b) => new Date(a.nextDoseDue!).getTime() - new Date(b.nextDoseDue!).getTime());
 
-    return { pendingMeds: pending, completedMeds: completed };
-  }, [allMedications]);
+    // Process upcoming vaccinations (boosters)
+    const upcomingVaccines = vaccinationRecords.filter(v => {
+      if (!(v as any).nextDoseDate) return false;
+      return true; 
+    }).map(v => ({ ...v, isVaccine: true }));
+
+    return { 
+      pendingMeds: [...pending, ...upcomingVaccines.filter((v: any) => isSameDay(parseISO(v.nextDoseDate!), new Date()) || isPast(parseISO(v.nextDoseDate!)))].sort((a, b) => {
+        const dateA = new Date((a as any).nextDoseDue || (a as any).nextDoseDate).getTime();
+        const dateB = new Date((b as any).nextDoseDue || (b as any).nextDoseDate).getTime();
+        return dateA - dateB;
+      }), 
+      completedMeds: completed,
+      futureVaccines: upcomingVaccines.filter((v: any) => !isSameDay(parseISO(v.nextDoseDate!), new Date()) && !isPast(parseISO(v.nextDoseDate!)))
+    };
+  }, [allMedications, vaccinationRecords]);
 
   const handleLogDose = async (med: any) => {
     try {
@@ -160,7 +175,7 @@ export default function Home() {
               </div>
             </div>
             
-            {pendingMeds.some(m => isDoseOverdue(m.nextDoseDue)) && (
+            {pendingMeds.some((m: any) => isDoseOverdue(m.isVaccine ? m.nextDoseDate : m.nextDoseDue)) && (
               <span className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full animate-pulse">
                 {t('common.active')}
               </span>
@@ -176,50 +191,99 @@ export default function Home() {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {pendingMeds.map(med => {
-                const pet = pets.find(p => p.id === med.petId);
-                const overdue = isDoseOverdue(med.nextDoseDue);
-                const isDueToday = med.nextDoseDue && isSameDay(parseISO(med.nextDoseDue), new Date());
+              {pendingMeds.map((item: any) => {
+                const pet = pets.find(p => p.id === item.petId);
+                const itemDate = (item.isVaccine ? item.nextDoseDate : item.nextDoseDue) as string;
+                const overdue = isDoseOverdue(itemDate);
+                const isDueToday = itemDate && isSameDay(parseISO(itemDate), new Date());
+                
                 return (
-                  <div key={`home-due-${med.id}`} className="group flex flex-col p-4 bg-secondary/30 border border-border rounded-2xl hover:border-primary/50 transition-all duration-300">
+                  <div key={`home-due-${item.id}`} className="group flex flex-col p-4 bg-secondary/30 border border-border rounded-2xl hover:border-primary/50 transition-all duration-300">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center text-primary group-hover:scale-110 transition-transform relative">
                         {pet?.photoUrl ? (
                           <img src={pet.photoUrl} alt={pet.name} className="w-full h-full object-cover rounded-xl" />
                         ) : (
-                          <Pill size={20} />
+                          item.isVaccine ? <Syringe size={20} /> : <Pill size={20} />
                         )}
                       </div>
                       <div className="min-w-0">
                         <p className="text-xs font-black text-primary uppercase tracking-wider">{pet?.name}</p>
-                        <p className="font-bold truncate text-sm">{med.name}</p>
+                        <p className="font-bold truncate text-sm">{item.name || item.description}</p>
                       </div>
                     </div>
                     
                     <div className="flex items-center justify-between mt-auto pt-3 border-t border-border">
                       <div className="text-[11px] font-bold">
                         <span className={`uppercase ${isDueToday ? 'text-primary' : 'text-muted-foreground'}`}>
-                          {format(parseISO(med.nextDoseDue!), 'dd.MM.yyyy, HH.mm')}
+                          {format(parseISO(itemDate!), 'dd.MM.yyyy')}
                         </span>
                         {overdue && <span className="ml-2 text-destructive uppercase italic">! {t('medications.overdue')}</span>}
                       </div>
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleLogDose(med);
-                        }}
-                        className={`p-2 rounded-xl transition-all ${
-                          overdue 
-                            ? 'bg-destructive text-destructive-foreground shadow-lg shadow-destructive/20 hover:scale-110' 
-                            : 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:scale-110'
-                        }`}
-                      >
-                        <CheckCircle2 size={16} strokeWidth={3} />
-                      </button>
+                      {!item.isVaccine ? (
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleLogDose(item);
+                          }}
+                          className={`p-2 rounded-xl transition-all ${
+                            overdue 
+                              ? 'bg-destructive text-destructive-foreground shadow-lg shadow-destructive/20 hover:scale-110' 
+                              : 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:scale-110'
+                          }`}
+                        >
+                          <CheckCircle2 size={16} strokeWidth={3} />
+                        </button>
+                      ) : (
+                        <div className="p-2 bg-primary/10 text-primary rounded-xl">
+                          <Syringe size={16} strokeWidth={3} />
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
               })}
+            </div>
+          )}
+
+          {/* Future Vaccination Boosters */}
+          {futureVaccines && futureVaccines.length > 0 && (
+            <div className="mt-12 space-y-6">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-primary/20 flex items-center justify-center text-primary shadow-sm">
+                  <Syringe size={18} />
+                </div>
+                <h3 className="text-sm font-black uppercase tracking-widest text-muted-foreground">
+                  {t('healthRecords.upcomingBoosters')}
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {futureVaccines.map((vaccine: any) => {
+                  const pet = pets.find(p => p.id === vaccine.petId);
+                  return (
+                    <div key={`home-vaccine-${vaccine.id}`} className="flex items-center gap-3 p-3 bg-primary/5 border border-primary/20 rounded-2xl hover:border-primary/40 transition-colors">
+                      <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center text-primary overflow-hidden">
+                        {pet?.photoUrl ? (
+                          <img src={pet.photoUrl} alt={pet.name} className="w-full h-full object-cover" />
+                        ) : (
+                          <Syringe size={16} />
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[10px] font-bold text-primary uppercase">{pet?.name}</p>
+                        <p className="text-xs font-bold truncate">{vaccine.description}</p>
+                        <p className="text-[10px] text-muted-foreground font-bold uppercase">
+                          {format(parseISO(vaccine.nextDoseDate!), 'dd MMMM yyyy', { locale: dateLocale })}
+                        </p>
+                      </div>
+                      <div className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full uppercase">
+                        BOOSTER
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           )}
 

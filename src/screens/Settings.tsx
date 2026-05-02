@@ -20,7 +20,7 @@ import { useExtractionUsage } from '@/hooks/queries/useUsage';
 import { exportUserData, importUserData } from '@/lib/dataManagement';
 import toast from 'react-hot-toast';
 import { format, parseISO } from 'date-fns';
-import { tr, enUS } from 'date-fns/locale';
+import { tr, enUS, de, es, fr, it, ru, pt, nl, ja, zhCN } from 'date-fns/locale';
 
 export default function Settings() {
   const { t, i18n } = useTranslation();
@@ -30,7 +30,18 @@ export default function Settings() {
   
   const [exporting, setExporting] = React.useState(false);
   const [importing, setImporting] = React.useState(false);
-  const dateLocale = i18n.language === 'tr' ? tr : enUS;
+  const dateLocale = 
+    i18n.language === 'tr' ? tr : 
+    i18n.language === 'de' ? de : 
+    i18n.language === 'es' ? es :
+    i18n.language === 'fr' ? fr :
+    i18n.language === 'it' ? it :
+    i18n.language === 'ru' ? ru :
+    i18n.language === 'pt' ? pt :
+    i18n.language === 'nl' ? nl :
+    i18n.language === 'ja' ? ja :
+    i18n.language === 'zh' ? zhCN :
+    enUS;
 
   const handleExport = async () => {
     if (!user) return;
@@ -72,7 +83,7 @@ export default function Settings() {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
-  const changeLanguage = (lang: 'tr' | 'en') => {
+  const changeLanguage = (lang: 'tr' | 'en' | 'de' | 'es' | 'fr' | 'it' | 'ru' | 'pt' | 'nl' | 'ja' | 'zh') => {
     i18n.changeLanguage(lang);
     setLocale(lang);
   };
@@ -142,22 +153,31 @@ export default function Settings() {
                 </div>
                 <div>
                   <p className="font-bold">{t('settings.language')}</p>
-                  <p className="text-xs text-muted-foreground">{i18n.language === 'tr' ? 'Türkçe' : 'English'}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {i18n.language === 'tr' ? 'Türkçe' : 
+                     i18n.language === 'de' ? 'Deutsch' : 
+                     i18n.language === 'es' ? 'Español' :
+                     i18n.language === 'fr' ? 'Français' :
+                     i18n.language === 'it' ? 'Italiano' :
+                     i18n.language === 'ru' ? 'Русский' :
+                     i18n.language === 'pt' ? 'Português' :
+                     i18n.language === 'nl' ? 'Nederlands' :
+                     i18n.language === 'ja' ? '日本語' :
+                     i18n.language === 'zh' ? '简体中文' :
+                     'English'}
+                  </p>
                 </div>
               </div>
-              <div className="flex gap-2">
-                <button 
-                  onClick={() => changeLanguage('tr')}
-                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${i18n.language === 'tr' ? 'bg-primary text-primary-foreground' : 'bg-secondary hover:bg-secondary/80'}`}
-                >
-                  TR
-                </button>
-                <button 
-                  onClick={() => changeLanguage('en')}
-                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${i18n.language === 'en' ? 'bg-primary text-primary-foreground' : 'bg-secondary hover:bg-secondary/80'}`}
-                >
-                  EN
-                </button>
+              <div className="flex flex-wrap gap-2 justify-end max-w-[400px]">
+                {(['tr', 'en', 'de', 'es', 'fr', 'it', 'ru', 'pt', 'nl', 'ja', 'zh'] as const).map((lang) => (
+                  <button 
+                    key={lang}
+                    onClick={() => changeLanguage(lang)}
+                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${i18n.language === lang ? 'bg-primary text-primary-foreground' : 'bg-secondary hover:bg-secondary/80'}`}
+                  >
+                    {lang.toUpperCase()}
+                  </button>
+                ))}
               </div>
             </div>
           </div>

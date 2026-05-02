@@ -111,6 +111,8 @@
     "fileRequirements": "Maks 10MB • PDF, JPG, PNG",
     "labName": "Laboratuvar Adı",
     "weightKg": "Ağırlık (kg)",
+    "nextDoseDate": "Gelecek Doz Tarihi",
+    "upcomingBoosters": "Yaklaşan Aşılar",
     "measurements": "Lab Değerleri",
     "addManually": "Manuel Ekle",
     "extractWithAI": "Yapay Zekayla Doldur",
@@ -119,7 +121,8 @@
       "vet_visit": "Veteriner Ziyareti",
       "symptom": "Semptom",
       "lab_test": "Lab Testi",
-      "weight": "Ağırlık"
+      "weight": "Ağırlık",
+      "vaccination": "Aşı"
     },
     "nRecords": "{{count}} kayıt",
     "nMeasurements": "{{count}} değer"
@@ -266,7 +269,7 @@
     "noParametersMatch": "Aramanızla eşleşen parametre bulunamadı.",
     "selectParameterTitle": "Grafik Seçilmedi",
     "lastN": "Son {{n}} ölçüm",
-    "labs": "Laboratuvarlar"
+    "labs": "Lablar"
   },
   "shares": {
     "title": "Erişim Paylaşımı",
