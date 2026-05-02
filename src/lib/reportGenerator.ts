@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas-pro';
 import { format } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
 import { type Pet } from '@/schemas/pet';
