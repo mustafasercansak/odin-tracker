@@ -88,6 +88,12 @@ describe('HealthRecordModal Component', () => {
     
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'weight' } });
     
+    // Fill required description
+    fireEvent.change(screen.getByPlaceholderText('healthRecords.description'), {
+      target: { value: 'Weekly weight check' },
+    });
+
+    // Wait for weight input to appear
     const weightInput = await screen.findByPlaceholderText('0.00');
     fireEvent.change(weightInput, { target: { value: '5.2' } });
     
@@ -100,6 +106,7 @@ describe('HealthRecordModal Component', () => {
     const lastCall = mockAddRecord.mutateAsync.mock.calls[0][0];
     expect(lastCall.weightKg).toBe(5.2);
     expect(lastCall.recordType).toBe('weight');
+    expect(lastCall.description).toBe('Weekly weight check');
   });
 
   it('handles AI extraction flow', async () => {
