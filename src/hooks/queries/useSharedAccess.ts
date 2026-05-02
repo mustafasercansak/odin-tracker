@@ -6,8 +6,7 @@ import {
   getDocs, 
   addDoc, 
   deleteDoc, 
-  doc,
-  orderBy
+  doc
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { type SharedAccess } from '@/schemas/sharedAccess';
