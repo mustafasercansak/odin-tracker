@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { usePets } from '@/hooks/queries/usePets';
 import { useAppStore } from '@/store/useAppStore';
-import { Plus, Heart, ChevronRight, Calendar, Info, Search, Clock, Pill, CheckCircle2, Edit3, Syringe, ShieldAlert, Weight } from 'lucide-react';
+import { Plus, Heart, ChevronRight, Calendar, CheckSquare, Search, Clock, Pill, CheckCircle2, Edit3, Syringe, ShieldAlert, Weight } from 'lucide-react';
 import { format, parseISO, isSameDay, isPast } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
 import { useAllMedications, useMedications } from '@/hooks/queries/useMedications';

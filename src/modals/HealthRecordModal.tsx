@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
-import { Save, Upload, Sparkles, FileText, X, CheckCircle2, FlaskConical, Syringe, Stethoscope, Pill, Scale, Activity, PartyPopper, HeartPulse } from 'lucide-react';
+import { Save, Upload, Sparkles, FileText, X, CheckCircle2, FlaskConical, Syringe, Stethoscope, Pill, Scale, PartyPopper, HeartPulse } from 'lucide-react';
 import { Modal } from '@/components/Modal';
 import { useAppStore } from '@/store/useAppStore';
 import { useHealthRecords } from '@/hooks/queries/useHealthRecords';

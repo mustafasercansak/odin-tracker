@@ -4,7 +4,7 @@ import { Modal } from '@/components/Modal';
 import { useAppStore } from '@/store/useAppStore';
 import { usePets } from '@/hooks/queries/usePets';
 import { useHealthRecords } from '@/hooks/queries/useHealthRecords';
-import { Save, CheckSquare, Square, Syringe, Calendar, FileText } from 'lucide-react';
+import { Save, CheckSquare, Square, Calendar, FileText } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const BatchRecordModal: React.FC = () => {
@@ -50,7 +50,7 @@ export const BatchRecordModal: React.FC = () => {
           description,
           nextDoseDate: recordType === 'vaccination' ? nextDoseDate : undefined,
           notes: `Batch Logged: ${new Date().toLocaleDateString()}`
-        })
+        } as any)
       ));
       
       toast.success(t('batch.success', { count: selectedPetIds.length }));

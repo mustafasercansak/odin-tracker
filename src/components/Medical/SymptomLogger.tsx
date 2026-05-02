@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHealthRecords } from '@/hooks/queries/useHealthRecords';
-import { Heart, Utensils, Zap, Smile, Check, Save } from 'lucide-react';
+import { Heart, Utensils, Zap, Smile, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface SymptomLoggerProps {
@@ -27,7 +27,7 @@ export const SymptomLogger: React.FC<SymptomLoggerProps> = ({ petId }) => {
         appetite,
         energy,
         mood,
-      });
+      } as any);
       toast.success(t('symptoms.checkin.success'));
     } catch (error) {
       toast.error(t('common.error'));

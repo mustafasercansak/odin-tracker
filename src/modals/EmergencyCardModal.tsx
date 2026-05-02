@@ -4,17 +4,14 @@ import { Modal } from '@/components/Modal';
 import { useAppStore } from '@/store/useAppStore';
 import { usePets } from '@/hooks/queries/usePets';
 import { ShieldAlert, Phone, Heart, Hash, Droplet, AlertCircle, User } from 'lucide-react';
-import { format, parseISO } from 'date-fns';
-import { tr, enUS } from 'date-fns/locale';
 
 export const EmergencyCardModal: React.FC = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { activeModal, modalData, setActiveModal } = useAppStore();
   const { pets } = usePets();
   
   const pet = pets.find(p => p.id === modalData?.petId);
   const isOpen = activeModal === 'emergency_card';
-  const dateLocale = i18n.language === 'tr' ? tr : enUS;
 
   if (!pet) return null;
 

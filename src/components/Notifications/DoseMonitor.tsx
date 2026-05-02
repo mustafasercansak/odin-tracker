@@ -4,7 +4,7 @@ import { useAppStore } from '@/store/useAppStore';
 import { usePets } from '@/hooks/queries/usePets';
 import { useAllMedications } from '@/hooks/queries/useMedications';
 import { useAllVaccinationRecords } from '@/hooks/queries/useHealthRecords';
-import { isDoseOverdue } from '@/lib/medication-helpers';
+
 import { parseISO, isSameDay, isPast, addMinutes, isBefore } from 'date-fns';
 
 export const DoseMonitor: React.FC = () => {
