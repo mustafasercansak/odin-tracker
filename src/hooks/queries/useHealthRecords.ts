@@ -98,7 +98,6 @@ export function useLabRecords(petId: string | null) {
 }
 
 export function useAllLabRecords(petIds: string[]) {
-  const queryClient = useQueryClient();
 
   const allRecordsQuery = useQuery({
     queryKey: ['healthRecords', 'all', petIds],

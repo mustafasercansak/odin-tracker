@@ -10,8 +10,6 @@ import { useMedications } from '@/hooks/queries/useMedications';
 import { medicationInputSchema, type MedicationInput, type Medication } from '@/schemas/medication';
 import { CustomDateInput } from '@/components/CustomDateInput';
 import { CustomTimeInput } from '@/components/CustomTimeInput';
-import { format, parseISO } from 'date-fns';
-import { calculateNextDose } from '@/lib/medication-helpers';
 
 export const MedicationModal: React.FC = () => {
   const { t } = useTranslation();
@@ -92,7 +90,7 @@ export const MedicationModal: React.FC = () => {
         await updateMedication.mutateAsync({
           id: medToEdit.id,
           ...payload,
-        });
+        } as any);
       } else {
         // For new medications, use nextDoseDue if set, otherwise default to startDate
         if (!(payload as any).nextDoseDue) {
@@ -103,7 +101,7 @@ export const MedicationModal: React.FC = () => {
           petId: (modalData as any).petId,
           ...payload,
           active: true,
-        });
+        } as any);
       }
       
       toast.success(t('common.toasts.saved'));

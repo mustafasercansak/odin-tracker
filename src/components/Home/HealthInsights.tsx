@@ -26,7 +26,7 @@ export const HealthInsights: React.FC<HealthInsightsProps> = ({ pets }) => {
       // Group by parameter
       const paramData: Record<string, any[]> = {};
       petRecords.forEach(record => {
-        record.measurements.forEach(m => {
+        record.measurements?.forEach(m => {
           if (!paramData[m.parameter]) paramData[m.parameter] = [];
           paramData[m.parameter].push({
             value: m.value,

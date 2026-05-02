@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { usePets } from '@/hooks/queries/usePets';
 import { useAppStore } from '@/store/useAppStore';
-import { Plus, Heart, ChevronRight, Calendar, Info, Search, Clock, Pill, CheckCircle2, AlertCircle, Edit3 } from 'lucide-react';
+import { Plus, Heart, ChevronRight, Calendar, Info, Search, Clock, Pill, CheckCircle2, Edit3 } from 'lucide-react';
 import { format, parseISO, isSameDay, isPast } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
 import { useAllMedications, useMedications } from '@/hooks/queries/useMedications';
@@ -19,7 +19,7 @@ export default function Home() {
   const { setSelectedPetId, setActiveModal, searchQuery } = useAppStore();
   
   const petIds = React.useMemo(() => pets.map(p => p.id), [pets]);
-  const { data: allMedications, isLoading: medsLoading } = useAllMedications(petIds);
+  const { data: allMedications } = useAllMedications(petIds);
   
   // Need mutations for logging dose from Home
   const { addRecord } = useHealthRecords(null); // We'll pass petId manually
@@ -89,7 +89,7 @@ export default function Home() {
         medicationId: med.id,
         description: `${med.name} - ${med.dosage} (${t(`medications.frequencies.${med.frequency}`)})`,
         notes: t('medications.doseLoggedAutomatically'),
-      });
+      } as any);
 
       await updateMedication.mutateAsync({
         id: med.id,
