@@ -39,7 +39,7 @@ export async function explainLabResults(record: LabTestRecord, pet: Pet, age: st
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
   const measurementsStr = (record.measurements || [])
     .map(m => `${m.parameter}: ${m.value} ${m.unit} (${m.flag || 'normal'})`)
