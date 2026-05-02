@@ -12,6 +12,7 @@ import { calculateNextDose, isDoseOverdue } from '@/lib/medication-helpers';
 import { calculateAge } from '@/lib/pet-helpers';
 import toast from 'react-hot-toast';
 import { HealthInsights } from '@/components/Home/HealthInsights';
+import { DashboardStats } from '@/components/Home/DashboardStats';
 
 export default function Home() {
   const { t, i18n } = useTranslation();
@@ -164,6 +165,8 @@ export default function Home() {
           <span className="hidden sm:inline font-extrabold">{t('pets.addPet')}</span>
         </button>
       </header>
+
+      {pets.length > 0 && <DashboardStats pets={pets} />}
 
       {pets.length > 0 && <HealthInsights pets={pets} />}
 

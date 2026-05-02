@@ -4,6 +4,7 @@ import { AuthGuard, GuestGuard } from './components/AuthGuard';
 import { MainLayout } from './components/Layout/MainLayout';
 import Login from './screens/Login';
 import Register from './screens/Register';
+import ForgotPassword from './screens/ForgotPassword';
 import Home from './screens/Home';
 import PetDetail from './screens/PetDetail';
 import Settings from './screens/Settings';
@@ -88,11 +89,25 @@ function App() {
               </GuestGuard>
             }
           />
+          {import.meta.env.VITE_DISABLE_SIGNUP !== 'true' && (
+            <Route
+              path="/register"
+              element={
+                <GuestGuard>
+                  <Register />
+                </GuestGuard>
+              }
+            />
+          )}
           <Route
             path="/register"
+            element={<Navigate to="/login" replace />}
+          />
+          <Route
+            path="/forgot-password"
             element={
               <GuestGuard>
-                <Register />
+                <ForgotPassword />
               </GuestGuard>
             }
           />

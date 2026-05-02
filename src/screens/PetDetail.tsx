@@ -468,7 +468,7 @@ export default function PetDetail() {
         )}
 
         {activeTab === 'trends' && pet.id && (
-          <TrendsTab petId={pet.id} />
+          <TrendsTab petId={pet.id} species={pet.species} />
         )}
 
 
@@ -577,7 +577,7 @@ export default function PetDetail() {
         {/* Hidden Container for Report Charts (Only used during PDF generation) */}
         {isGeneratingReport && pet.id && (
           <div className="fixed -left-[2000px] -top-[2000px] w-[800px]">
-            <TrendsTab petId={pet.id} />
+            <TrendsTab petId={pet.id} species={pet.species} />
           </div>
         )}
       </div>

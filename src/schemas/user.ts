@@ -26,16 +26,18 @@ export const registerSchema = loginSchema.extend({
 export const profileInputSchema = z.object({
   displayName: z.string().min(2, 'İsim en az 2 karakter olmalı'),
   photoURL: z.string().optional(),
+  currentPassword: z.string().optional().or(z.literal('')),
   newPassword: z.string().min(6, 'Şifre en az 6 karakter olmalı').optional().or(z.literal('')),
   confirmPassword: z.string().optional().or(z.literal('')),
-}).refine((data) => {
-  if (data.newPassword && data.newPassword !== data.confirmPassword) {
-    return false;
+}).superRefine((data, ctx) => {
+  if (data.newPassword) {
+    if (!data.currentPassword) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['currentPassword'], message: 'Mevcut şifre gerekli' });
+    }
+    if (data.newPassword !== data.confirmPassword) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['confirmPassword'], message: 'Şifreler eşleşmiyor' });
+    }
   }
-  return true;
-}, {
-  message: 'Şifreler eşleşmiyor',
-  path: ['confirmPassword'],
 });
 
 

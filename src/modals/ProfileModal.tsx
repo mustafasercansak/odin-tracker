@@ -9,7 +9,7 @@ import { useAppStore } from '@/store/useAppStore';
 import { useAuth } from '@/hooks/useAuth';
 import { profileInputSchema, type ProfileInput } from '@/schemas/user';
 import { uploadFile } from '@/lib/storage';
-import { updatePassword, signOut } from 'firebase/auth';
+import { updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 
 export const ProfileModal: React.FC = () => {
@@ -89,23 +89,20 @@ export const ProfileModal: React.FC = () => {
           updatedAt: new Date().toISOString(),
         }, { merge: true });
       }
-      if (data.newPassword && auth.currentUser) {
+      if (data.newPassword && data.currentPassword && auth.currentUser?.email) {
+        const credential = EmailAuthProvider.credential(auth.currentUser.email, data.currentPassword);
+        await reauthenticateWithCredential(auth.currentUser, credential);
         await updatePassword(auth.currentUser, data.newPassword);
         toast.success(t('settings.passwordChanged'));
       }
-      
+
       toast.success(t('common.toasts.saved'));
       handleClose();
     } catch (error: any) {
-      console.error('Error updating profile:', error);
-      if (error.code === 'auth/requires-recent-login') {
-        toast.error(t('settings.requiresRecentLogin'));
-        setTimeout(async () => {
-          await signOut(auth);
-          window.location.reload();
-        }, 3000);
+      if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+        toast.error(t('auth.errors.wrong-password'));
       } else {
-        toast.error(error.message || t('common.toasts.error'));
+        toast.error(t('common.toasts.error'));
       }
     } finally {
       setLoading(false);
@@ -164,6 +161,17 @@ export const ProfileModal: React.FC = () => {
           <div className="pt-4 mt-4 border-t border-border">
             <h3 className="text-sm font-bold text-primary mb-4 uppercase tracking-widest">{t('settings.changePassword')}</h3>
             <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold mb-1.5">{t('settings.currentPassword')}</label>
+                <input
+                  type="password"
+                  {...register('currentPassword')}
+                  className={`w-full px-4 py-2.5 rounded-xl bg-input border ${errors.currentPassword ? 'border-destructive' : 'border-border'} focus:ring-2 focus:ring-primary outline-none transition-all`}
+                  placeholder="••••••••"
+                />
+                {errors.currentPassword && <p className="mt-1 text-xs text-destructive">{errors.currentPassword.message}</p>}
+              </div>
+
               <div>
                 <label className="block text-sm font-semibold mb-1.5">{t('settings.newPassword')}</label>
                 <input

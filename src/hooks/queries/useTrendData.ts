@@ -23,7 +23,8 @@ export function useMeasurementSeries(
   petId: string | null,
   parameter: string,
   timeRange: TrendsTimeRange,
-  labNames: string[] = []
+  labNames: string[] = [],
+  species?: string
 ) {
   const { labRecords, isLoading } = useLabRecords(petId);
 
@@ -76,7 +77,7 @@ export function useMeasurementSeries(
 
         // Fallback to standard reference range if both are null
         if (refMin === null && refMax === null) {
-          const standardRef = getReferenceRange(parameter);
+          const standardRef = getReferenceRange(parameter, species);
           if (standardRef) {
             // Need to ensure units match or convert
             refMin = standardRef.min;
@@ -108,7 +109,7 @@ export function useMeasurementSeries(
 
     // 3. Sort by date ascending for charts
     return points.sort((a, b) => a.date.localeCompare(b.date));
-  }, [labRecords, parameter, timeRange]);
+  }, [labRecords, parameter, timeRange, species]);
 
   return {
     series,

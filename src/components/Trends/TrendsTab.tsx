@@ -9,9 +9,10 @@ import { TrendingUp, Filter, Search, X, CheckSquare, Square, AlertTriangle, Buil
 
 interface TrendsTabProps {
   petId: string;
+  species?: string;
 }
 
-export const TrendsTab: React.FC<TrendsTabProps> = ({ petId }) => {
+export const TrendsTab: React.FC<TrendsTabProps> = ({ petId, species }) => {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [showOnlyAnomalous, setShowOnlyAnomalous] = useState(false);
@@ -271,12 +272,13 @@ export const TrendsTab: React.FC<TrendsTabProps> = ({ petId }) => {
       {/* Charts Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {trendsSelectedParams.map(paramId => (
-          <ChartWrapper 
-            key={paramId} 
-            petId={petId} 
-            parameter={paramId} 
-            timeRange={trendsTimeRange} 
+          <ChartWrapper
+            key={paramId}
+            petId={petId}
+            parameter={paramId}
+            timeRange={trendsTimeRange}
             labNames={trendsSelectedLabs}
+            species={species}
           />
         ))}
         
@@ -297,18 +299,20 @@ export const TrendsTab: React.FC<TrendsTabProps> = ({ petId }) => {
 };
 
 // Internal wrapper to handle data fetching per chart to avoid giant re-renders
-const ChartWrapper: React.FC<{ 
-  petId: string, 
-  parameter: string, 
+const ChartWrapper: React.FC<{
+  petId: string,
+  parameter: string,
   timeRange: TrendsTimeRange,
-  labNames: string[]
-}> = ({ 
-  petId, 
-  parameter, 
+  labNames: string[],
+  species?: string,
+}> = ({
+  petId,
+  parameter,
   timeRange,
-  labNames
+  labNames,
+  species,
 }) => {
-  const { series, isLoading } = useMeasurementSeries(petId, parameter, timeRange, labNames);
+  const { series, isLoading } = useMeasurementSeries(petId, parameter, timeRange, labNames, species);
 
   if (isLoading || series.length < 2) return null;
 

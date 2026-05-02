@@ -110,17 +110,19 @@ export default function Login() {
           </div>
         </form>
 
-        <div className="text-center mt-6">
-          <p className="text-sm text-muted-foreground">
-            {t('auth.noAccount')}{' '}
-            <Link 
-              to="/register" 
-              className="text-primary font-bold hover:underline ml-1"
-            >
-              {t('auth.registerNow')}
-            </Link>
-          </p>
-        </div>
+        {import.meta.env.VITE_DISABLE_SIGNUP !== 'true' && (
+          <div className="text-center mt-6">
+            <p className="text-sm text-muted-foreground">
+              {t('auth.noAccount')}{' '}
+              <Link 
+                to="/register" 
+                className="text-primary font-bold hover:underline ml-1"
+              >
+                {t('auth.registerNow')}
+              </Link>
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

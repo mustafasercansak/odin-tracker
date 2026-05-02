@@ -76,22 +76,22 @@ describe('MeasurementEditor Component', () => {
 
   it('updates reference range and recalculates flags (low)', () => {
     render(<MeasurementEditor measurements={mockMeasurements} onChange={mockOnChange} />);
-    const minInput = screen.getByPlaceholderText('min');
-    
+    const minInput = screen.getAllByPlaceholderText('—')[0];
+
     // Set min to 2.0 while value is 1.2 -> should be 'low'
     fireEvent.change(minInput, { target: { value: '2.0' } });
-    
+
     const lastCall = mockOnChange.mock.calls[0][0];
     expect(lastCall[0].flag).toBe('low');
   });
 
   it('updates reference range and recalculates flags (high)', () => {
     render(<MeasurementEditor measurements={mockMeasurements} onChange={mockOnChange} />);
-    const maxInput = screen.getByPlaceholderText('max');
-    
+    const maxInput = screen.getAllByPlaceholderText('—')[1];
+
     // Set max to 1.0 while value is 1.2 -> should be 'high'
     fireEvent.change(maxInput, { target: { value: '1.0' } });
-    
+
     const lastCall = mockOnChange.mock.calls[0][0];
     expect(lastCall[0].flag).toBe('high');
   });
@@ -102,7 +102,7 @@ describe('MeasurementEditor Component', () => {
       { ...mockMeasurements[0], referenceMin: 0.5, referenceMax: null, flag: 'normal' }
     ];
     render(<MeasurementEditor measurements={measurementsWithFlag} onChange={mockOnChange} />);
-    const minInput = screen.getByPlaceholderText('min');
+    const minInput = screen.getAllByPlaceholderText('—')[0];
     
     // Clear the only remaining reference value
     fireEvent.change(minInput, { target: { value: '' } });
@@ -116,7 +116,7 @@ describe('MeasurementEditor Component', () => {
       { ...mockMeasurements[0], confidence: 'low' }
     ];
     render(<MeasurementEditor measurements={lowConfidenceMeds} onChange={mockOnChange} />);
-    expect(screen.getByText('lab.confidence.low')).toBeInTheDocument();
+    expect(screen.getByText(/lab\.confidence\.low/)).toBeInTheDocument();
   });
 
   it('handles empty value input by falling back to 0', () => {
