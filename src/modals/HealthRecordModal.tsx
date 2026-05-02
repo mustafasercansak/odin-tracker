@@ -205,21 +205,19 @@ export const HealthRecordModal: React.FC = () => {
         fileUrl: finalFileUrl || null,
       };
       
-      // Remove temporary UI fields and clean undefined values for Firebase
+      // Remove temporary UI fields
       delete (payload as any).recordTime;
-      Object.keys(payload).forEach(key => {
-        if ((payload as any)[key] === undefined) {
-          delete (payload as any)[key];
-        }
-      });
+      
+      // Clean ALL nested undefined values for Firebase (Firebase rejects undefined)
+      const cleanPayload = JSON.parse(JSON.stringify(payload));
 
       if (isEdit && recordToEdit) {
         await updateRecord.mutateAsync({
           id: recordToEdit.id,
-          ...payload,
+          ...cleanPayload,
         } as any);
       } else {
-        await addRecord.mutateAsync(payload as any);
+        await addRecord.mutateAsync(cleanPayload as any);
       }
       
       toast.success(t('common.toasts.saved'));

@@ -114,11 +114,11 @@ export default function Login() {
           <p className="text-sm text-muted-foreground">
             {t('auth.noAccount')}{' '}
             <Link 
-            to="/register" 
-            className="text-primary font-bold hover:underline ml-1"
-          >
-            {t('auth.registerNow')}
-          </Link>
+              to="/register" 
+              className="text-primary font-bold hover:underline ml-1"
+            >
+              {t('auth.registerNow')}
+            </Link>
           </p>
         </div>
       </div>

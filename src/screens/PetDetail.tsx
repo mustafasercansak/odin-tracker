@@ -17,7 +17,8 @@ import {
   Trash2,
   Shield,
   Mail,
-  Share2
+  Share2,
+  Edit3
 } from 'lucide-react';
 import { usePets } from '@/hooks/queries/usePets';
 import { useHealthRecords, useLabRecords } from '@/hooks/queries/useHealthRecords';
@@ -251,7 +252,8 @@ export default function PetDetail() {
                 {filteredRecords.map((record) => (
                   <div 
                     key={record.id}
-                    className="bg-card border border-border rounded-2xl p-4 hover:border-primary/50 transition-colors cursor-pointer group"
+                    onClick={() => canEdit && setActiveModal('record_edit', record)}
+                    className={`bg-card border border-border rounded-2xl p-4 hover:border-primary/50 transition-colors group ${canEdit ? 'cursor-pointer' : ''}`}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-4">
@@ -260,8 +262,11 @@ export default function PetDetail() {
                           <Activity size={20} />
                         </div>
                         <div>
-                          <h4 className="font-bold group-hover:text-primary transition-colors">
+                          <h4 className="font-bold group-hover:text-primary transition-colors flex items-center gap-2">
                             {t(`healthRecords.recordTypes.${record.recordType}`)}
+                            {canEdit && (
+                              <Edit3 size={14} className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                            )}
                           </h4>
                           <p className="text-sm text-muted-foreground">
                             {format(parseISO(record.recordDate), 'dd.MM.yyyy', { locale: dateLocale })}
