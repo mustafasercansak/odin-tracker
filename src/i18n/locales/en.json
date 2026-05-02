@@ -59,7 +59,9 @@
     "displayName": "Name",
     "forgotPassword": "Forgot Password",
     "noAccount": "Don't have an account?",
+    "registerNow": "Register",
     "hasAccount": "Already have an account?",
+    "loginNow": "Login",
     "errors": {
       "user-not-found": "No user found with this email",
       "wrong-password": "Incorrect password",

@@ -59,7 +59,9 @@
     "displayName": "İsim",
     "forgotPassword": "Şifremi Unuttum",
     "noAccount": "Hesabın yok mu?",
+    "registerNow": "Kayıt Ol",
     "hasAccount": "Zaten hesabın var mı?",
+    "loginNow": "Giriş Yap",
     "errors": {
       "user-not-found": "Bu e-posta adresiyle kayıtlı kullanıcı bulunamadı",
       "wrong-password": "Şifre hatalı",
