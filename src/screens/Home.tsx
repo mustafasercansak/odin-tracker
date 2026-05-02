@@ -37,11 +37,17 @@ export default function Home() {
         const userDoc = await getDoc(userRef);
         
         if (!userDoc.exists()) {
-          await setDoc(userRef, {
+          const userData: any = {
+            uid: currentUser.uid,
             email: currentUser.email.toLowerCase(),
-            displayName: currentUser.displayName || null,
             createdAt: new Date().toISOString(),
-          });
+          };
+          
+          if (currentUser.displayName) userData.displayName = currentUser.displayName;
+          if (currentUser.photoURL) userData.photoUrl = currentUser.photoURL;
+
+          await setDoc(userRef, userData);
+          console.log('User synced to Firestore');
         }
       }
     };
@@ -119,7 +125,7 @@ export default function Home() {
           <h1 className="text-3xl font-bold tracking-tight">{t('pets.title')}</h1>
           <p className="text-muted-foreground mt-1">
             {pets.length > 0
-              ? t('healthRecords.nRecords', { count: pets.length }).replace('kayıt', t('pets.title').toLowerCase()) // Quick fix for "X pets"
+              ? t('pets.petCount', { count: pets.length })
               : t('pets.noPets')
             }
           </p>
@@ -147,7 +153,7 @@ export default function Home() {
                 <Clock size={22} strokeWidth={2.5} />
               </div>
               <div>
-                <h2 className="text-xl font-black uppercase italic tracking-tight">{t('home.schedule') || 'GÜNLÜK PROGRAM'}</h2>
+                <h2 className="text-xl font-black uppercase italic tracking-tight">{t('home.schedule')}</h2>
                 <p className="text-xs text-muted-foreground font-bold tracking-widest uppercase">
                   {pendingMeds.length} {t('medications.title').toLowerCase()}
                 </p>
@@ -165,7 +171,7 @@ export default function Home() {
             <div className="py-10 text-center bg-secondary/10 rounded-3xl border border-dashed border-border">
               <CheckCircle2 size={32} className="mx-auto text-primary mb-3 opacity-20" />
               <p className="text-muted-foreground font-bold italic">
-                {completedMeds.length > 0 ? t('medications.allDosesCompleted') || 'Tüm dozlar tamamlandı!' : t('medications.noActiveMedications')}
+                {completedMeds.length > 0 ? t('medications.allDosesCompleted') : t('medications.noActiveMedications')}
               </p>
             </div>
           ) : (
@@ -225,7 +231,7 @@ export default function Home() {
                   <CheckCircle2 size={18} />
                 </div>
                 <h3 className="text-sm font-black uppercase tracking-widest text-muted-foreground">
-                  {t('medications.completedToday') || 'BUGÜN TAMAMLANANLAR'}
+                  {t('medications.completedToday')}
                 </h3>
               </div>
 

@@ -18,6 +18,7 @@ const baseRecordSchema = z.object({
   description: z.string(),
   notes: z.string().optional(),
   fileUrl: z.string().optional(),
+  fileUrls: z.array(z.string()).optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
 })
@@ -61,14 +62,23 @@ export const healthRecordInputSchema = z.object({
   recordDate: z.string().min(1, 'Tarih zorunlu'),
   recordTime: z.string().optional(),
   recordType: recordTypeSchema,
-  description: z.string().min(1, 'Açıklama zorunlu'),
+  description: z.string(),
   notes: z.string().optional(),
   medicationId: z.string().optional(),
   fileUrl: z.string().optional(),
+  fileUrls: z.array(z.string()).optional(),
   weightKg: z.number().optional(),
   labName: z.string().optional(),
   measurements: z.array(measurementSchema).optional(),
   extractionMetadata: extractionMetadataSchema.optional(),
+}).superRefine((data, ctx) => {
+  if (data.recordType !== 'lab_test' && data.description.trim() === '') {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['description'],
+      message: 'Açıklama zorunlu',
+    });
+  }
 })
 
 export type HealthRecordInput = z.infer<typeof healthRecordInputSchema>

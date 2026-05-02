@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { HealthRecordModal } from './HealthRecordModal';
 import { useAppStore } from '@/store/useAppStore';
 import { useHealthRecords } from '@/hooks/queries/useHealthRecords';
-import { useExtractLabResults } from '@/hooks/queries/useExtraction';
+import { useExtractWithAnthropic } from '@/hooks/queries/useExtraction';
 import { useExtractionUsage } from '@/hooks/queries/useUsage';
 import { uploadFile } from '@/lib/storage';
 
@@ -28,7 +28,7 @@ vi.mock('@/hooks/queries/useHealthRecords', () => ({
 }));
 
 vi.mock('@/hooks/queries/useExtraction', () => ({
-  useExtractLabResults: vi.fn(),
+  useExtractWithAnthropic: vi.fn(),
   mapExtractionErrorToMessage: vi.fn(() => 'error'),
 }));
 
@@ -67,7 +67,7 @@ describe('HealthRecordModal Component', () => {
       updateRecord: mockUpdateRecord,
     });
 
-    (useExtractLabResults as any).mockReturnValue(mockExtractMutation);
+    (useExtractWithAnthropic as any).mockReturnValue(mockExtractMutation);
     (useExtractionUsage as any).mockReturnValue({ data: { count: 5, limit: 10 } });
     
     (uploadFile as any).mockResolvedValue('http://example.com/file.jpg');

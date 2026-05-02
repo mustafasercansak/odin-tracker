@@ -47,6 +47,8 @@ export const CustomTimeInput: React.FC<CustomTimeInputProps> = ({
       if (hours >= 0 && hours < 24 && mins >= 0 && mins < 60) {
         onChange(`${h}:${m}`);
       }
+    } else if (val.length === 0) {
+      onChange(''); // Allow clearing
     }
   };
 

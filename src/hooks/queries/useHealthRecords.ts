@@ -38,37 +38,43 @@ export function useHealthRecords(petId: string | null) {
 
   const addRecord = useMutation({
     mutationFn: async (recordData: Omit<HealthRecord, 'id' | 'createdAt' | 'updatedAt'>) => {
-      const docRef = await addDoc(collection(db, 'health_records'), {
+      const docRef = await addDoc(collection(db, 'health_records'), cleanData({
         ...recordData,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-      });
+      }));
       return docRef.id;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['healthRecords', petId] });
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['healthRecords', variables.petId] });
     },
   });
 
   const updateRecord = useMutation({
     mutationFn: async ({ id, ...data }: Partial<HealthRecord> & { id: string }) => {
       const docRef = doc(db, 'health_records', id);
-      await updateDoc(docRef, {
+      await updateDoc(docRef, cleanData({
         ...data,
         updatedAt: new Date().toISOString(),
-      });
+      }));
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['healthRecords', petId] });
+    onSuccess: (_, variables) => {
+      const pId = (variables as any).petId || petId;
+      if (pId) {
+        queryClient.invalidateQueries({ queryKey: ['healthRecords', pId] });
+      }
     },
   });
 
   const deleteRecord = useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async ({ id }: { id: string; petId?: string }) => {
       await deleteDoc(doc(db, 'health_records', id));
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['healthRecords', petId] });
+    onSuccess: (_, variables) => {
+      const pId = variables.petId || petId;
+      if (pId) {
+        queryClient.invalidateQueries({ queryKey: ['healthRecords', pId] });
+      }
     },
   });
 
@@ -79,6 +85,16 @@ export function useHealthRecords(petId: string | null) {
     updateRecord,
     deleteRecord,
   };
+}
+
+function cleanData(data: any) {
+  const cleaned: any = {};
+  Object.keys(data).forEach(key => {
+    if (data[key] !== undefined) {
+      cleaned[key] = data[key];
+    }
+  });
+  return cleaned;
 }
 
 export function useLabRecords(petId: string | null) {

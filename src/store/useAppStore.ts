@@ -12,6 +12,7 @@ interface AppState {
   selectedPetId: string | null;
   trendsTimeRange: TrendsTimeRange;
   trendsSelectedParams: string[];
+  trendsSelectedLabs: string[];
 
   // Non-persisted state
   isOnline: boolean;
@@ -25,6 +26,7 @@ interface AppState {
   setSelectedPetId: (id: string | null) => void;
   setTrendsTimeRange: (range: TrendsTimeRange) => void;
   setTrendsSelectedParams: (params: string[]) => void;
+  setTrendsSelectedLabs: (labs: string[]) => void;
   setIsOnline: (status: boolean) => void;
   setSearchQuery: (query: string) => void;
   setActiveModal: (modalName: string | null, data?: any) => void;
@@ -39,6 +41,7 @@ export const useAppStore = create<AppState>()(
       selectedPetId: null,
       trendsTimeRange: '6m',
       trendsSelectedParams: ['creatinine', 'sdma', 'phosphorus'],
+      trendsSelectedLabs: [],
 
       // Initial non-persisted state
       isOnline: navigator.onLine,
@@ -52,6 +55,7 @@ export const useAppStore = create<AppState>()(
       setSelectedPetId: (selectedPetId) => set({ selectedPetId }),
       setTrendsTimeRange: (trendsTimeRange) => set({ trendsTimeRange }),
       setTrendsSelectedParams: (trendsSelectedParams) => set({ trendsSelectedParams }),
+      setTrendsSelectedLabs: (trendsSelectedLabs) => set({ trendsSelectedLabs }),
       setIsOnline: (isOnline) => set({ isOnline }),
       setSearchQuery: (searchQuery) => set({ searchQuery }),
       setActiveModal: (activeModal, modalData = null) => set({ activeModal, modalData }),
@@ -66,6 +70,7 @@ export const useAppStore = create<AppState>()(
         selectedPetId: state.selectedPetId,
         trendsTimeRange: state.trendsTimeRange,
         trendsSelectedParams: state.trendsSelectedParams,
+        trendsSelectedLabs: state.trendsSelectedLabs,
       }),
     }
   )

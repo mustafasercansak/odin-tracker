@@ -239,11 +239,11 @@ export const MedicationsTab: React.FC<MedicationsTabProps> = ({ petId }) => {
                     </div>
                   </div>
                   {canEdit && (
-                    <button 
+                    <button
                       onClick={() => setActiveModal('medication_edit', med)}
                       className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground transition-colors"
                     >
-                      <Calendar size={16} />
+                      <Edit2 size={16} />
                     </button>
                   )}
                 </div>

@@ -269,7 +269,13 @@ export default function PetDetail() {
                             )}
                           </h4>
                           <p className="text-sm text-muted-foreground">
-                            {format(parseISO(record.recordDate), 'dd.MM.yyyy', { locale: dateLocale })}
+                            {(() => {
+                              try {
+                                return format(parseISO(record.recordDate), 'dd.MM.yyyy', { locale: dateLocale });
+                              } catch (e) {
+                                return record.recordDate.split('T')[0];
+                              }
+                            })()}
                           </p>
                         </div>
                       </div>

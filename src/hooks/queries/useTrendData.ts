@@ -21,7 +21,8 @@ export interface TrendDataPoint {
 export function useMeasurementSeries(
   petId: string | null,
   parameter: string,
-  timeRange: TrendsTimeRange
+  timeRange: TrendsTimeRange,
+  labNames: string[] = []
 ) {
   const { labRecords, isLoading } = useLabRecords(petId);
 
@@ -41,9 +42,15 @@ export function useMeasurementSeries(
 
     labRecords.forEach((record) => {
       const recordDate = parseISO(record.recordDate);
+      const recordLabName = record.labName || '';
 
       // Filter by time range if not 'all'
       if (cutoffDate && !isAfter(recordDate, cutoffDate)) {
+        return;
+      }
+
+      // Filter by lab name if filter is active
+      if (labNames.length > 0 && !labNames.includes(recordLabName)) {
         return;
       }
 

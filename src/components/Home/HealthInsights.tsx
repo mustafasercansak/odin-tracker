@@ -59,7 +59,7 @@ export const HealthInsights: React.FC<HealthInsightsProps> = ({ pets }) => {
             originalLabel: latest.originalLabel,
             type: 'warning',
             title: t('insights.significantIncrease', { param: getParameterLabel(param, latest.originalLabel, t) }),
-            description: t('insights.increaseDescription', { pet: pet.name, percent: Math.round(change) }),
+            description: t('insights.increaseDescription', { pet: pet.name, param: getParameterLabel(param, latest.originalLabel, t), percent: Math.round(change) }),
             icon: <TrendingUp className="text-destructive" size={18} />
           });
         }
@@ -73,7 +73,7 @@ export const HealthInsights: React.FC<HealthInsightsProps> = ({ pets }) => {
             originalLabel: latest.originalLabel,
             type: 'success',
             title: t('insights.backToNormal', { param: getParameterLabel(param, latest.originalLabel, t) }),
-            description: t('insights.normalDescription', { pet: pet.name }),
+            description: t('insights.normalDescription', { pet: pet.name, param: getParameterLabel(param, latest.originalLabel, t) }),
             icon: <CheckCircle2 className="text-green-500" size={18} />
           });
         }

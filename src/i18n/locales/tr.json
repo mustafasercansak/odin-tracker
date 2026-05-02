@@ -91,6 +91,7 @@
       "other": "Diğer"
     },
     "noPets": "Henüz hayvan eklenmedi",
+    "petCount": "{{count}} can",
     "emptyDescription": "Dostlarınızın sağlık verilerini takip etmeye başlamak için ilk kaydı oluşturun.",
     "lastCheck": "Son Kontrol",
     "confirmDelete": "Bu hayvanı silmek istediğinizden emin misiniz?",
@@ -181,8 +182,19 @@
         "quota_exceeded": "Aylık ekstraksiyon kotanız doldu. Manuel girebilirsiniz.",
         "extraction_failed": "Görselden değer çıkarılamadı. Manuel girmeyi deneyin.",
         "invalid_image": "Görsel formatı desteklenmiyor.",
-        "large_file": "Dosya 5MB'dan büyük. Sıkıştırmak ister misiniz?"
+        "large_file": "Dosya 10MB'dan büyük."
       }
+    },
+    "addLabResult": "Lab Sonuçları Ekle",
+    "saveLabResult": "Lab Sonuçlarını Kaydet",
+    "aiExtractedBadge": "YZ",
+    "verifyBadge": "Doğrula",
+    "dragDrop": {
+      "title": "Lab raporunu buraya bırakın",
+      "subtitle": "veya dosya seçmek için tıklayın",
+      "changeFile": "Değiştir",
+      "removeFile": "Kaldır",
+      "addFile": "+ Dosya ekle"
     }
   },
   "medications": {
@@ -246,7 +258,15 @@
     "referenceRange": "Referans Aralığı",
     "unitMismatch": "Uyarı: Bu parametrede farklı birimler kullanılmış",
     "recentValues": "Son Değerler",
-    "convertedFrom": "{{value}} {{unit}} biriminden dönüştürüldü"
+    "convertedFrom": "{{value}} {{unit}} biriminden dönüştürüldü",
+    "selectAll": "Hepsini Seç",
+    "clearAll": "Hepsini Kaldır",
+    "searchParameters": "Parametrelerde ara...",
+    "showAnomalous": "Sadece Alertler",
+    "noParametersMatch": "Aramanızla eşleşen parametre bulunamadı.",
+    "selectParameterTitle": "Grafik Seçilmedi",
+    "lastN": "Son {{n}} ölçüm",
+    "labs": "Laboratuvarlar"
   },
   "shares": {
     "title": "Erişim Paylaşımı",

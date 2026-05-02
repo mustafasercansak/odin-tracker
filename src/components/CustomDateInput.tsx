@@ -47,12 +47,14 @@ export const CustomDateInput: React.FC<CustomDateInputProps> = ({
     
     setInputValue(val);
 
-    // If we have a full valid date, update the parent
+    // If we have a valid date, update the parent
     if (val.length === 10) {
       const parsed = parse(val, 'dd.MM.yyyy', new Date());
       if (isValid(parsed)) {
         onChange(format(parsed, 'yyyy-MM-dd'));
       }
+    } else if (val.length === 0) {
+      onChange(''); // Allow clearing
     }
   };
 

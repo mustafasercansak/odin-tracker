@@ -91,6 +91,7 @@
       "other": "Other"
     },
     "noPets": "No pets added yet",
+    "petCount": "{{count}} pets",
     "emptyDescription": "Create your first record to start tracking your pets' health data.",
     "lastCheck": "Last Check",
     "confirmDelete": "Are you sure you want to delete this pet?",
@@ -181,8 +182,19 @@
         "quota_exceeded": "Monthly extraction quota exceeded. You can enter manually.",
         "extraction_failed": "Failed to extract values from image. Try entering manually.",
         "invalid_image": "Image format not supported.",
-        "large_file": "File is larger than 5MB. Would you like to compress it?"
+        "large_file": "File is larger than 10MB."
       }
+    },
+    "addLabResult": "Add Lab Results",
+    "saveLabResult": "Save Lab Results",
+    "aiExtractedBadge": "AI",
+    "verifyBadge": "Verify",
+    "dragDrop": {
+      "title": "Drop your lab report here",
+      "subtitle": "or click to browse",
+      "changeFile": "Change",
+      "removeFile": "Remove",
+      "addFile": "+ Add another file"
     }
   },
   "medications": {
@@ -246,7 +258,15 @@
     "referenceRange": "Reference Range",
     "unitMismatch": "Warning: Different units used for this parameter",
     "recentValues": "Recent Values",
-    "convertedFrom": "Converted from {{value}} {{unit}}"
+    "convertedFrom": "Converted from {{value}} {{unit}}",
+    "selectAll": "Select All",
+    "clearAll": "Clear All",
+    "searchParameters": "Search parameters...",
+    "showAnomalous": "Only Alerts",
+    "noParametersMatch": "No parameters match your search.",
+    "selectParameterTitle": "No Chart Selected",
+    "lastN": "Last {{n}} measurements",
+    "labs": "Laboratories"
   },
   "shares": {
     "title": "Access Sharing",

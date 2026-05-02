@@ -41,16 +41,17 @@ export function useMedications(petId: string | null) {
 
   const addMedication = useMutation({
     mutationFn: async (medData: Omit<Medication, 'id' | 'createdAt' | 'updatedAt' | 'active'>) => {
-      const docRef = await addDoc(collection(db, 'medications'), {
+      const docRef = await addDoc(collection(db, 'medications'), cleanData({
         ...medData,
         active: true,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-      });
+      }));
       return docRef.id;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['medications', petId] });
+    onSuccess: (_, variables) => {
+      const pId = (variables as any).petId || petId;
+      if (pId) queryClient.invalidateQueries({ queryKey: ['medications', pId] });
       queryClient.invalidateQueries({ queryKey: ['medications', 'all'] });
     },
   });
@@ -58,23 +59,31 @@ export function useMedications(petId: string | null) {
   const updateMedication = useMutation({
     mutationFn: async ({ id, ...data }: Partial<Medication> & { id: string }) => {
       const docRef = doc(db, 'medications', id);
-      await updateDoc(docRef, {
+      await updateDoc(docRef, cleanData({
         ...data,
         updatedAt: new Date().toISOString(),
-      });
+      }));
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['medications', petId] });
+    onSuccess: (_, variables) => {
+      const pId = (variables as any).petId || petId;
+      if (pId) {
+        queryClient.invalidateQueries({ queryKey: ['medications', pId] });
+      } else {
+        queryClient.invalidateQueries({ queryKey: ['medications'] });
+      }
       queryClient.invalidateQueries({ queryKey: ['medications', 'all'] });
     },
   });
 
   const deleteMedication = useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async ({ id }: { id: string; petId?: string }) => {
       await deleteDoc(doc(db, 'medications', id));
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['medications', petId] });
+    onSuccess: (_, variables) => {
+      const pId = variables.petId || petId;
+      if (pId) {
+        queryClient.invalidateQueries({ queryKey: ['medications', pId] });
+      }
       queryClient.invalidateQueries({ queryKey: ['medications', 'all'] });
     },
   });
@@ -86,6 +95,16 @@ export function useMedications(petId: string | null) {
     updateMedication,
     deleteMedication,
   };
+}
+
+function cleanData(data: any) {
+  const cleaned: any = {};
+  Object.keys(data).forEach(key => {
+    if (data[key] !== undefined) {
+      cleaned[key] = data[key];
+    }
+  });
+  return cleaned;
 }
 
 export function useAllMedications(petIds: string[]) {
