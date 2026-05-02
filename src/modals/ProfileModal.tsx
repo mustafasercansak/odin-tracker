@@ -9,6 +9,8 @@ import { useAppStore } from '@/store/useAppStore';
 import { useAuth } from '@/hooks/useAuth';
 import { profileInputSchema, type ProfileInput } from '@/schemas/user';
 import { uploadFile } from '@/lib/storage';
+import { updatePassword, signOut } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 export const ProfileModal: React.FC = () => {
   const { t } = useTranslation();
@@ -38,6 +40,8 @@ export const ProfileModal: React.FC = () => {
       reset({
         displayName: user.displayName || '',
         photoURL: user.photoURL || '',
+        newPassword: '',
+        confirmPassword: '',
       });
       setImagePreview(user.photoURL || null);
     }
@@ -85,12 +89,24 @@ export const ProfileModal: React.FC = () => {
           updatedAt: new Date().toISOString(),
         }, { merge: true });
       }
+      if (data.newPassword && auth.currentUser) {
+        await updatePassword(auth.currentUser, data.newPassword);
+        toast.success(t('settings.passwordChanged'));
+      }
       
       toast.success(t('common.toasts.saved'));
       handleClose();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating profile:', error);
-      toast.error(t('common.toasts.error'));
+      if (error.code === 'auth/requires-recent-login') {
+        toast.error(t('settings.requiresRecentLogin'));
+        setTimeout(async () => {
+          await signOut(auth);
+          window.location.reload();
+        }, 3000);
+      } else {
+        toast.error(error.message || t('common.toasts.error'));
+      }
     } finally {
       setLoading(false);
     }
@@ -143,6 +159,33 @@ export const ProfileModal: React.FC = () => {
             <p className="mt-1.5 text-[10px] text-muted-foreground uppercase font-bold tracking-wider">
               {t('settings.emailCannotBeChanged')}
             </p>
+          </div>
+
+          <div className="pt-4 mt-4 border-t border-border">
+            <h3 className="text-sm font-bold text-primary mb-4 uppercase tracking-widest">{t('settings.changePassword')}</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold mb-1.5">{t('settings.newPassword')}</label>
+                <input
+                  type="password"
+                  {...register('newPassword')}
+                  className={`w-full px-4 py-2.5 rounded-xl bg-input border ${errors.newPassword ? 'border-destructive' : 'border-border'} focus:ring-2 focus:ring-primary outline-none transition-all`}
+                  placeholder="••••••••"
+                />
+                {errors.newPassword && <p className="mt-1 text-xs text-destructive">{errors.newPassword.message}</p>}
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-1.5">{t('settings.confirmPassword')}</label>
+                <input
+                  type="password"
+                  {...register('confirmPassword')}
+                  className={`w-full px-4 py-2.5 rounded-xl bg-input border ${errors.confirmPassword ? 'border-destructive' : 'border-border'} focus:ring-2 focus:ring-primary outline-none transition-all`}
+                  placeholder="••••••••"
+                />
+                {errors.confirmPassword && <p className="mt-1 text-xs text-destructive">{errors.confirmPassword.message}</p>}
+              </div>
+            </div>
           </div>
         </div>
 

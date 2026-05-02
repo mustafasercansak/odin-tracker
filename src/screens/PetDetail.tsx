@@ -40,6 +40,7 @@ import { MedicationsTab } from '@/components/Medications/MedicationsTab';
 import { HistoryTimeline } from '@/components/Medical/HistoryTimeline';
 import { SymptomLogger } from '@/components/Medical/SymptomLogger';
 import { NutritionTab } from '@/components/Nutrition/NutritionTab';
+import { VetDashboard } from '@/components/Medical/VetDashboard';
 
 type TabType = 'health_records' | 'medications' | 'trends' | 'shared_access' | 'history' | 'nutrition';
 
@@ -156,6 +157,23 @@ export default function PetDetail() {
         <button onClick={() => navigate('/')} className="text-primary font-semibold hover:underline">
           {t('common.back')}
         </button>
+      </div>
+    );
+  }
+
+  if ((pet as any).role === 'vet') {
+    return (
+      <div className="pb-safe">
+        <div className="sticky top-0 z-10 glass-panel rounded-b-3xl border-b border-border mb-6 px-4 py-3 md:px-8 flex items-center justify-between">
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-muted-foreground hover:bg-secondary hover:text-foreground transition-all text-sm font-semibold"
+          >
+            <ChevronLeft size={18} />
+            {t('common.back')}
+          </button>
+        </div>
+        <VetDashboard pet={pet} />
       </div>
     );
   }

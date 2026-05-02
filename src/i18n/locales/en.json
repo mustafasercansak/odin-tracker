@@ -332,7 +332,9 @@
     "roles": {
       "viewer": "Viewer",
       "editor": "Editor",
-      "admin": "Admin"
+      "admin": "Admin",
+      "vet": "Veterinarian",
+      "sitter": "Pet Sitter"
     },
     "currentAccess": "Current Access",
     "revokeAccess": "Revoke Access",
@@ -389,7 +391,12 @@
     "anonymousShare": "Share lab values anonymously",
     "editProfile": "Edit Profile",
     "displayName": "Display Name",
-    "emailCannotBeChanged": "Email address cannot be changed"
+    "emailCannotBeChanged": "Email address cannot be changed",
+    "changePassword": "Change Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm New Password",
+    "passwordChanged": "Password updated successfully!",
+    "requiresRecentLogin": "For security reasons, please log out and log back in before changing your password."
   },
   "tabs": {
     "healthRecords": "Health",

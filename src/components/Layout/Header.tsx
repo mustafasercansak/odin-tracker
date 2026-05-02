@@ -92,23 +92,26 @@ export const Header: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <button 
+          onClick={() => setActiveModal('profile_edit')}
+          className="flex items-center gap-3 hover:bg-secondary/50 p-1.5 pr-3 rounded-full transition-colors group cursor-pointer border border-transparent hover:border-border"
+        >
           <div className="hidden sm:flex flex-col items-end">
-            <span className="text-xs font-bold text-foreground leading-none">
+            <span className="text-xs font-bold text-foreground leading-none group-hover:text-primary transition-colors">
               {user?.displayName || user?.email?.split('@')[0]}
             </span>
             <span className="text-[10px] text-muted-foreground font-medium mt-1">
               {user?.email}
             </span>
           </div>
-          <button className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:text-foreground transition-all overflow-hidden border border-border hover:border-primary/50 shadow-inner">
+          <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground group-hover:text-primary transition-all overflow-hidden border border-border group-hover:border-primary/50 shadow-inner">
             {user?.photoURL ? (
               <img src={user.photoURL} alt={user.displayName || ''} className="w-full h-full object-cover" />
             ) : (
               <User size={20} />
             )}
-          </button>
-        </div>
+          </div>
+        </button>
       </div>
     </header>
   );

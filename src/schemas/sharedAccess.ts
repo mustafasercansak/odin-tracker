@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const accessRoleSchema = z.enum(['viewer', 'editor', 'admin'])
+export const accessRoleSchema = z.enum(['viewer', 'editor', 'admin', 'vet', 'sitter'])
 
 export const sharedAccessSchema = z.object({
   id: z.string(),

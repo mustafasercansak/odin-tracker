@@ -329,7 +329,9 @@
     "roles": {
       "viewer": "Görüntüleyici",
       "editor": "Düzenleyici",
-      "admin": "Yönetici"
+      "admin": "Yönetici",
+      "vet": "Veteriner",
+      "sitter": "Bakıcı"
     },
     "currentAccess": "Mevcut Erişimler",
     "revokeAccess": "Erişimi Kaldır",
@@ -382,7 +384,12 @@
     "anonymousShare": "Lab değerlerini anonim olarak paylaş",
     "editProfile": "Profili Düzenle",
     "displayName": "Görünen İsim",
-    "emailCannotBeChanged": "E-posta adresi değiştirilemez"
+    "emailCannotBeChanged": "E-posta adresi değiştirilemez",
+    "changePassword": "Şifre Değiştir",
+    "newPassword": "Yeni Şifre",
+    "confirmPassword": "Yeni Şifre (Tekrar)",
+    "passwordChanged": "Şifreniz başarıyla güncellendi!",
+    "requiresRecentLogin": "Güvenlik nedeniyle şifrenizi değiştirmeden önce lütfen çıkış yapıp tekrar giriş yapın."
   },
   "tabs": {
     "healthRecords": "Sağlık",

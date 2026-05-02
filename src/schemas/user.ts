@@ -26,7 +26,18 @@ export const registerSchema = loginSchema.extend({
 export const profileInputSchema = z.object({
   displayName: z.string().min(2, 'İsim en az 2 karakter olmalı'),
   photoURL: z.string().optional(),
-})
+  newPassword: z.string().min(6, 'Şifre en az 6 karakter olmalı').optional().or(z.literal('')),
+  confirmPassword: z.string().optional().or(z.literal('')),
+}).refine((data) => {
+  if (data.newPassword && data.newPassword !== data.confirmPassword) {
+    return false;
+  }
+  return true;
+}, {
+  message: 'Şifreler eşleşmiyor',
+  path: ['confirmPassword'],
+});
+
 
 export type AppUser = z.infer<typeof userSchema>
 export type LoginInput = z.infer<typeof loginSchema>

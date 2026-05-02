@@ -19,6 +19,7 @@ export const petSchema = z.object({
   supplements: z.string().optional(),
   photoUrl: z.string().optional(),
   notes: z.string().optional(),
+  role: z.string().optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
 })

@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import type { HealthRecord } from '@/schemas/healthRecord';
 import { format, parseISO } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
-import { Syringe, Stethoscope, Pill, Activity, FlaskConical, Weight, PartyPopper, HeartPulse } from 'lucide-react';
+import { Syringe, Stethoscope, Pill, Activity, FlaskConical, Weight, PartyPopper, HeartPulse, CalendarPlus } from 'lucide-react';
+import { downloadICS } from '@/lib/ics-generator';
 
 interface HistoryTimelineProps {
   records: HealthRecord[];
@@ -36,7 +37,7 @@ const getColor = (type: string) => {
 };
 
 export const HistoryTimeline: React.FC<HistoryTimelineProps> = ({ records }) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dateLocale = i18n.language === 'tr' ? tr : enUS;
 
   // Sort records by date descending
@@ -79,10 +80,27 @@ export const HistoryTimeline: React.FC<HistoryTimelineProps> = ({ records }) => 
                 )}
 
                 {record.recordType === 'lab_test' && (record as any).labName && (
-                  <div className="flex items-center gap-1.5 text-xs text-primary font-bold uppercase tracking-wider">
+                  <div className="flex items-center gap-1.5 text-xs text-primary font-bold uppercase tracking-wider mb-2">
                     <FlaskConical size={14} />
                     {(record as any).labName}
                   </div>
+                )}
+
+                {record.recordType === 'vaccination' && (record as any).nextDoseDate && (
+                  <button
+                    onClick={() => {
+                      const event = {
+                        title: `🐾 ${t('shares.roles.vet')} - ${record.description}`,
+                        description: record.notes || '',
+                        startDate: parseISO((record as any).nextDoseDate),
+                      };
+                      downloadICS(event, `vet-visit-${record.id}`);
+                    }}
+                    className="mt-3 flex items-center gap-2 px-3 py-1.5 bg-primary/10 text-primary rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-primary/20 transition-colors w-fit border border-primary/20"
+                  >
+                    <CalendarPlus size={14} />
+                    {t('common.add')}
+                  </button>
                 )}
 
                 {/* Type Indicator Background Accent */}
