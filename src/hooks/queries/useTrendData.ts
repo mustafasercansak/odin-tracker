@@ -3,6 +3,7 @@ import { subMonths, isAfter, parseISO } from 'date-fns';
 import { useLabRecords } from './useHealthRecords';
 import { type TrendsTimeRange } from '@/store/useAppStore';
 import { normalizeValue, convertValue } from '@/lib/unit-converters';
+import { getReferenceRange } from '@/lib/lab-references';
 
 export interface TrendDataPoint {
   date: string;
@@ -71,6 +72,22 @@ export function useMeasurementSeries(
         if (normalized.wasConverted) {
           if (refMin !== null) refMin = convertValue(refMin, m.unit, normalized.unit, parameter);
           if (refMax !== null) refMax = convertValue(refMax, m.unit, normalized.unit, parameter);
+        }
+
+        // Fallback to standard reference range if both are null
+        if (refMin === null && refMax === null) {
+          const standardRef = getReferenceRange(parameter);
+          if (standardRef) {
+            // Need to ensure units match or convert
+            refMin = standardRef.min;
+            refMax = standardRef.max;
+            
+            // If the standard ref unit doesn't match the normalized unit, convert it
+            if (standardRef.unit !== normalized.unit) {
+              refMin = convertValue(refMin, standardRef.unit, normalized.unit, parameter);
+              refMax = convertValue(refMax, standardRef.unit, normalized.unit, parameter);
+            }
+          }
         }
 
         points.push({

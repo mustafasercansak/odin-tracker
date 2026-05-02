@@ -95,7 +95,13 @@
     "emptyDescription": "Créez votre premier enregistrement pour commencer à suivre la santé de votre animal.",
     "lastCheck": "Dernier contrôle",
     "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet animal ?",
-    "petNotFound": "Animal non trouvé"
+    "petNotFound": "Animal non trouvé",
+    "age": {
+      "years": "{{count}} ans",
+      "months": "{{count}} mois",
+      "days": "{{count}} jours",
+      "lessThanADay": "Né aujourd'hui"
+    }
   },
   "healthRecords": {
     "title": "Dossiers de Santé",
@@ -256,6 +262,7 @@
       "all": "Tout"
     },
     "noData": "Pas encore de données de laboratoire. Ajoutez votre premier enregistrement.",
+    "noDataDescription": "Ajoutez votre premier compte rendu de laboratoire pour voir les tendances.",
     "insufficientData": "Données insuffisantes pour le graphique (au moins 2 mesures requises)",
     "latestValue": "Dernière valeur",
     "referenceRange": "Plage de référence",
@@ -268,6 +275,7 @@
     "showAnomalous": "Alertes uniquement",
     "noParametersMatch": "Aucun paramètre ne correspond à votre recherche.",
     "selectParameterTitle": "Aucun graphique sélectionné",
+    "selectParameterDescription": "Sélectionnez un paramètre dans la liste ci-dessus pour visualiser ses tendances et ses évolutions.",
     "lastN": "Dernières {{n}} mesures",
     "labs": "Labs"
   },

@@ -11,6 +11,25 @@
     "normalDescription": "{{pet}}'s {{param}} level is now within the reference range. Great news!",
     "noInsights": "Not enough data to analyze yet."
   },
+  "symptoms": {
+    "checkin": {
+      "title": "Daily Health Check-in",
+      "appetite": "Appetite",
+      "energy": "Energy Level",
+      "mood": "Mood / Behavior",
+      "logNow": "Log Daily Status",
+      "dailySummary": "Daily health check-in",
+      "success": "Daily status logged successfully"
+    }
+  },
+  "batch": {
+    "title": "Multi-Pet Batch Logging",
+    "selectPets": "Select Pets",
+    "success": "Successfully logged records for {{count}} pets",
+    "errors": {
+      "noPetsSelected": "Please select at least one pet"
+    }
+  },
   "common": {
     "save": "Save",
     "cancel": "Cancel",
@@ -35,6 +54,9 @@
     "done": "Done",
     "noResultsFor": "No results found for \"{{query}}\"",
     "yesterday": "Yesterday",
+    "low": "Low",
+    "normal": "Normal",
+    "high": "High",
     "toasts": {
       "saved": "Saved successfully",
       "deleted": "Deleted successfully",
@@ -82,6 +104,17 @@
     "breed": "Breed",
     "dateOfBirth": "Date of Birth",
     "weight": "Weight (kg)",
+    "targetWeight": "Target Weight (kg)",
+    "microchipId": "Microchip ID",
+    "bloodType": "Blood Type",
+    "allergies": "Allergies",
+    "emergency": {
+      "title": "Emergency Card",
+      "subtitle": "Critical life-saving information",
+      "emergencyContact": "Emergency Contact",
+      "veterinarianName": "Veterinarian Name",
+      "veterinarianPhone": "Veterinarian Phone"
+    },
     "notes": "Notes",
     "species_values": {
       "cat": "Cat",
@@ -95,7 +128,13 @@
     "emptyDescription": "Create your first record to start tracking your pets' health data.",
     "lastCheck": "Last Check",
     "confirmDelete": "Are you sure you want to delete this pet?",
-    "petNotFound": "Pet not found"
+    "petNotFound": "Pet not found",
+    "age": {
+      "years": "{{count}} years",
+      "months": "{{count}} months",
+      "days": "{{count}} days",
+      "lessThanADay": "Born today"
+    }
   },
   "healthRecords": {
     "title": "Health Records",
@@ -120,9 +159,11 @@
       "medication": "Medication",
       "vet_visit": "Vet Visit",
       "symptom": "Symptom",
+      "symptom_checkin": "Daily Check-in",
       "lab_test": "Lab Test",
       "weight": "Weight",
-      "vaccination": "Vaccination"
+      "vaccination": "Vaccination",
+      "milestone": "Milestone"
     },
     "nRecords": "{{count}} records",
     "nMeasurements": "{{count}} measurements"
@@ -198,6 +239,15 @@
       "changeFile": "Change",
       "removeFile": "Remove",
       "addFile": "+ Add another file"
+    },
+    "explanation": {
+      "title": "AI Result Insights",
+      "loading": "Analyzing Results...",
+      "processing": "Consulting Veterinary Intelligence",
+      "disclaimer": "This analysis is AI-generated and intended for informational purposes only. It is NOT a medical diagnosis. Always review these results with your veterinarian.",
+      "summary": "The Bottom Line",
+      "keyFindings": "Key Findings",
+      "vetQuestions": "Questions for your Vet"
     }
   },
   "medications": {
@@ -256,6 +306,7 @@
       "all": "All"
     },
     "noData": "No lab data yet. Add your first lab record.",
+    "noDataDescription": "Add your first lab record to see the trends.",
     "insufficientData": "Insufficient data for chart (at least 2 measurements required)",
     "latestValue": "Latest Value",
     "referenceRange": "Reference Range",
@@ -268,8 +319,9 @@
     "showAnomalous": "Only Alerts",
     "noParametersMatch": "No parameters match your search.",
     "selectParameterTitle": "No Chart Selected",
+    "selectParameterDescription": "Select a parameter from the list above to view its trends and changes.",
     "lastN": "Last {{n}} measurements",
-    "labs": "Labs"
+    "labs": "Laboratories"
   },
   "shares": {
     "title": "Access Sharing",
@@ -299,7 +351,9 @@
     "subtitle": "Manage application preferences and data.",
     "appSettings": "App Settings",
     "darkMode": "Dark Mode",
-    "darkModeDescription": "Switch appearance to dark theme",
+    "darkModeDescription": "Switch between light and dark themes",
+    "notifications": "Smart Reminders",
+    "notificationsDescription": "Get alerts for medication doses and upcoming vaccinations",
     "theme": "Theme",
     "themes": {
       "light": "Light",
@@ -340,7 +394,20 @@
     "healthRecords": "Health",
     "medications": "Meds",
     "trends": "Trends",
-    "sharedAccess": "Access"
+    "sharedAccess": "Access",
+    "history": "History",
+    "nutrition": "Nutrition"
+  },
+  "nutrition": {
+    "title": "Nutrition & Diet",
+    "currentFood": "Current Food",
+    "feedingSchedule": "Feeding Schedule",
+    "supplements": "Supplements & Treats",
+    "noFoodSpecified": "No specific food brand set",
+    "noScheduleSpecified": "No feeding schedule set",
+    "noSupplementsSpecified": "No supplements or treats listed",
+    "noKnownAllergies": "No known allergies reported",
+    "disclaimer": "Always consult your vet before making significant changes to your pet's diet or adding new supplements."
   },
   "report": {
     "download": "Download Report",
@@ -353,5 +420,15 @@
     "value": "Value",
     "labTrends": "Lab Trends",
     "medicalHistory": "Medical History Summary"
+  },
+  "notifications": {
+    "medicationReminder": {
+      "title": "Medication for {{petName}}",
+      "body": "It's time for {{medName}} (scheduled at {{time}})"
+    },
+    "vaccineReminder": {
+      "title": "Vaccination for {{petName}}",
+      "body": "Today is the booster date for {{vaccineName}}"
+    }
   }
 }

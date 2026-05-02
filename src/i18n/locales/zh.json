@@ -95,7 +95,13 @@
     "emptyDescription": "创建您的第一条记录，开始追踪宠物的健康状况。",
     "lastCheck": "最后检查",
     "confirmDelete": "您确定要删除这只宠物吗？",
-    "petNotFound": "未找到宠物信息"
+    "petNotFound": "未找到宠物信息",
+    "age": {
+      "years": "{{count}}岁",
+      "months": "{{count}}个月",
+      "days": "{{count}}天",
+      "lessThanADay": "今天出生"
+    }
   },
   "healthRecords": {
     "title": "健康记录",

@@ -13,6 +13,8 @@ interface AppState {
   trendsTimeRange: TrendsTimeRange;
   trendsSelectedParams: string[];
   trendsSelectedLabs: string[];
+  recordsSelectedLabs: string[];
+  notificationsEnabled: boolean;
 
   // Non-persisted state
   isOnline: boolean;
@@ -27,6 +29,8 @@ interface AppState {
   setTrendsTimeRange: (range: TrendsTimeRange) => void;
   setTrendsSelectedParams: (params: string[]) => void;
   setTrendsSelectedLabs: (labs: string[]) => void;
+  setRecordsSelectedLabs: (labs: string[]) => void;
+  setNotificationsEnabled: (enabled: boolean) => void;
   setIsOnline: (status: boolean) => void;
   setSearchQuery: (query: string) => void;
   setActiveModal: (modalName: string | null, data?: any) => void;
@@ -42,6 +46,8 @@ export const useAppStore = create<AppState>()(
       trendsTimeRange: '6m',
       trendsSelectedParams: ['creatinine', 'sdma', 'phosphorus'],
       trendsSelectedLabs: [],
+      recordsSelectedLabs: [],
+      notificationsEnabled: false,
 
       // Initial non-persisted state
       isOnline: navigator.onLine,
@@ -56,6 +62,8 @@ export const useAppStore = create<AppState>()(
       setTrendsTimeRange: (trendsTimeRange) => set({ trendsTimeRange }),
       setTrendsSelectedParams: (trendsSelectedParams) => set({ trendsSelectedParams }),
       setTrendsSelectedLabs: (trendsSelectedLabs) => set({ trendsSelectedLabs }),
+      setRecordsSelectedLabs: (recordsSelectedLabs) => set({ recordsSelectedLabs }),
+      setNotificationsEnabled: (notificationsEnabled) => set({ notificationsEnabled }),
       setIsOnline: (isOnline) => set({ isOnline }),
       setSearchQuery: (searchQuery) => set({ searchQuery }),
       setActiveModal: (activeModal, modalData = null) => set({ activeModal, modalData }),
@@ -71,6 +79,8 @@ export const useAppStore = create<AppState>()(
         trendsTimeRange: state.trendsTimeRange,
         trendsSelectedParams: state.trendsSelectedParams,
         trendsSelectedLabs: state.trendsSelectedLabs,
+        recordsSelectedLabs: state.recordsSelectedLabs,
+        notificationsEnabled: state.notificationsEnabled,
       }),
     }
   )

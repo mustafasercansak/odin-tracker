@@ -11,6 +11,25 @@
     "normalDescription": "{{pet}} dostumuzun {{param}} değeri artık referans aralığında. Harika haber!",
     "noInsights": "Şu an için analiz edilecek yeterli veri yok."
   },
+  "symptoms": {
+    "checkin": {
+      "title": "Günlük Sağlık Takibi",
+      "appetite": "İştah Durumu",
+      "energy": "Enerji Seviyesi",
+      "mood": "Mod / Davranış",
+      "logNow": "Günlük Durumu Kaydet",
+      "dailySummary": "Günlük sağlık özeti",
+      "success": "Günlük durum başarıyla kaydedildi"
+    }
+  },
+  "batch": {
+    "title": "Çoklu Hayvan Toplu Kayıt",
+    "selectPets": "Hayvanları Seçin",
+    "success": "{{count}} hayvan için kayıt başarıyla oluşturuldu",
+    "errors": {
+      "noPetsSelected": "Lütfen en az bir hayvan seçin"
+    }
+  },
   "common": {
     "save": "Kaydet",
     "cancel": "İptal",
@@ -35,6 +54,9 @@
     "done": "Tamam",
     "noResultsFor": "\"{{query}}\" için sonuç bulunamadı.",
     "yesterday": "Dün",
+    "low": "Düşük",
+    "normal": "Normal",
+    "high": "Yüksek",
     "toasts": {
       "saved": "Kaydedildi",
       "deleted": "Silindi",
@@ -82,6 +104,14 @@
     "breed": "Irk",
     "dateOfBirth": "Doğum Tarihi",
     "weight": "Ağırlık (kg)",
+    "targetWeight": "Hedef Ağırlık (kg)",
+    "microchipId": "Mikroçip ID",
+    "bloodType": "Kan Grubu",
+    "allergies": "Alerjiler",
+    "emergency": {
+      "title": "Acil Durum Kartı",
+      "subtitle": "Kritik hayat kurtarıcı bilgiler"
+    },
     "notes": "Notlar",
     "species_values": {
       "cat": "Kedi",
@@ -95,7 +125,13 @@
     "emptyDescription": "Dostlarınızın sağlık verilerini takip etmeye başlamak için ilk kaydı oluşturun.",
     "lastCheck": "Son Kontrol",
     "confirmDelete": "Bu hayvanı silmek istediğinizden emin misiniz?",
-    "petNotFound": "Hayvan bulunamadı"
+    "petNotFound": "Hayvan bulunamadı",
+    "age": {
+      "years": "{{count}} yaşında",
+      "months": "{{count}} aylık",
+      "days": "{{count}} günlük",
+      "lessThanADay": "Bugün doğdu"
+    }
   },
   "healthRecords": {
     "title": "Sağlık Kayıtları",
@@ -118,11 +154,13 @@
     "extractWithAI": "Yapay Zekayla Doldur",
     "recordTypes": {
       "medication": "İlaç",
-      "vet_visit": "Veteriner Ziyareti",
+      "vet_visit": "Vet Ziyareti",
       "symptom": "Semptom",
-      "lab_test": "Lab Testi",
-      "weight": "Ağırlık",
-      "vaccination": "Aşı"
+      "symptom_checkin": "Günlük Kontrol",
+      "lab_test": "Laboratuvar Sonucu",
+      "weight": "Kilo",
+      "vaccination": "Aşı",
+      "milestone": "Kilometre Taşı"
     },
     "nRecords": "{{count}} kayıt",
     "nMeasurements": "{{count}} değer"
@@ -198,6 +236,15 @@
       "changeFile": "Değiştir",
       "removeFile": "Kaldır",
       "addFile": "+ Dosya ekle"
+    },
+    "explanation": {
+      "title": "AI Sonuç Analizi",
+      "loading": "Sonuçlar Analiz Ediliyor...",
+      "processing": "Veteriner Zekasına Danışılıyor",
+      "disclaimer": "Bu analiz yapay zeka tarafından oluşturulmuştur ve sadece bilgilendirme amaçlıdır. Tıbbi bir teşhis DEĞİLDİR. Bu sonuçları her zaman veteriner hekiminizle birlikte değerlendirin.",
+      "summary": "Özet Durum",
+      "keyFindings": "Önemli Bulgular",
+      "vetQuestions": "Veterinerinize Sorun"
     }
   },
   "medications": {
@@ -256,6 +303,7 @@
       "all": "Hepsi"
     },
     "noData": "Henüz lab verisi yok. İlk lab kaydını ekleyin.",
+    "noDataDescription": "Grafikleri görebilmek için öncelikle laboratuvar sonuçlarını ekleyin.",
     "insufficientData": "Grafik için yeterli veri yok (en az 2 ölçüm gerekli)",
     "latestValue": "Son Değer",
     "referenceRange": "Referans Aralığı",
@@ -268,6 +316,7 @@
     "showAnomalous": "Sadece Alertler",
     "noParametersMatch": "Aramanızla eşleşen parametre bulunamadı.",
     "selectParameterTitle": "Grafik Seçilmedi",
+    "selectParameterDescription": "Trendleri ve değişimleri incelemek için yukarıdaki listeden parametre seçin.",
     "lastN": "Son {{n}} ölçüm",
     "labs": "Lablar"
   },
@@ -298,8 +347,10 @@
     "title": "Ayarlar",
     "subtitle": "Uygulama tercihlerini ve verilerini yönet.",
     "appSettings": "Uygulama Ayarları",
-    "darkMode": "Koyu Mod",
-    "darkModeDescription": "Görünümü koyu temaya geçir",
+    "darkMode": "Karanlık Mod",
+    "darkModeDescription": "Aydınlık ve karanlık temalar arasında geçiş yapın",
+    "notifications": "Akıllı Hatırlatıcılar",
+    "notificationsDescription": "İlaç dozları ve yaklaşan aşılar için uyarılar alın",
     "theme": "Tema",
     "themes": {
       "light": "Açık",
@@ -336,7 +387,20 @@
     "healthRecords": "Sağlık",
     "medications": "İlaçlar",
     "trends": "Trendler",
-    "sharedAccess": "Erişim"
+    "sharedAccess": "Erişim",
+    "history": "Geçmiş",
+    "nutrition": "Beslenme"
+  },
+  "nutrition": {
+    "title": "Beslenme ve Diyet",
+    "currentFood": "Mevcut Mama",
+    "feedingSchedule": "Beslenme Düzeni",
+    "supplements": "Takviyeler ve Ödüller",
+    "noFoodSpecified": "Belirlenmiş bir mama markası yok",
+    "noScheduleSpecified": "Belirlenmiş bir beslenme düzeni yok",
+    "noSupplementsSpecified": "Listelenmiş bir takviye veya ödül yok",
+    "noKnownAllergies": "Bilinen bir alerji bildirilmedi",
+    "disclaimer": "Evcil hayvanınızın diyetinde önemli değişiklikler yapmadan veya yeni takviyeler eklemeden önce daima veterinerinize danışın."
   },
   "report": {
     "download": "Rapor İndir",
@@ -349,5 +413,15 @@
     "value": "Değer",
     "labTrends": "Laboratuvar Trendleri",
     "medicalHistory": "Tıbbi Geçmiş Özeti"
+  },
+  "notifications": {
+    "medicationReminder": {
+      "title": "{{petName}} için İlaç Vakti",
+      "body": "{{medName}} zamanı geldi (Saat: {{time}})"
+    },
+    "vaccineReminder": {
+      "title": "{{petName}} için Aşı Vakti",
+      "body": "Bugün {{vaccineName}} hatırlatma dozu günü"
+    }
   }
 }

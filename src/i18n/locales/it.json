@@ -95,7 +95,13 @@
     "emptyDescription": "Crea il tuo primo record per iniziare a monitorare la salute del tuo animale.",
     "lastCheck": "Ultimo controllo",
     "confirmDelete": "Sei sicuro di voler eliminare questo animale?",
-    "petNotFound": "Animale non trovato"
+    "petNotFound": "Animale non trovato",
+    "age": {
+      "years": "{{count}} anni",
+      "months": "{{count}} mesi",
+      "days": "{{count}} giorni",
+      "lessThanADay": "Nato oggi"
+    }
   },
   "healthRecords": {
     "title": "Cartelle Cliniche",
@@ -256,6 +262,7 @@
       "all": "Tutti"
     },
     "noData": "Non ci sono ancora dati di laboratorio. Aggiungi il tuo primo record.",
+    "noDataDescription": "Aggiungi il tuo primo referto di laboratorio per vedere le tendenze.",
     "insufficientData": "Dati insufficienti per il grafico (sono necessarie almeno 2 misurazioni)",
     "latestValue": "Ultimo Valore",
     "referenceRange": "Intervallo di Riferimento",
@@ -268,6 +275,7 @@
     "showAnomalous": "Solo Allerte",
     "noParametersMatch": "Nessun parametro corrisponde alla tua ricerca.",
     "selectParameterTitle": "Nessun grafico selezionato",
+    "selectParameterDescription": "Seleziona un parametro dall'elenco sopra per visualizzare le sue tendenze e variazioni.",
     "lastN": "Ultime {{n}} misurazioni",
     "labs": "Labs"
   },

@@ -95,7 +95,13 @@
     "emptyDescription": "Crie seu primeiro registro para começar a acompanhar a saúde do seu pet.",
     "lastCheck": "Último check-up",
     "confirmDelete": "Tem certeza que deseja excluir este pet?",
-    "petNotFound": "Pet não encontrado"
+    "petNotFound": "Pet não encontrado",
+    "age": {
+      "years": "{{count}} anos",
+      "months": "{{count}} meses",
+      "days": "{{count}} dias",
+      "lessThanADay": "Nascido hoje"
+    }
   },
   "healthRecords": {
     "title": "Registros de Saúde",

@@ -8,6 +8,8 @@ export const recordTypeSchema = z.enum([
   'lab_test',
   'weight',
   'vaccination',
+  'symptom_checkin',
+  'milestone',
 ])
 
 export type RecordType = z.infer<typeof recordTypeSchema>
@@ -56,6 +58,17 @@ export const healthRecordSchema = z.discriminatedUnion('recordType', [
     recordType: z.literal('vaccination'),
     nextDoseDate: z.string().optional(),
   }),
+  baseRecordSchema.extend({
+    recordType: z.literal('symptom_checkin'),
+    appetite: z.enum(['low', 'normal', 'high']).optional(),
+    energy: z.enum(['low', 'normal', 'high']).optional(),
+    mood: z.enum(['low', 'normal', 'high']).optional(),
+    digestiveStatus: z.string().optional(),
+  }),
+  baseRecordSchema.extend({
+    recordType: z.literal('milestone'),
+    milestoneType: z.string().optional(),
+  }),
 ])
 
 export type HealthRecord = z.infer<typeof healthRecordSchema>
@@ -77,6 +90,11 @@ export const healthRecordInputSchema = z.object({
   measurements: z.array(measurementSchema).optional(),
   extractionMetadata: extractionMetadataSchema.optional(),
   nextDoseDate: z.string().optional(),
+  appetite: z.enum(['low', 'normal', 'high']).optional(),
+  energy: z.enum(['low', 'normal', 'high']).optional(),
+  mood: z.enum(['low', 'normal', 'high']).optional(),
+  digestiveStatus: z.string().optional(),
+  milestoneType: z.string().optional(),
 }).superRefine((data, ctx) => {
   if (data.recordType !== 'lab_test' && data.description.trim() === '') {
     ctx.addIssue({

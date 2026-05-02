@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
-import { Save, Upload, Sparkles, FileText, X, CheckCircle2, FlaskConical, Syringe, Stethoscope, Pill, Scale, Activity } from 'lucide-react';
+import { Save, Upload, Sparkles, FileText, X, CheckCircle2, FlaskConical, Syringe, Stethoscope, Pill, Scale, Activity, PartyPopper, HeartPulse } from 'lucide-react';
 import { Modal } from '@/components/Modal';
 import { useAppStore } from '@/store/useAppStore';
 import { useHealthRecords } from '@/hooks/queries/useHealthRecords';
@@ -86,6 +86,10 @@ export const HealthRecordModal: React.FC = () => {
         labName: (recordToEdit as any).labName,
         measurements: (recordToEdit as any).measurements || [],
         nextDoseDate: (recordToEdit as any).nextDoseDate,
+        milestoneType: (recordToEdit as any).milestoneType,
+        appetite: (recordToEdit as any).appetite,
+        energy: (recordToEdit as any).energy,
+        mood: (recordToEdit as any).mood,
       });
       setFileUrl(recordToEdit.fileUrl || null);
     } else if (modalData) {
@@ -235,10 +239,9 @@ export const HealthRecordModal: React.FC = () => {
 
       const finalDate = `${data.recordDate}T${data.recordTime || '00:00'}:00`;
       const finalDescription =
-        data.description?.trim() ||
-        (data.recordType === 'lab_test'
+        data.recordType === 'lab_test'
           ? data.labName?.trim() || t('healthRecords.recordTypes.lab_test')
-          : '');
+          : data.description?.trim() || '';
 
       const payload: any = {
         petId: data.petId,
@@ -323,14 +326,15 @@ export const HealthRecordModal: React.FC = () => {
             {t('healthRecords.recordType')}
           </label>
           <div className="grid grid-cols-3 gap-1.5">
-            {(['lab_test', 'vet_visit', 'medication', 'weight', 'symptom', 'vaccination'] as const).map((type) => {
+            {(['lab_test', 'vet_visit', 'medication', 'weight', 'vaccination', 'symptom_checkin', 'milestone'] as const).map((type) => {
               const Icon = 
                 type === 'lab_test' ? FlaskConical :
                 type === 'vet_visit' ? Stethoscope :
                 type === 'medication' ? Pill :
                 type === 'weight' ? Scale :
-                type === 'symptom' ? Activity :
-                Syringe;
+                type === 'vaccination' ? Syringe :
+                type === 'milestone' ? PartyPopper :
+                HeartPulse;
 
               return (
                 <button

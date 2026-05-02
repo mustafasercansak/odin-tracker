@@ -12,6 +12,10 @@ import { HealthRecordModal } from './modals/HealthRecordModal';
 import { MedicationModal } from './modals/MedicationModal';
 import { ShareModal } from './modals/ShareModal';
 import { ProfileModal } from './modals/ProfileModal';
+import { EmergencyCardModal } from './modals/EmergencyCardModal';
+import { BatchRecordModal } from './modals/BatchRecordModal';
+import { LabExplanationModal } from './modals/LabExplanationModal';
+import { DoseMonitor } from './components/Notifications/DoseMonitor';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './lib/queryClient';
 
@@ -33,11 +37,18 @@ const Trends = () => (
   </div>
 );
 
+const LabExplanationModalWrapper = () => {
+  const { activeModal, modalData } = useAppStore();
+  if (activeModal !== 'lab_explanation' || !modalData) return null;
+  return <LabExplanationModal record={modalData.record} pet={modalData.pet} />;
+};
+
 function App() {
-  const { theme } = useAppStore();
+  const { theme, locale } = useAppStore();
 
   useEffect(() => {
     const root = window.document.documentElement;
+    root.lang = locale;
     root.classList.remove('light', 'dark');
 
     if (theme === 'system') {
@@ -46,7 +57,7 @@ function App() {
     } else {
       root.classList.add(theme);
     }
-  }, [theme]);
+  }, [theme, locale]);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -63,6 +74,10 @@ function App() {
         <MedicationModal />
         <ShareModal />
         <ProfileModal />
+        <EmergencyCardModal />
+        <BatchRecordModal />
+        <LabExplanationModalWrapper />
+        <DoseMonitor />
         <Routes>
           {/* Public Routes */}
           <Route

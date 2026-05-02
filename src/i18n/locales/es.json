@@ -95,7 +95,13 @@
     "emptyDescription": "Crea tu primer registro para empezar a seguir la salud de tu mascota.",
     "lastCheck": "Último chequeo",
     "confirmDelete": "¿Estás seguro de que quieres eliminar esta mascota?",
-    "petNotFound": "Mascota no encontrada"
+    "petNotFound": "Mascota no encontrada",
+    "age": {
+      "years": "{{count}} años",
+      "months": "{{count}} meses",
+      "days": "{{count}} días",
+      "lessThanADay": "Nacido hoy"
+    }
   },
   "healthRecords": {
     "title": "Registros de Salud",
@@ -268,6 +274,7 @@
     "showAnomalous": "Solo Alertas",
     "noParametersMatch": "Ningún parámetro coincide con su búsqueda.",
     "selectParameterTitle": "Ningún gráfico seleccionado",
+    "selectParameterDescription": "Seleccione un parámetro de la lista anterior para ver sus tendencias y cambios.",
     "lastN": "Últimas {{n}} mediciones",
     "labs": "Labs"
   },

@@ -95,7 +95,13 @@
     "emptyDescription": "最初の記録を作成して、ペットの健康管理を始めましょう。",
     "lastCheck": "最終チェック",
     "confirmDelete": "このペットを削除してもよろしいですか？",
-    "petNotFound": "ペットが見つかりませんでした"
+    "petNotFound": "ペットが見つかりませんでした",
+    "age": {
+      "years": "{{count}}歳",
+      "months": "{{count}}ヶ月",
+      "days": "{{count}}日",
+      "lessThanADay": "今日生まれ"
+    }
   },
   "healthRecords": {
     "title": "健康記録",

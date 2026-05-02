@@ -95,7 +95,13 @@
     "emptyDescription": "Erstellen Sie Ihren ersten Eintrag, um die Gesundheitsdaten Ihrer Tiere zu verfolgen.",
     "lastCheck": "Letzter Check",
     "confirmDelete": "Sind Sie sicher, dass Sie dieses Tier löschen möchten?",
-    "petNotFound": "Tier nicht gefunden"
+    "petNotFound": "Tier nicht gefunden",
+    "age": {
+      "years": "{{count}} Jahre",
+      "months": "{{count}} Monate",
+      "days": "{{count}} Tage",
+      "lessThanADay": "Heute geboren"
+    }
   },
   "healthRecords": {
     "title": "Gesundheitsakten",
@@ -268,6 +274,7 @@
     "showAnomalous": "Nur Alarme",
     "noParametersMatch": "Keine Parameter entsprechen Ihrer Suche.",
     "selectParameterTitle": "Kein Diagramm ausgewählt",
+    "selectParameterDescription": "Wählen Sie einen Parameter aus der Liste oben aus, um dessen Trends und Änderungen anzuzeigen.",
     "lastN": "Letzte {{n}} Messungen",
     "labs": "Labore"
   },

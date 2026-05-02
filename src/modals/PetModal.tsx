@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
-import { Camera, Save } from 'lucide-react';
+import { Camera, Save, ShieldAlert, Utensils } from 'lucide-react';
 import { Modal } from '@/components/Modal';
 import { useAppStore } from '@/store/useAppStore';
 import { usePets } from '@/hooks/queries/usePets';
@@ -44,6 +44,12 @@ export const PetModal: React.FC = () => {
         breed: pet.breed || '',
         dateOfBirth: pet.dateOfBirth || '',
         weightKg: pet.weightKg || 0,
+        microchipId: pet.microchipId || '',
+        bloodType: pet.bloodType || '',
+        allergies: pet.allergies || '',
+        currentFood: pet.currentFood || '',
+        feedingSchedule: pet.feedingSchedule || '',
+        supplements: pet.supplements || '',
         notes: pet.notes || '',
       });
       setImagePreview(pet.photoUrl || null);
@@ -54,6 +60,12 @@ export const PetModal: React.FC = () => {
         breed: '',
         dateOfBirth: '',
         weightKg: 0,
+        microchipId: '',
+        bloodType: '',
+        allergies: '',
+        currentFood: '',
+        feedingSchedule: '',
+        supplements: '',
         notes: '',
       });
       setImagePreview(null);
@@ -195,16 +207,28 @@ export const PetModal: React.FC = () => {
             )}
           />
 
-          {/* Weight */}
-          <div>
-            <label className="block text-sm font-semibold mb-1.5">{t('pets.weight')}</label>
-            <input
-              type="number"
-              step="0.1"
-              {...control.register('weightKg', { valueAsNumber: true })}
-              className="w-full px-4 py-2.5 rounded-xl bg-input border border-border focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
-              placeholder="0.0"
-            />
+          {/* Weight & Goal */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-semibold mb-1.5">{t('pets.weight')}</label>
+              <input
+                type="number"
+                step="0.1"
+                {...control.register('weightKg', { valueAsNumber: true })}
+                className="w-full px-4 py-2.5 rounded-xl bg-input border border-border focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
+                placeholder="0.0"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold mb-1.5">{t('pets.targetWeight')}</label>
+              <input
+                type="number"
+                step="0.1"
+                {...control.register('targetWeightKg', { valueAsNumber: true })}
+                className="w-full px-4 py-2.5 rounded-xl bg-input border border-border focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
+                placeholder="0.0"
+              />
+            </div>
           </div>
 
           {/* Notes */}
@@ -216,6 +240,75 @@ export const PetModal: React.FC = () => {
               className="w-full px-4 py-2.5 rounded-xl bg-input border border-border focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none resize-none"
               placeholder={t('pets.notes')}
             />
+          </div>
+
+          {/* Nutrition Section */}
+          <div className="md:col-span-2 pt-4 mt-4 border-t border-border">
+            <h3 className="text-sm font-bold text-primary flex items-center gap-2 mb-4 uppercase tracking-widest">
+              <Utensils size={16} />
+              {t('nutrition.title')}
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-muted-foreground mb-1.5 uppercase tracking-wider">{t('nutrition.currentFood')}</label>
+                <input
+                  {...control.register('currentFood')}
+                  className="w-full px-4 py-2 bg-secondary/30 border border-border rounded-xl focus:ring-2 focus:ring-primary/50 outline-none"
+                  placeholder="Brand & Flavor"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-muted-foreground mb-1.5 uppercase tracking-wider">{t('nutrition.feedingSchedule')}</label>
+                <input
+                  {...control.register('feedingSchedule')}
+                  className="w-full px-4 py-2 bg-secondary/30 border border-border rounded-xl focus:ring-2 focus:ring-primary/50 outline-none"
+                  placeholder="e.g. 8:00 AM, 6:00 PM"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-xs font-bold text-muted-foreground mb-1.5 uppercase tracking-wider">{t('nutrition.supplements')}</label>
+                <textarea
+                  {...control.register('supplements')}
+                  rows={2}
+                  className="w-full px-4 py-2 bg-secondary/30 border border-border rounded-xl focus:ring-2 focus:ring-primary/50 outline-none resize-none"
+                  placeholder="Vitamins, treats, oils..."
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Emergency Section */}
+          <div className="md:col-span-2 pt-4 mt-4 border-t border-border">
+            <h3 className="text-sm font-bold text-destructive flex items-center gap-2 mb-4 uppercase tracking-widest">
+              <ShieldAlert size={16} />
+              {t('pets.emergency.title')}
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-muted-foreground mb-1.5 uppercase tracking-wider">{t('pets.microchipId')}</label>
+                <input
+                  {...control.register('microchipId')}
+                  className="w-full px-4 py-2 bg-secondary/30 border border-border rounded-xl focus:ring-2 focus:ring-destructive/50 outline-none"
+                  placeholder="e.g. 985112000..."
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-muted-foreground mb-1.5 uppercase tracking-wider">{t('pets.bloodType')}</label>
+                <input
+                  {...control.register('bloodType')}
+                  className="w-full px-4 py-2 bg-secondary/30 border border-border rounded-xl focus:ring-2 focus:ring-destructive/50 outline-none"
+                  placeholder="e.g. DEA 1.1+"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-xs font-bold text-muted-foreground mb-1.5 uppercase tracking-wider">{t('pets.allergies')}</label>
+                <input
+                  {...control.register('allergies')}
+                  className="w-full px-4 py-2 bg-secondary/30 border border-border rounded-xl focus:ring-2 focus:ring-destructive/50 outline-none"
+                  placeholder={t('pets.allergies')}
+                />
+              </div>
+            </div>
           </div>
         </div>
 

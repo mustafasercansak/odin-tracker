@@ -95,7 +95,13 @@
     "emptyDescription": "Maak je eerste record aan om de gezondheid van je huisdier te volgen.",
     "lastCheck": "Laatste controle",
     "confirmDelete": "Weet je zeker dat je dit huisdier wilt verwijderen?",
-    "petNotFound": "Huisdier niet gevonden"
+    "petNotFound": "Huisdier niet gevonden",
+    "age": {
+      "years": "{{count}} jaar",
+      "months": "{{count}} maanden",
+      "days": "{{count}} dagen",
+      "lessThanADay": "Vandaag geboren"
+    }
   },
   "healthRecords": {
     "title": "Gezondheidsdossiers",

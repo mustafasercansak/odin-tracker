@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { usePets } from '@/hooks/queries/usePets';
 import { useAppStore } from '@/store/useAppStore';
-import { Plus, Heart, ChevronRight, Calendar, Info, Search, Clock, Pill, CheckCircle2, Edit3, Syringe } from 'lucide-react';
+import { Plus, Heart, ChevronRight, Calendar, Info, Search, Clock, Pill, CheckCircle2, Edit3, Syringe, ShieldAlert, Weight } from 'lucide-react';
 import { format, parseISO, isSameDay, isPast } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
 import { useAllMedications, useMedications } from '@/hooks/queries/useMedications';
 import { useHealthRecords, useAllVaccinationRecords } from '@/hooks/queries/useHealthRecords';
 import { calculateNextDose, isDoseOverdue } from '@/lib/medication-helpers';
+import { calculateAge } from '@/lib/pet-helpers';
 import toast from 'react-hot-toast';
 import { HealthInsights } from '@/components/Home/HealthInsights';
 
@@ -145,6 +146,16 @@ export default function Home() {
             }
           </p>
         </div>
+        {pets.length > 1 && (
+          <button 
+            onClick={() => setActiveModal('batch_record')}
+            className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-all shadow-lg shadow-primary/5"
+            title={t('batch.title')}
+          >
+            <CheckSquare size={20} strokeWidth={3} />
+            <span className="hidden sm:inline font-extrabold">{t('batch.title')}</span>
+          </button>
+        )}
         <button
           onClick={() => setActiveModal('pet_add')}
           className="flex items-center gap-2 px-6 py-2.5 rounded-full btn-neon"
@@ -375,6 +386,19 @@ export default function Home() {
               {/* Background Accent */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
 
+              <div className="absolute top-4 right-4 z-10 flex gap-2">
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveModal('emergency_card', { petId: pet.id });
+                  }}
+                  className="p-2 bg-destructive/10 text-destructive rounded-xl hover:bg-destructive hover:text-white transition-all shadow-lg shadow-destructive/10 active:scale-90"
+                  title={t('pets.emergency.title')}
+                >
+                  <ShieldAlert size={18} />
+                </button>
+              </div>
+
               <div className="relative flex items-start gap-5">
                 <div className="w-20 h-20 rounded-2xl bg-secondary flex items-center justify-center text-primary text-2xl font-bold shadow-inner overflow-hidden flex-shrink-0">
                   {pet.photoUrl ? (
@@ -412,11 +436,37 @@ export default function Home() {
                           : '---'
                         }
                       </span>
+                      {pet.dateOfBirth && (
+                        <>
+                          <span className="w-1 h-1 rounded-full bg-muted-foreground/30 mx-0.5" />
+                          <span className="font-bold text-primary">{calculateAge(pet.dateOfBirth, t)}</span>
+                        </>
+                      )}
                     </div>
                     {pet.weightKg && (
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Info size={14} className="flex-shrink-0" />
-                        <span>{pet.weightKg} kg</span>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Weight size={14} className="flex-shrink-0" />
+                          <span>{pet.weightKg} kg</span>
+                        </div>
+                        
+                        {pet.targetWeightKg && (
+                          <div className="mt-2 space-y-1">
+                            <div className="flex justify-between text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                              <span>{t('pets.targetWeight')}</span>
+                              <span className="text-primary">{pet.targetWeightKg} kg</span>
+                            </div>
+                            <div className="h-1.5 w-full bg-secondary rounded-full overflow-hidden border border-border/30">
+                              <div 
+                                className="h-full bg-primary shadow-[0_0_8px_rgba(var(--primary),0.5)] transition-all duration-1000"
+                                style={{ 
+                                  width: `${Math.min(100, Math.max(5, (pet.weightKg / pet.targetWeightKg) * 100))}%`,
+                                  opacity: pet.weightKg > pet.targetWeightKg ? 0.8 : 1
+                                }}
+                              />
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>

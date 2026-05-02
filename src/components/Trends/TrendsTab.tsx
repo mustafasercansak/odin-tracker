@@ -107,7 +107,7 @@ export const TrendsTab: React.FC<TrendsTabProps> = ({ petId }) => {
         </div>
         <h3 className="text-xl font-bold mb-2">{t('trends.noData')}</h3>
         <p className="text-muted-foreground max-w-sm">
-          Grafikleri görebilmek için öncelikle laboratuvar sonuçlarını ekleyin.
+          {t('trends.noDataDescription')}
         </p>
       </div>
     );
@@ -287,7 +287,7 @@ export const TrendsTab: React.FC<TrendsTabProps> = ({ petId }) => {
             </div>
             <h4 className="text-lg font-bold text-foreground mb-2">{t('trends.selectParameterTitle')}</h4>
             <p className="text-muted-foreground font-medium max-w-xs mx-auto">
-              Trendleri ve değişimleri incelemek için yukarıdaki listeden parametre seçin.
+              {t('trends.selectParameterDescription')}
             </p>
           </div>
         )}

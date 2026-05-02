@@ -88,6 +88,26 @@ export async function generatePetReport({ pet, records, medications, charts, t, 
       </div>
     ` : ''}
 
+    ${records.filter(r => r.recordType === 'vaccination').length > 0 ? `
+      <div style="margin-bottom: 40px;">
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 15px;">${t('healthRecords.recordTypes.vaccination')}</h2>
+        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+          <tr style="background: #829c8e; color: white;">
+            <th style="text-align: left; padding: 10px;">${t('healthRecords.recordDate')}</th>
+            <th style="text-align: left; padding: 10px;">${t('healthRecords.description')}</th>
+            <th style="text-align: left; padding: 10px;">${t('healthRecords.nextDoseDate')}</th>
+          </tr>
+          ${records.filter(r => r.recordType === 'vaccination').sort((a, b) => new Date(b.recordDate).getTime() - new Date(a.recordDate).getTime()).map(v => `
+            <tr style="border-bottom: 1px solid #e7e5e4;">
+              <td style="padding: 10px;">${format(new Date(v.recordDate), 'dd.MM.yyyy')}</td>
+              <td style="padding: 10px;">${v.description}</td>
+              <td style="padding: 10px;">${(v as any).nextDoseDate ? format(new Date((v as any).nextDoseDate), 'dd.MM.yyyy') : '---'}</td>
+            </tr>
+          `).join('')}
+        </table>
+      </div>
+    ` : ''}
+
     <div style="margin-bottom: 40px;">
       <h2 style="font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 15px;">${t('report.medicalHistory')}</h2>
       <table style="width: 100%; border-collapse: collapse; font-size: 12px;">

@@ -18,7 +18,12 @@ import {
   Shield,
   Mail,
   Share2,
-  Edit3
+  Edit3,
+  Building2,
+  ShieldAlert,
+  Clock,
+  Brain,
+  Utensils
 } from 'lucide-react';
 import { usePets } from '@/hooks/queries/usePets';
 import { useHealthRecords, useLabRecords } from '@/hooks/queries/useHealthRecords';
@@ -29,10 +34,14 @@ import { useAuth } from '@/hooks/useAuth';
 import { generatePetReport } from '@/lib/reportGenerator';
 import { format, parseISO } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
+import { calculateAge } from '@/lib/pet-helpers';
 import { TrendsTab } from '@/components/Trends/TrendsTab';
 import { MedicationsTab } from '@/components/Medications/MedicationsTab';
+import { HistoryTimeline } from '@/components/Medical/HistoryTimeline';
+import { SymptomLogger } from '@/components/Medical/SymptomLogger';
+import { NutritionTab } from '@/components/Nutrition/NutritionTab';
 
-type TabType = 'health_records' | 'medications' | 'trends' | 'shared_access';
+type TabType = 'health_records' | 'medications' | 'trends' | 'shared_access' | 'history' | 'nutrition';
 
 export default function PetDetail() {
   const { id } = useParams<{ id: string }>();
@@ -43,18 +52,48 @@ export default function PetDetail() {
   const { labRecords } = useLabRecords(id || null);
   const { medications } = useMedications(id || null);
   const { shares, revokeAccess, updateAccess, isLoading: sharesLoading } = useSharedAccess(id || null);
-  const { setActiveModal, searchQuery } = useAppStore();
+  const { setActiveModal, searchQuery, recordsSelectedLabs, setRecordsSelectedLabs } = useAppStore();
   const { user } = useAuth();
+  
+  const availableLabs = useMemo(() => {
+    const labs = new Set<string>();
+    records.forEach(record => {
+      if ((record as any).labName) labs.add((record as any).labName);
+    });
+    return Array.from(labs).sort();
+  }, [records]);
 
   const filteredRecords = useMemo(() => {
-    if (!searchQuery) return records;
-    const query = searchQuery.toLowerCase();
-    return records.filter(record => 
-      record.description?.toLowerCase().includes(query) ||
-      record.recordType.toLowerCase().includes(query) ||
-      record.notes?.toLowerCase().includes(query)
-    );
-  }, [records, searchQuery]);
+    let filtered = records;
+
+    // Filter by Lab Name
+    if (recordsSelectedLabs.length > 0) {
+      filtered = filtered.filter(record => 
+        (record as any).labName && recordsSelectedLabs.includes((record as any).labName)
+      );
+    }
+
+    // Filter by Search Query
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(record => 
+        record.description?.toLowerCase().includes(query) ||
+        record.recordType.toLowerCase().includes(query) ||
+        record.notes?.toLowerCase().includes(query) ||
+        (record as any).labName?.toLowerCase().includes(query)
+      );
+    }
+
+    return filtered;
+  }, [records, searchQuery, recordsSelectedLabs]);
+
+  const toggleLabFilter = (lab: string) => {
+    if (recordsSelectedLabs.includes(lab)) {
+      setRecordsSelectedLabs(recordsSelectedLabs.filter(l => l !== lab));
+    } else {
+      setRecordsSelectedLabs([...recordsSelectedLabs, lab]);
+    }
+  };
   
   const [activeTab, setActiveTab] = useState<TabType>('health_records');
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
@@ -123,6 +162,8 @@ export default function PetDetail() {
 
   const tabs = [
     { id: 'health_records', label: t('tabs.healthRecords'), icon: Activity, hidden: false },
+    { id: 'history', label: t('tabs.history'), icon: Clock, hidden: false },
+    { id: 'nutrition', label: t('tabs.nutrition'), icon: Utensils, hidden: false },
     { id: 'medications', label: t('tabs.medications'), icon: Pill, hidden: false },
     { id: 'trends', label: t('tabs.trends'), icon: TrendingUp, hidden: labRecords.length === 0 },
     { id: 'shared_access', label: t('tabs.sharedAccess'), icon: Users, hidden: false },
@@ -141,6 +182,13 @@ export default function PetDetail() {
             <span className="font-medium">{t('common.back')}</span>
           </button>
           <div className="flex items-center gap-2">
+            <button 
+              onClick={() => setActiveModal('emergency_card', { petId: pet.id })}
+              className="flex items-center gap-2 px-3 py-2 rounded-xl bg-destructive/10 hover:bg-destructive hover:text-white text-destructive transition-all text-sm font-semibold shadow-lg shadow-destructive/10"
+            >
+              <ShieldAlert size={18} />
+              <span className="hidden sm:inline">{t('pets.emergency.title')}</span>
+            </button>
             <button 
               onClick={handleDownloadReport}
               disabled={isGeneratingReport}
@@ -187,11 +235,32 @@ export default function PetDetail() {
                     : '---'
                   }
                 </span>
+                {pet.dateOfBirth && (
+                  <>
+                    <span className="w-1 h-1 rounded-full bg-muted-foreground/30 mx-0.5" />
+                    <span className="font-bold text-primary">{calculateAge(pet.dateOfBirth, t)}</span>
+                  </>
+                )}
               </div>
               {pet.weightKg && (
-                <div className="flex items-center gap-1.5 text-sm bg-card border border-border px-3 py-1 rounded-full">
-                  <Weight size={14} className="text-primary" />
-                  <span>{pet.weightKg} kg</span>
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-1.5 text-sm bg-card border border-border px-3 py-1 rounded-full w-fit">
+                    <Weight size={14} className="text-primary" />
+                    <span>{pet.weightKg} kg</span>
+                    {pet.targetWeightKg && (
+                      <span className="text-[10px] font-bold text-muted-foreground ml-1">
+                        / {pet.targetWeightKg} kg
+                      </span>
+                    )}
+                  </div>
+                  {pet.targetWeightKg && (
+                    <div className="w-32 h-1 bg-secondary rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-primary"
+                        style={{ width: `${Math.min(100, (pet.weightKg / pet.targetWeightKg) * 100)}%` }}
+                      />
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -222,7 +291,10 @@ export default function PetDetail() {
       {/* Tab Content */}
       <div className="mt-6">
         {activeTab === 'health_records' && (
-          <div className="space-y-6">
+          <div className="space-y-8">
+            {canEdit && <SymptomLogger petId={pet.id} />}
+            
+            <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-bold">{t('healthRecords.title')}</h2>
               {canEdit && (
@@ -235,6 +307,41 @@ export default function PetDetail() {
                 </button>
               )}
             </div>
+
+            {/* Lab Filters */}
+            {availableLabs.length > 0 && (
+              <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+                <label className="flex items-center gap-2 text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-3 px-1">
+                  <Building2 size={12} className="text-primary/60" />
+                  {t('trends.labs')}
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => setRecordsSelectedLabs([])}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
+                      recordsSelectedLabs.length === 0
+                        ? 'bg-primary border-primary text-primary-foreground shadow-sm shadow-primary/20'
+                        : 'bg-secondary/50 border-transparent text-muted-foreground hover:border-border'
+                    }`}
+                  >
+                    {t('common.all')}
+                  </button>
+                  {availableLabs.map(lab => (
+                    <button
+                      key={lab}
+                      onClick={() => toggleLabFilter(lab)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
+                        recordsSelectedLabs.includes(lab)
+                          ? 'bg-primary border-primary text-primary-foreground shadow-sm shadow-primary/20'
+                          : 'bg-secondary/50 border-transparent text-muted-foreground hover:border-border'
+                      }`}
+                    >
+                      {lab}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {records.length === 0 ? (
               <div className="py-12 text-center bg-card border border-dashed border-border rounded-3xl">
@@ -268,7 +375,7 @@ export default function PetDetail() {
                               <Edit3 size={14} className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                             )}
                           </h4>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-sm text-muted-foreground flex items-center gap-2">
                             {(() => {
                               try {
                                 return format(parseISO(record.recordDate), 'dd.MM.yyyy', { locale: dateLocale });
@@ -276,17 +383,51 @@ export default function PetDetail() {
                                 return record.recordDate.split('T')[0];
                               }
                             })()}
+                            {record.recordType === 'lab_test' && (record as any).labName && (
+                              <>
+                                <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
+                                <span className="font-medium text-primary/80">{(record as any).labName}</span>
+                              </>
+                            )}
                           </p>
                         </div>
                       </div>
                       {record.recordType === 'lab_test' && record.measurements && (
-                        <div className="text-right">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary">
+                        <div className="flex flex-col items-end gap-1">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-tighter bg-primary/10 text-primary">
                             {t('healthRecords.nMeasurements', { count: record.measurements.length })}
                           </span>
+                          <div className="flex flex-wrap justify-end gap-1 mt-1">
+                            {record.measurements.slice(0, 3).map((m, idx) => (
+                              <div key={idx} className="flex items-center gap-1 px-1.5 py-0.5 rounded-lg bg-secondary/50 border border-border/50 text-[10px]">
+                                <span className="font-bold text-muted-foreground">{t(`lab.parameters.${m.parameter}`, { defaultValue: m.parameter })}:</span>
+                                <span className="font-black text-foreground">{m.value}</span>
+                                <span className="text-[8px] opacity-70">{m.unit}</span>
+                              </div>
+                            ))}
+                            {record.measurements.length > 3 && (
+                              <span className="text-[10px] text-muted-foreground font-bold">...</span>
+                            )}
+                          </div>
                         </div>
                       )}
                     </div>
+                    
+                    {record.recordType === 'lab_test' && record.measurements && record.measurements.length > 0 && (
+                      <div className="mt-4 pt-4 border-t border-border/50 flex justify-end">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveModal('lab_explanation', { record, pet });
+                          }}
+                          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 text-primary text-xs font-bold hover:bg-primary hover:text-white transition-all shadow-sm"
+                        >
+                          <Brain size={16} />
+                          <span>{t('lab.explanation.title')}</span>
+                        </button>
+                      </div>
+                    )}
+
                     {record.description && (
                       <p className="mt-3 text-sm text-foreground/80 leading-relaxed">
                         {record.description}
@@ -297,6 +438,11 @@ export default function PetDetail() {
               </div>
             )}
           </div>
+        </div>
+      )}
+
+      {activeTab === 'history' && (
+          <HistoryTimeline records={records} />
         )}
 
         {activeTab === 'medications' && pet.id && (
@@ -305,6 +451,15 @@ export default function PetDetail() {
 
         {activeTab === 'trends' && pet.id && (
           <TrendsTab petId={pet.id} />
+        )}
+
+
+        {activeTab === 'nutrition' && pet && (
+          <NutritionTab 
+            pet={pet} 
+            canEdit={canEdit} 
+            onEdit={() => setActiveModal('pet_edit', pet)} 
+          />
         )}
 
         {activeTab === 'shared_access' && pet.id && (

@@ -12,7 +12,8 @@ import {
   ShieldCheck,
   Zap,
   Download,
-  Upload
+  Upload,
+  Bell
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { useAuth } from '@/hooks/useAuth';
@@ -25,7 +26,7 @@ import { tr, enUS, de, es, fr, it, ru, pt, nl, ja, zhCN } from 'date-fns/locale'
 export default function Settings() {
   const { t, i18n } = useTranslation();
   const { user, signOut } = useAuth();
-  const { theme, setTheme, setLocale, setActiveModal } = useAppStore();
+  const { theme, setTheme, setLocale, setActiveModal, notificationsEnabled, setNotificationsEnabled } = useAppStore();
   const { data: usage } = useExtractionUsage();
   
   const [exporting, setExporting] = React.useState(false);
@@ -141,6 +142,37 @@ export default function Settings() {
               className={`w-12 h-6 rounded-full p-1 transition-colors ${theme === 'dark' ? 'bg-primary' : 'bg-muted'}`}
             >
               <div className={`w-4 h-4 rounded-full bg-white transition-transform ${theme === 'dark' ? 'translate-x-6' : 'translate-x-0'}`} />
+            </button>
+          </div>
+
+          {/* Notifications Toggle */}
+          <div className="flex items-center justify-between p-4 hover:bg-secondary/30 transition-colors">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-secondary text-primary">
+                <Bell size={20} />
+              </div>
+              <div>
+                <p className="font-bold">{t('settings.notifications')}</p>
+                <p className="text-xs text-muted-foreground">{t('settings.notificationsDescription')}</p>
+              </div>
+            </div>
+            <button 
+              onClick={async () => {
+                if (!notificationsEnabled) {
+                  const permission = await Notification.requestPermission();
+                  if (permission === 'granted') {
+                    setNotificationsEnabled(true);
+                    toast.success(t('notificationsEnabled'));
+                  } else {
+                    toast.error(t('notificationsDenied'));
+                  }
+                } else {
+                  setNotificationsEnabled(false);
+                }
+              }}
+              className={`w-12 h-6 rounded-full p-1 transition-colors ${notificationsEnabled ? 'bg-primary' : 'bg-muted'}`}
+            >
+              <div className={`w-4 h-4 rounded-full bg-white transition-transform ${notificationsEnabled ? 'translate-x-6' : 'translate-x-0'}`} />
             </button>
           </div>
 
