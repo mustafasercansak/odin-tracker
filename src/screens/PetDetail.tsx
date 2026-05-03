@@ -28,6 +28,7 @@ import {
 import { usePets } from '@/hooks/queries/usePets';
 import { useHealthRecords, useLabRecords } from '@/hooks/queries/useHealthRecords';
 import { useMedications } from '@/hooks/queries/useMedications';
+import { SwipeableRecord } from '@/components/Medical/SwipeableRecord';
 import { useSharedAccess } from '@/hooks/queries/useSharedAccess';
 import { useAppStore } from '@/store/useAppStore';
 import { useAuth } from '@/hooks/useAuth';
@@ -49,7 +50,7 @@ export default function PetDetail() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const { pets, isLoading: petsLoading } = usePets();
-  const { records, isLoading: recordsLoading } = useHealthRecords(id || null);
+  const { records, deleteRecord, isLoading: recordsLoading } = useHealthRecords(id || null);
   const { labRecords } = useLabRecords(id || null);
   const { medications } = useMedications(id || null);
   const { shares, revokeAccess, updateAccess, isLoading: sharesLoading } = useSharedAccess(id || null);
@@ -260,6 +261,13 @@ export default function PetDetail() {
                   </>
                 )}
               </div>
+              {pet.passportNumber && (
+                <div className="flex items-center gap-1.5 text-sm bg-card border border-border px-3 py-1 rounded-full">
+                  <Shield size={14} className="text-primary" />
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mr-1">Passport:</span>
+                  <span className="font-bold">{pet.passportNumber}</span>
+                </div>
+              )}
               {pet.weightKg && (
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-1.5 text-sm bg-card border border-border px-3 py-1 rounded-full w-fit">
@@ -375,83 +383,92 @@ export default function PetDetail() {
                   </div>
                 )}
                 {filteredRecords.map((record) => (
-                  <div 
+                  <SwipeableRecord
                     key={record.id}
-                    onClick={() => canEdit && setActiveModal('record_edit', record)}
-                    className={`bg-card border border-border rounded-2xl p-4 hover:border-primary/50 transition-colors group ${canEdit ? 'cursor-pointer' : ''}`}
+                    onDelete={() => {
+                      if (window.confirm(t('common.confirmDelete'))) {
+                        deleteRecord.mutate({ id: record.id, petId: pet.id });
+                      }
+                    }}
+                    canDelete={canEdit}
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-primary">
-                          {/* Record type icon logic here */}
-                          <Activity size={20} />
-                        </div>
-                        <div>
-                          <h4 className="font-bold group-hover:text-primary transition-colors flex items-center gap-2">
-                            {t(`healthRecords.recordTypes.${record.recordType}`)}
-                            {canEdit && (
-                              <Edit3 size={14} className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                            )}
-                          </h4>
-                          <p className="text-sm text-muted-foreground flex items-center gap-2">
-                            {(() => {
-                              try {
-                                return format(parseISO(record.recordDate), 'dd.MM.yyyy', { locale: dateLocale });
-                              } catch (e) {
-                                return record.recordDate.split('T')[0];
-                              }
-                            })()}
-                            {record.recordType === 'lab_test' && (record as any).labName && (
-                              <>
-                                <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
-                                <span className="font-medium text-primary/80">{(record as any).labName}</span>
-                              </>
-                            )}
-                          </p>
-                        </div>
-                      </div>
-                      {record.recordType === 'lab_test' && record.measurements && (
-                        <div className="flex flex-col items-end gap-1">
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-tighter bg-primary/10 text-primary">
-                            {t('healthRecords.nMeasurements', { count: record.measurements.length })}
-                          </span>
-                          <div className="flex flex-wrap justify-end gap-1 mt-1">
-                            {record.measurements.slice(0, 3).map((m, idx) => (
-                              <div key={idx} className="flex items-center gap-1 px-1.5 py-0.5 rounded-lg bg-secondary/50 border border-border/50 text-[10px]">
-                                <span className="font-bold text-muted-foreground">{t(`lab.parameters.${m.parameter}`, { defaultValue: m.parameter })}:</span>
-                                <span className="font-black text-foreground">{m.value}</span>
-                                <span className="text-[8px] opacity-70">{m.unit}</span>
-                              </div>
-                            ))}
-                            {record.measurements.length > 3 && (
-                              <span className="text-[10px] text-muted-foreground font-bold">...</span>
-                            )}
+                    <div 
+                      onClick={() => canEdit && setActiveModal('record_edit', record)}
+                      className={`bg-card border border-border rounded-2xl p-4 hover:border-primary/50 transition-colors group ${canEdit ? 'cursor-pointer' : ''}`}
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-start gap-4">
+                          <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-primary">
+                            {/* Record type icon logic here */}
+                            <Activity size={20} />
+                          </div>
+                          <div>
+                            <h4 className="font-bold group-hover:text-primary transition-colors flex items-center gap-2">
+                              {t(`healthRecords.recordTypes.${record.recordType}`)}
+                              {canEdit && (
+                                <Edit3 size={14} className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                              )}
+                            </h4>
+                            <p className="text-sm text-muted-foreground flex items-center gap-2">
+                              {(() => {
+                                try {
+                                  return format(parseISO(record.recordDate), 'dd.MM.yyyy', { locale: dateLocale });
+                                } catch (e) {
+                                  return record.recordDate.split('T')[0];
+                                }
+                              })()}
+                              {record.recordType === 'lab_test' && (record as any).labName && (
+                                <>
+                                  <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
+                                  <span className="font-medium text-primary/80">{(record as any).labName}</span>
+                                </>
+                              )}
+                            </p>
                           </div>
                         </div>
+                        {record.recordType === 'lab_test' && record.measurements && (
+                          <div className="flex flex-col items-end gap-1">
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-tighter bg-primary/10 text-primary">
+                              {t('healthRecords.nMeasurements', { count: record.measurements.length })}
+                            </span>
+                            <div className="flex flex-wrap justify-end gap-1 mt-1">
+                              {record.measurements.slice(0, 3).map((m, idx) => (
+                                <div key={idx} className="flex items-center gap-1 px-1.5 py-0.5 rounded-lg bg-secondary/50 border border-border/50 text-[10px]">
+                                  <span className="font-bold text-muted-foreground">{t(`lab.parameters.${m.parameter}`, { defaultValue: m.parameter })}:</span>
+                                  <span className="font-black text-foreground">{m.value}</span>
+                                  <span className="text-[8px] opacity-70">{m.unit}</span>
+                                </div>
+                              ))}
+                              {record.measurements.length > 3 && (
+                                <span className="text-[10px] text-muted-foreground font-bold">...</span>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {record.recordType === 'lab_test' && record.measurements && record.measurements.length > 0 && (
+                        <div className="mt-4 pt-4 border-t border-border/50 flex justify-end">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveModal('lab_explanation', { record, pet });
+                            }}
+                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 text-primary text-xs font-bold hover:bg-primary hover:text-white transition-all shadow-sm"
+                          >
+                            <Brain size={16} />
+                            <span>{t('lab.explanation.title')}</span>
+                          </button>
+                        </div>
+                      )}
+
+                      {record.description && (
+                        <p className="mt-3 text-sm text-foreground/80 leading-relaxed">
+                          {record.description}
+                        </p>
                       )}
                     </div>
-                    
-                    {record.recordType === 'lab_test' && record.measurements && record.measurements.length > 0 && (
-                      <div className="mt-4 pt-4 border-t border-border/50 flex justify-end">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setActiveModal('lab_explanation', { record, pet });
-                          }}
-                          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 text-primary text-xs font-bold hover:bg-primary hover:text-white transition-all shadow-sm"
-                        >
-                          <Brain size={16} />
-                          <span>{t('lab.explanation.title')}</span>
-                        </button>
-                      </div>
-                    )}
-
-                    {record.description && (
-                      <p className="mt-3 text-sm text-foreground/80 leading-relaxed">
-                        {record.description}
-                      </p>
-                    )}
-                  </div>
+                  </SwipeableRecord>
                 ))}
               </div>
             )}

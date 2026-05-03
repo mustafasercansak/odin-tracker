@@ -18,6 +18,7 @@ export const petSchema = z.object({
   weightKg: optionalNumber,
   targetWeightKg: optionalNumber,
   microchipId: z.string().optional(),
+  passportNumber: z.string().optional(),
   bloodType: z.string().optional(),
   allergies: z.string().optional(),
   emergencyContacts: z.array(z.object({
@@ -45,6 +46,7 @@ export const petInputSchema = z.object({
   weightKg: optionalNumber,
   targetWeightKg: optionalNumber,
   microchipId: z.string().optional(),
+  passportNumber: z.string().optional(),
   bloodType: z.string().optional(),
   allergies: z.string().optional(),
   emergencyContacts: z.array(z.object({

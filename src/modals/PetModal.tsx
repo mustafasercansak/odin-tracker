@@ -45,6 +45,7 @@ export const PetModal: React.FC = () => {
         dateOfBirth: pet.dateOfBirth || '',
         weightKg: pet.weightKg || 0,
         microchipId: pet.microchipId || '',
+        passportNumber: pet.passportNumber || '',
         bloodType: pet.bloodType || '',
         allergies: pet.allergies || '',
         currentFood: pet.currentFood || '',
@@ -61,6 +62,7 @@ export const PetModal: React.FC = () => {
         dateOfBirth: '',
         weightKg: 0,
         microchipId: '',
+        passportNumber: '',
         bloodType: '',
         allergies: '',
         currentFood: '',
@@ -290,6 +292,14 @@ export const PetModal: React.FC = () => {
                   {...control.register('microchipId')}
                   className="w-full px-4 py-2 bg-secondary/30 border border-border rounded-xl focus:ring-2 focus:ring-destructive/50 outline-none"
                   placeholder="e.g. 985112000..."
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-muted-foreground mb-1.5 uppercase tracking-wider">Passport Number</label>
+                <input
+                  {...control.register('passportNumber')}
+                  className="w-full px-4 py-2 bg-secondary/30 border border-border rounded-xl focus:ring-2 focus:ring-destructive/50 outline-none"
+                  placeholder="e.g. TR-123456"
                 />
               </div>
               <div>
