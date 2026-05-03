@@ -50,6 +50,7 @@
   "common": {
     "save": "Opslaan",
     "cancel": "Annuleren",
+    "undo": "Ongedaan maken",
     "delete": "Verwijderen",
     "retry": "Opnieuw proberen",
     "edit": "Bewerken",
@@ -85,7 +86,8 @@
       "extractionFailed": "Kon geen gegevens uit de afbeelding extraheren",
       "quotaExceeded": "Maandelijks quotum overschreden",
       "unauthorized": "Niet geautoriseerd",
-      "fileUploadFailed": "Bestandsupload mislukt, record wordt toch opgeslagen."
+      "fileUploadFailed": "Bestandsupload mislukt, record wordt toch opgeslagen.",
+      "deletedWithUndo": "Item verwijderd. Je kunt dit ongedaan maken."
     },
     "logout": "Uitloggen"
   },

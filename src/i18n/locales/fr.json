@@ -50,6 +50,7 @@
   "common": {
     "save": "Enregistrer",
     "cancel": "Annuler",
+    "undo": "Annuler",
     "delete": "Supprimer",
     "retry": "Réessayer",
     "edit": "Modifier",
@@ -85,7 +86,8 @@
       "extractionFailed": "Impossible d'extraire des données de l'image",
       "quotaExceeded": "Quota mensuel dépassé",
       "unauthorized": "Non autorisé",
-      "fileUploadFailed": "Échec du téléchargement du fichier, l'enregistrement sera tout de même sauvegardé."
+      "fileUploadFailed": "Échec du téléchargement du fichier, l'enregistrement sera tout de même sauvegardé.",
+      "deletedWithUndo": "Enregistrement supprimé. Vous pouvez annuler cette action."
     },
     "logout": "Déconnexion"
   },

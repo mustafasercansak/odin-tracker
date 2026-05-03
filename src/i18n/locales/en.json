@@ -65,6 +65,7 @@
     "noData": "No data",
     "back": "Back",
     "next": "Next",
+    "undo": "Undo",
     "required": "Required field",
     "optional": "Optional",
     "user": "User",
@@ -78,6 +79,7 @@
     "toasts": {
       "saved": "Saved successfully",
       "deleted": "Deleted successfully",
+      "deletedWithUndo": "Record deleted. You can undo this action.",
       "error": "An error occurred",
       "extractionStarted": "AI analysis started...",
       "extractionSuccess": "{{count}} values extracted",

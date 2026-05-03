@@ -1,6 +1,7 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import toast from 'react-hot-toast';
 import { 
   ChevronLeft, 
   Edit2, 
@@ -57,6 +58,63 @@ export default function PetDetail() {
   const { setActiveModal, searchQuery, recordsSelectedLabs, setRecordsSelectedLabs } = useAppStore();
   const { user } = useAuth();
   
+  const [pendingDeletions, setPendingDeletions] = useState<Set<string>>(new Set());
+  const deletionTimeouts = useRef<Record<string, any>>({});
+
+  const handleDeleteRecord = (recordId: string) => {
+    if (!pet) return;
+
+    // Optimistically hide from UI
+    setPendingDeletions(prev => new Set(prev).add(recordId));
+
+    toast((toastInfo) => (
+      <div className="flex items-center gap-3">
+        <span className="text-sm font-medium">{t('common.toasts.deletedWithUndo')}</span>
+        <button 
+          onClick={() => {
+            // Undo logic
+            if (deletionTimeouts.current[recordId]) {
+              clearTimeout(deletionTimeouts.current[recordId]);
+              delete deletionTimeouts.current[recordId];
+            }
+            setPendingDeletions(prev => {
+              const next = new Set(prev);
+              next.delete(recordId);
+              return next;
+            });
+            toast.dismiss(toastInfo.id);
+          }}
+          className="px-3 py-1 bg-primary text-primary-foreground rounded-lg text-xs font-bold hover:bg-primary/90 transition-all shadow-sm"
+        >
+          {t('common.undo')}
+        </button>
+      </div>
+    ), { duration: 5000 });
+
+    // Actual deletion after 5 seconds
+    deletionTimeouts.current[recordId] = setTimeout(() => {
+      deleteRecord.mutate({ id: recordId, petId: pet.id }, {
+        onSuccess: () => {
+          setPendingDeletions(prev => {
+            const next = new Set(prev);
+            next.delete(recordId);
+            return next;
+          });
+        },
+        onError: () => {
+          // If deletion fails, bring it back
+          setPendingDeletions(prev => {
+            const next = new Set(prev);
+            next.delete(recordId);
+            return next;
+          });
+          toast.error(t('common.toasts.error'));
+        }
+      });
+      delete deletionTimeouts.current[recordId];
+    }, 5000);
+  };
+  
   const availableLabs = useMemo(() => {
     const labs = new Set<string>();
     records.forEach(record => {
@@ -66,7 +124,7 @@ export default function PetDetail() {
   }, [records]);
 
   const filteredRecords = useMemo(() => {
-    let filtered = records;
+    let filtered = records.filter(r => !pendingDeletions.has(r.id));
 
     // Filter by Lab Name
     if (recordsSelectedLabs.length > 0) {
@@ -385,11 +443,7 @@ export default function PetDetail() {
                 {filteredRecords.map((record) => (
                   <SwipeableRecord
                     key={record.id}
-                    onDelete={() => {
-                      if (window.confirm(t('common.confirmDelete'))) {
-                        deleteRecord.mutate({ id: record.id, petId: pet.id });
-                      }
-                    }}
+                    onDelete={() => handleDeleteRecord(record.id)}
                     canDelete={canEdit}
                   >
                     <div 

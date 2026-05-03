@@ -50,6 +50,7 @@
   "common": {
     "save": "Guardar",
     "cancel": "Cancelar",
+    "undo": "Deshacer",
     "delete": "Eliminar",
     "retry": "Reintentar",
     "edit": "Editar",
@@ -85,7 +86,8 @@
       "extractionFailed": "No se pudieron extraer datos de la imagen",
       "quotaExceeded": "Cuota mensual excedida",
       "unauthorized": "Sin autorización",
-      "fileUploadFailed": "Error al subir el archivo, el registro se guardará igualmente."
+      "fileUploadFailed": "Error al subir el archivo, el registro se guardará igualmente.",
+      "deletedWithUndo": "Registro eliminado. Puedes deshacer esta acción."
     },
     "logout": "Cerrar sesión"
   },

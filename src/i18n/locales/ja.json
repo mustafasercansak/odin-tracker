@@ -50,6 +50,7 @@
   "common": {
     "save": "保存",
     "cancel": "キャンセル",
+    "undo": "元に戻す",
     "delete": "削除",
     "retry": "再試行",
     "edit": "編集",
@@ -85,7 +86,8 @@
       "extractionFailed": "画像からデータを抽出できませんでした",
       "quotaExceeded": "月間制限を超過しました",
       "unauthorized": "認証エラー",
-      "fileUploadFailed": "ファイルのアップロードに失敗しましたが、記録は保存されます。"
+      "fileUploadFailed": "ファイルのアップロードに失敗しましたが、記録は保存されます。",
+      "deletedWithUndo": "レコードが削除されました。元に戻すことができます。"
     },
     "logout": "ログアウト"
   },

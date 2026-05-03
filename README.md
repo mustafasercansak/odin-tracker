@@ -30,6 +30,14 @@ Odin Tracker is a professional-grade, privacy-first pet health management dashbo
 
 ---
 
+## 📸 Application Preview
+
+| Dashboard | AI Insights | Health Trends |
+| :---: | :---: | :---: |
+| ![Dashboard](./public/assets/screenshots/dashboard.png) | ![AI Insights](./public/assets/screenshots/ai-insights.png) | ![Trends](./public/assets/screenshots/trends.png) |
+
+---
+
 ## 📚 Documentation
 
 We provide extensive documentation for both pet owners and veterinary professionals:
@@ -48,10 +56,12 @@ npm install
 npm run dev
 ```
 
-### 2. Configuration
-*   Create a `.env` file based on `.env.example`.
-*   Set up your Firebase project and add your credentials.
-*   Configure your AI keys in the app settings to enable extraction features.
+### 1. Environment Variables & Firebase Setup
+To run Odin Tracker, you need to connect it to your own **Firebase** project. This ensures you have 100% control over your data.
+
+![Odin Tracker Dashboard](./public/assets/screenshots/dashboard.png)
+
+1.  **Create a Firebase Project**: Go to the [Firebase Console](https://console.firebase.google.com/) and create a new project.
 
 ---
 

@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { format, parseISO, isSameDay, isPast } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
 import toast from 'react-hot-toast';
+import { SwipeableRecord } from '@/components/Medical/SwipeableRecord';
 
 interface MedicationsTabProps {
   petId: string;
@@ -21,9 +22,63 @@ export const MedicationsTab: React.FC<MedicationsTabProps> = ({ petId }) => {
   const { user } = useAuth();
   const { pets } = usePets();
   const pet = pets.find(p => p.id === petId);
-  const { medications, updateMedication, isLoading } = useMedications(petId);
+  const { medications, updateMedication, deleteMedication, isLoading } = useMedications(petId);
   const { records, addRecord } = useHealthRecords(petId);
   const { setActiveModal } = useAppStore();
+
+  const [pendingDeletions, setPendingDeletions] = React.useState<Set<string>>(new Set());
+  const deletionTimeouts = React.useRef<Record<string, any>>({});
+
+  const handleDeleteMedication = (medId: string) => {
+    // Optimistically hide from UI
+    setPendingDeletions(prev => new Set(prev).add(medId));
+
+    toast((toastInfo) => (
+      <div className="flex items-center gap-3">
+        <span className="text-sm font-medium">{t('common.toasts.deletedWithUndo')}</span>
+        <button 
+          onClick={() => {
+            // Undo logic
+            if (deletionTimeouts.current[medId]) {
+              clearTimeout(deletionTimeouts.current[medId]);
+              delete deletionTimeouts.current[medId];
+            }
+            setPendingDeletions(prev => {
+              const next = new Set(prev);
+              next.delete(medId);
+              return next;
+            });
+            toast.dismiss(toastInfo.id);
+          }}
+          className="px-3 py-1 bg-primary text-primary-foreground rounded-lg text-xs font-bold hover:bg-primary/90 transition-all shadow-sm"
+        >
+          {t('common.undo')}
+        </button>
+      </div>
+    ), { duration: 5000 });
+
+    // Actual deletion after 5 seconds
+    deletionTimeouts.current[medId] = setTimeout(() => {
+      deleteMedication.mutate({ id: medId, petId }, {
+        onSuccess: () => {
+          setPendingDeletions(prev => {
+            const next = new Set(prev);
+            next.delete(medId);
+            return next;
+          });
+        },
+        onError: () => {
+          setPendingDeletions(prev => {
+            const next = new Set(prev);
+            next.delete(medId);
+            return next;
+          });
+          toast.error(t('common.toasts.error'));
+        }
+      });
+      delete deletionTimeouts.current[medId];
+    }, 5000);
+  };
 
   const canEdit = React.useMemo(() => {
     if (!pet) return false;
@@ -51,8 +106,9 @@ export const MedicationsTab: React.FC<MedicationsTabProps> = ({ petId }) => {
     }
   };
 
-  const activeMeds = medications.filter(m => m.active);
-  const pastMeds = medications.filter(m => !m.active);
+  const visibleMeds = medications.filter(m => !pendingDeletions.has(m.id));
+  const activeMeds = visibleMeds.filter(m => m.active);
+  const pastMeds = visibleMeds.filter(m => !m.active);
   
   const dueToday = activeMeds.filter(m => {
     if (!m.nextDoseDue) return false;
@@ -216,85 +272,90 @@ export const MedicationsTab: React.FC<MedicationsTabProps> = ({ petId }) => {
             const overdue = isDoseOverdue(med.nextDoseDue);
             
             return (
-              <div 
+              <SwipeableRecord
                 key={med.id}
-                className="bg-card border border-border rounded-2xl p-5 hover:border-primary/50 transition-colors shadow-sm relative overflow-hidden group"
+                onDelete={() => handleDeleteMedication(med.id)}
+                canDelete={canEdit}
               >
-                {overdue && (
-                  <div className="absolute top-0 right-0 w-24 h-24 -mr-12 -mt-12 bg-destructive/10 rounded-full flex items-end justify-start p-4">
-                    <AlertCircle size={16} className="text-destructive" />
-                  </div>
-                )}
+                <div 
+                  className="bg-card border border-border rounded-2xl p-5 hover:border-primary/50 transition-colors shadow-sm relative overflow-hidden group"
+                >
+                  {overdue && (
+                    <div className="absolute top-0 right-0 w-24 h-24 -mr-12 -mt-12 bg-destructive/10 rounded-full flex items-end justify-start p-4">
+                      <AlertCircle size={16} className="text-destructive" />
+                    </div>
+                  )}
 
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                      <Pill size={20} />
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                        <Pill size={20} />
+                      </div>
+                      <div>
+                        <h4 className="font-bold">{med.name}</h4>
+                        <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">
+                          {med.dosage} • {t(`medications.frequencies.${med.frequency}`)}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-bold">{med.name}</h4>
-                      <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">
-                        {med.dosage} • {t(`medications.frequencies.${med.frequency}`)}
-                      </p>
+                    {canEdit && (
+                      <button
+                        onClick={() => setActiveModal('medication_edit', med)}
+                        className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground transition-colors"
+                      >
+                        <Edit2 size={16} />
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1.5">
+                      <span>{t('medications.adherence')}</span>
+                      <span className={calculateAdherence(records.filter(r => (r as any).medicationId === med.id), med.frequency) < 80 ? 'text-destructive' : 'text-green-500'}>
+                        %{calculateAdherence(records.filter(r => (r as any).medicationId === med.id), med.frequency)}
+                      </span>
+                    </div>
+                    <div className="h-1.5 w-full bg-secondary rounded-full overflow-hidden">
+                      <div 
+                        className={`h-full transition-all duration-1000 ${calculateAdherence(records.filter(r => (r as any).medicationId === med.id), med.frequency) < 80 ? 'bg-destructive' : 'bg-green-500'}`}
+                        style={{ width: `${calculateAdherence(records.filter(r => (r as any).medicationId === med.id), med.frequency)}%` }}
+                      ></div>
                     </div>
                   </div>
+
+                  <div className="space-y-3 mb-6">
+                    <div className="flex items-center gap-2 text-sm">
+                      <Clock size={14} className={overdue ? 'text-destructive' : 'text-primary'} />
+                      <span className={overdue ? 'text-destructive font-bold' : 'text-muted-foreground font-medium'}>
+                        {med.nextDoseDue 
+                          ? `${t('medications.nextDose')}: ${format(parseISO(med.nextDoseDue), 'dd.MM.yyyy, HH.mm', { locale: dateLocale })}`
+                          : t('medications.noSchedule')
+                        }
+                      </span>
+                    </div>
+                    {med.endDate && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground italic">
+                        <Calendar size={14} />
+                        <span>{t('medications.endsOn')}: {format(parseISO(med.endDate), 'dd.MM.yyyy', { locale: dateLocale })}</span>
+                      </div>
+                    )}
+                  </div>
+
                   {canEdit && (
-                    <button
-                      onClick={() => setActiveModal('medication_edit', med)}
-                      className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground transition-colors"
+                    <button 
+                      onClick={() => handleLogDose(med)}
+                      className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all shadow-sm ${
+                        overdue 
+                          ? 'bg-destructive text-destructive-foreground shadow-destructive/20 hover:bg-destructive/90' 
+                          : 'bg-secondary text-foreground hover:bg-primary hover:text-primary-foreground'
+                      }`}
                     >
-                      <Edit2 size={16} />
+                      <CheckCircle2 size={18} />
+                      {t('medications.logDose')}
                     </button>
                   )}
                 </div>
-
-                <div className="mb-4">
-                  <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1.5">
-                    <span>{t('medications.adherence')}</span>
-                    <span className={calculateAdherence(records.filter(r => (r as any).medicationId === med.id), med.frequency) < 80 ? 'text-destructive' : 'text-green-500'}>
-                      %{calculateAdherence(records.filter(r => (r as any).medicationId === med.id), med.frequency)}
-                    </span>
-                  </div>
-                  <div className="h-1.5 w-full bg-secondary rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full transition-all duration-1000 ${calculateAdherence(records.filter(r => (r as any).medicationId === med.id), med.frequency) < 80 ? 'bg-destructive' : 'bg-green-500'}`}
-                      style={{ width: `${calculateAdherence(records.filter(r => (r as any).medicationId === med.id), med.frequency)}%` }}
-                    ></div>
-                  </div>
-                </div>
-
-                <div className="space-y-3 mb-6">
-                  <div className="flex items-center gap-2 text-sm">
-                    <Clock size={14} className={overdue ? 'text-destructive' : 'text-primary'} />
-                    <span className={overdue ? 'text-destructive font-bold' : 'text-muted-foreground font-medium'}>
-                      {med.nextDoseDue 
-                        ? `${t('medications.nextDose')}: ${format(parseISO(med.nextDoseDue), 'dd.MM.yyyy, HH.mm', { locale: dateLocale })}`
-                        : t('medications.noSchedule')
-                      }
-                    </span>
-                  </div>
-                  {med.endDate && (
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground italic">
-                      <Calendar size={14} />
-                      <span>{t('medications.endsOn')}: {format(parseISO(med.endDate), 'dd.MM.yyyy', { locale: dateLocale })}</span>
-                    </div>
-                  )}
-                </div>
-
-                {canEdit && (
-                  <button 
-                    onClick={() => handleLogDose(med)}
-                    className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all shadow-sm ${
-                      overdue 
-                        ? 'bg-destructive text-destructive-foreground shadow-destructive/20 hover:bg-destructive/90' 
-                        : 'bg-secondary text-foreground hover:bg-primary hover:text-primary-foreground'
-                    }`}
-                  >
-                    <CheckCircle2 size={18} />
-                    {t('medications.logDose')}
-                  </button>
-                )}
-              </div>
+              </SwipeableRecord>
             );
           })}
         </div>
@@ -313,19 +374,25 @@ export const MedicationsTab: React.FC<MedicationsTabProps> = ({ petId }) => {
           {showPast && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in slide-in-from-top-2 duration-300">
               {pastMeds.map((med) => (
-                <div key={med.id} className="bg-card/50 border border-border rounded-xl p-4 opacity-70">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center text-muted-foreground">
-                      <Pill size={16} />
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-bold">{med.name}</h4>
-                      <p className="text-[10px] text-muted-foreground font-semibold uppercase">
-                        {med.dosage} • {t(`medications.frequencies.${med.frequency}`)}
-                      </p>
+                <SwipeableRecord
+                  key={med.id}
+                  onDelete={() => handleDeleteMedication(med.id)}
+                  canDelete={canEdit}
+                >
+                  <div className="bg-card/50 border border-border rounded-xl p-4 opacity-70">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center text-muted-foreground">
+                        <Pill size={16} />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-bold">{med.name}</h4>
+                        <p className="text-[10px] text-muted-foreground font-semibold uppercase">
+                          {med.dosage} • {t(`medications.frequencies.${med.frequency}`)}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </SwipeableRecord>
               ))}
             </div>
           )}

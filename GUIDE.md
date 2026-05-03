@@ -9,6 +9,8 @@ Odin Tracker is designed to be accessible to pet owners worldwide, with full sup
 ### 1. Environment Variables & Firebase Setup
 To run Odin Tracker, you need to connect it to your own **Firebase** project. This ensures you have 100% control over your data.
 
+![Odin Tracker Dashboard](./public/assets/screenshots/dashboard.png)
+
 1.  **Create a Firebase Project**: Go to the [Firebase Console](https://console.firebase.google.com/) and create a new project.
 2.  **Enable Services**:
     *   **Authentication**: Enable "Email/Password" provider.
@@ -20,7 +22,25 @@ To run Odin Tracker, you need to connect it to your own **Firebase** project. Th
     *   Fill in the `VITE_FIREBASE_...` variables with the values from your Firebase config.
     *   **VITE_DISABLE_SIGNUP**: Set to `true` if you want to prevent new users from registering after you've created your account.
 
-### 2. Setting Up Your AI Assistant (BYOK)
+### 2. Security Hardening (Firestore Rules)
+**Important**: By default, Firebase projects may be insecure.
+1.  In your Firebase Console, go to **Firestore** > **Rules**.
+2.  Copy the contents of the `firestore.rules` file from this project and paste them there.
+3.  Do the same for **Storage** > **Rules** using the `storage.rules` file.
+This ensures that only you (and people you explicitly share with) can see your pet's data.
+
+### 3. Data Portability & Backups
+You own your data. Period.
+*   **Export**: Go to **Settings** > **Export Data**. This downloads a `.json` file containing everything.
+*   **Import**: If you move to a new account or device, use **Import Data** to restore your history.
+
+### 4. Sharing Access
+You can share your pet's health records with your veterinarian or family:
+1.  Go to the **Access** tab in the main navigation.
+2.  Enter the email of the person you want to invite.
+3.  Choose a role: **Viewer** (Read-only) or **Editor** (Can add records).
+
+### 5. Setting Up Your AI Assistant (BYOK)
 Odin Tracker features a "Bring Your Own Key" (BYOK) model to ensure 100% privacy and no monthly fees.
 1.  Go to **Settings** > **API Keys Configuration**.
 2.  Enter your keys for:
@@ -64,6 +84,8 @@ If you are a professional veterinarian:
 ### 1. Ortam Değişkenleri ve Firebase Kurulumu
 Odin Tracker'ı çalıştırmak için onu kendi **Firebase** projenize bağlamanız gerekir. Bu, verileriniz üzerinde %100 kontrol sahibi olmanızı sağlar.
 
+![Odin Tracker Panel](./public/assets/screenshots/dashboard.png)
+
 1.  **Firebase Projesi Oluşturun**: [Firebase Konsolu](https://console.firebase.google.com/)'na gidin ve yeni bir proje oluşturun.
 2.  **Servisleri Etkinleştirin**:
     *   **Authentication**: "E-posta/Şifre" sağlayıcısını etkinleştirin.
@@ -75,7 +97,25 @@ Odin Tracker'ı çalıştırmak için onu kendi **Firebase** projenize bağlaman
     *   `VITE_FIREBASE_...` değişkenlerini Firebase yapılandırmanızdaki değerlerle doldurun.
     *   **VITE_DISABLE_SIGNUP**: Hesabınızı oluşturduktan sonra yeni kullanıcıların kaydolmasını engellemek istiyorsanız `true` olarak ayarlayın.
 
-### 2. Yapay Zeka Asistanını Kurma (Kendi Anahtarını Getir - BYOK)
+### 2. Güvenlik Sertleştirme (Firestore Kuralları)
+**Önemli**: Varsayılan olarak, Firebase projeleri güvensiz olabilir.
+1.  Firebase Konsolunuzda **Firestore** > **Kurallar** (Rules) bölümüne gidin.
+2.  Bu projedeki `firestore.rules` dosyasının içeriğini kopyalayıp oraya yapıştırın.
+3.  Aynı işlemi `storage.rules` dosyasını kullanarak **Storage** > **Kurallar** için de yapın.
+Bu, verilerinize yalnızca sizin (ve açıkça paylaştığınız kişilerin) erişebilmesini sağlar.
+
+### 3. Veri Taşınabilirliği ve Yedekleme
+Verileriniz size aittir.
+*   **Dışa Aktar**: **Ayarlar** > **Verileri Dışa Aktar**'a gidin. Bu, her şeyi içeren bir `.json` dosyası indirir.
+*   **İçe Aktar**: Yeni bir hesaba veya cihaza geçerseniz, geçmişinizi geri yüklemek için **Verileri İçe Aktar**'ı kullanın.
+
+### 4. Erişimi Paylaşma
+Evcil hayvanınızın sağlık kayıtlarını veterinerinizle veya ailenizle paylaşabilirsiniz:
+1.  Ana navigasyondaki **Erişim** sekmesine gidin.
+2.  Davet etmek istediğiniz kişinin e-postasını girin.
+3.  Bir rol seçin: **İzleyici** (Salt okunur) veya **Editör** (Kayıt ekleyebilir).
+
+### 5. Yapay Zeka Asistanını Kurma (Kendi Anahtarını Getir - BYOK)
 Odin Tracker, %100 gizlilik ve aylık ücret olmaması için "Kendi Anahtarını Getir" modelini kullanır.
 1.  **Ayarlar** > **API Anahtarları Yapılandırması**'na gidin.
 2.  Şu servisler için anahtarlarınızı girin:

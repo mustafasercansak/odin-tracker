@@ -50,6 +50,7 @@
   "common": {
     "save": "Salva",
     "cancel": "Annulla",
+    "undo": "Annulla",
     "delete": "Elimina",
     "retry": "Riprova",
     "edit": "Modifica",
@@ -85,7 +86,8 @@
       "extractionFailed": "Impossibile estrarre i dati dall'immagine",
       "quotaExceeded": "Quota mensile superata",
       "unauthorized": "Non autorizzato",
-      "fileUploadFailed": "Caricamento file fallito, il record verrà comunque salvato."
+      "fileUploadFailed": "Caricamento file fallito, il record verrà comunque salvato.",
+      "deletedWithUndo": "Record eliminato. Puoi annullare l'azione."
     },
     "logout": "Disconnetti"
   },

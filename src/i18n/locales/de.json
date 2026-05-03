@@ -50,6 +50,7 @@
   "common": {
     "save": "Speichern",
     "cancel": "Abbrechen",
+    "undo": "Rückgängig",
     "delete": "Löschen",
     "retry": "Wiederholen",
     "edit": "Bearbeiten",
@@ -85,7 +86,8 @@
       "extractionFailed": "Daten konnten nicht aus dem Bild extrahiert werden",
       "quotaExceeded": "Monatliches Kontingent überschritten",
       "unauthorized": "Keine Zugriffsberechtigung",
-      "fileUploadFailed": "Datei-Upload fehlgeschlagen, Datensatz wird trotzdem gespeichert."
+      "fileUploadFailed": "Datei-Upload fehlgeschlagen, Datensatz wird trotzdem gespeichert.",
+      "deletedWithUndo": "Eintrag gelöscht. Sie können dies rückgängig machen."
     },
     "logout": "Abmelden"
   },

@@ -65,6 +65,7 @@
     "noData": "Veri yok",
     "back": "Geri",
     "next": "İleri",
+    "undo": "Geri Al",
     "required": "Zorunlu alan",
     "optional": "İsteğe bağlı",
     "user": "Kullanıcı",
@@ -78,6 +79,7 @@
     "toasts": {
       "saved": "Kaydedildi",
       "deleted": "Silindi",
+      "deletedWithUndo": "Kayıt silindi. İşlemi geri alabilirsiniz.",
       "error": "Bir hata oluştu",
       "extractionStarted": "Yapay zeka analiz başladı...",
       "extractionSuccess": "{{count}} değer çıkarıldı",

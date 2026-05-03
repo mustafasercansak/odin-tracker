@@ -25,22 +25,24 @@ export const SwipeableRecord: React.FC<SwipeableRecordProps> = ({ children, onDe
 
   return (
     <div className="relative overflow-hidden rounded-2xl group">
-      {/* Delete Background */}
-      <div className="absolute inset-0 bg-destructive flex items-center justify-end px-6">
-        <div className="flex flex-col items-center gap-1 text-white">
-          <Trash2 size={24} />
-          <span className="text-[10px] font-bold uppercase tracking-widest">Delete</span>
+      {canDelete && (
+        <div 
+          className="absolute inset-0 bg-destructive flex items-center justify-end px-6"
+          role="img"
+          aria-label="Delete action background"
+        >
+          <Trash2 className="text-destructive-foreground animate-pulse" size={24} />
         </div>
-      </div>
-
-      {/* Foreground Content */}
+      )}
+      
       <motion.div
-        drag="x"
-        dragConstraints={{ left: -150, right: 0 }}
-        dragElastic={0.1}
+        drag={canDelete ? "x" : false}
+        dragConstraints={{ left: -100, right: 0 }}
+        dragElastic={0.2}
         onDragEnd={handleDragEnd}
         animate={controls}
-        className="relative z-10 bg-background"
+        className="relative z-10 bg-background cursor-grab active:cursor-grabbing"
+        role="listitem"
       >
         {children}
       </motion.div>

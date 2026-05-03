@@ -50,6 +50,7 @@
   "common": {
     "save": "保存",
     "cancel": "取消",
+    "undo": "撤销",
     "delete": "删除",
     "retry": "重试",
     "edit": "编辑",
@@ -85,7 +86,8 @@
       "extractionFailed": "无法从图片中提取数据",
       "quotaExceeded": "月度配额已用完",
       "unauthorized": "未授权",
-      "fileUploadFailed": "文件上传失败，但记录仍将保存。"
+      "fileUploadFailed": "文件上传失败，但记录仍将保存。",
+      "deletedWithUndo": "记录已删除。您可以撤销此操作。"
     },
     "logout": "退出登录"
   },
