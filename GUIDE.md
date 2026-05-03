@@ -4,10 +4,19 @@ Welcome to **Odin Tracker**, the ultimate companion for pet health management. T
 
 ## 🚀 Getting Started
 
-### 1. Installation & Environment
-Odin Tracker is a Progressive Web App (PWA) built with Vite and React.
-*   **Web**: Access it via [Your URL].
-*   **Installation**: On mobile, use "Add to Home Screen" to use it like a native app.
+### 1. Environment Variables & Firebase Setup
+To run Odin Tracker, you need to connect it to your own **Firebase** project. This ensures you have 100% control over your data.
+
+1.  **Create a Firebase Project**: Go to the [Firebase Console](https://console.firebase.google.com/) and create a new project.
+2.  **Enable Services**:
+    *   **Authentication**: Enable "Email/Password" provider.
+    *   **Firestore Database**: Create a database in "Production" or "Test" mode.
+    *   **Storage**: Enable Firebase Storage for pet photos and lab reports.
+3.  **Get Your Config**: In Project Settings, add a "Web App" and copy the configuration object.
+4.  **Set Up `.env`**:
+    *   Copy `.env.example` to a new file named `.env`.
+    *   Fill in the `VITE_FIREBASE_...` variables with the values from your Firebase config.
+    *   **VITE_DISABLE_SIGNUP**: Set to `true` if you want to prevent new users from registering after you've created your account.
 
 ### 2. Setting Up Your AI Assistant (BYOK)
 Odin Tracker features a "Bring Your Own Key" (BYOK) model to ensure 100% privacy and no monthly fees.
@@ -50,10 +59,19 @@ If you are a professional veterinarian:
 
 ## 🚀 Başlarken
 
-### 1. Kurulum ve Ortam
-Odin Tracker, Vite ve React ile oluşturulmuş bir Progressive Web App (PWA)'dir.
-*   **Web**: [Sizin URL'niz] üzerinden erişin.
-*   **Kurulum**: Mobilde, yerel bir uygulama gibi kullanmak için "Ana Ekrana Ekle" seçeneğini kullanın.
+### 1. Ortam Değişkenleri ve Firebase Kurulumu
+Odin Tracker'ı çalıştırmak için onu kendi **Firebase** projenize bağlamanız gerekir. Bu, verileriniz üzerinde %100 kontrol sahibi olmanızı sağlar.
+
+1.  **Firebase Projesi Oluşturun**: [Firebase Konsolu](https://console.firebase.google.com/)'na gidin ve yeni bir proje oluşturun.
+2.  **Servisleri Etkinleştirin**:
+    *   **Authentication**: "E-posta/Şifre" sağlayıcısını etkinleştirin.
+    *   **Firestore Database**: "Üretim" veya "Test" modunda bir veritabanı oluşturun.
+    *   **Storage**: Evcil hayvan fotoğrafları ve laboratuvar raporları için Firebase Storage'ı etkinleştirin.
+3.  **Yapılandırmanızı Alın**: Proje Ayarları'nda bir "Web Uygulaması" ekleyin ve yapılandırma nesnesini kopyalayın.
+4.  **.env Dosyasını Ayarlayın**:
+    *   `.env.example` dosyasını `.env` adında yeni bir dosyaya kopyalayın.
+    *   `VITE_FIREBASE_...` değişkenlerini Firebase yapılandırmanızdaki değerlerle doldurun.
+    *   **VITE_DISABLE_SIGNUP**: Hesabınızı oluşturduktan sonra yeni kullanıcıların kaydolmasını engellemek istiyorsanız `true` olarak ayarlayın.
 
 ### 2. Yapay Zeka Asistanını Kurma (Kendi Anahtarını Getir - BYOK)
 Odin Tracker, %100 gizlilik ve aylık ücret olmaması için "Kendi Anahtarını Getir" modelini kullanır.
