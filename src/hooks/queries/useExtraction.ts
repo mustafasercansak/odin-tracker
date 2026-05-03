@@ -6,6 +6,8 @@ import { type ExtractionResult } from '@/schemas/extraction';
 import { retryWithBackoff } from '@/lib/ai-utils';
 import { useAppStore } from '@/store/useAppStore';
 
+export type ExtractionProvider = 'anthropic' | 'google';
+
 // ─── Prompt (mirrored from cloud function) ────────────────────────────────────
 
 const EXTRACTION_PROMPT = `

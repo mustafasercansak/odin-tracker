@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Modal } from '@/components/Modal';
 import { useAppStore } from '@/store/useAppStore';
-import { Key, Shield, Info, ExternalLink } from 'lucide-react';
+import { Key, Shield, ExternalLink } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const AIKeysModal: React.FC = () => {

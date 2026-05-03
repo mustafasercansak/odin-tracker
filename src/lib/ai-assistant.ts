@@ -124,7 +124,7 @@ export async function explainLabResults(record: LabTestRecord, pet: Pet, age: st
 
   // ─── Execution Logic ───────────────────────────────────────────────────────
   
-  const executionOrder = [];
+  const executionOrder: string[] = [];
   if (preferredProvider !== 'auto') {
     executionOrder.push(preferredProvider);
   }
