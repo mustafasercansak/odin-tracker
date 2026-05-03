@@ -636,7 +636,7 @@ export const HealthRecordModal: React.FC = () => {
                   )}
                 </div>
               </div>
-              <div className="p-4">
+              <div className="p-4 min-h-[300px]">
                 <Controller
                   control={control}
                   name="measurements"

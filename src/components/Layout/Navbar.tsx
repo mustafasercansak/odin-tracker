@@ -4,7 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { 
   Home, 
   TrendingUp, 
-  Settings 
+  Settings,
+  Globe,
+  Users
 } from 'lucide-react';
 
 import { useAppStore } from '@/store/useAppStore';
@@ -54,6 +56,28 @@ export const Navbar: React.FC = () => {
             )}
           </NavLink>
         ))}
+      </div>
+      
+      {/* Desktop Social Links */}
+      <div className="hidden md:flex flex-col gap-2 mt-auto pb-8 border-t border-border/50 pt-8">
+        <a 
+          href="https://github.com/mustafasercansak/odin-tracker" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all group"
+        >
+          <Globe size={18} className="group-hover:scale-110 transition-transform" />
+          <span className="text-sm font-bold">GitHub</span>
+        </a>
+        <a 
+          href="https://www.linkedin.com/in/mustafa-sercan-sak-30190684/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all group"
+        >
+          <Users size={18} className="group-hover:scale-110 transition-transform" />
+          <span className="text-sm font-bold">LinkedIn</span>
+        </a>
       </div>
     </nav>
   );

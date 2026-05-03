@@ -4,6 +4,7 @@ import { Plus, Trash2, AlertTriangle, Sparkles } from 'lucide-react';
 import { type Measurement, canonicalParameters } from '@/schemas/measurement';
 import { canonicalUnits } from '@/lib/lab-defaults';
 import { getParameterLabel } from '@/lib/i18n-helpers';
+import { SearchableSelect } from './Medical/SearchableSelect';
 
 interface MeasurementEditorProps {
   measurements: Measurement[];
@@ -137,22 +138,21 @@ export const MeasurementEditor: React.FC<MeasurementEditorProps> = ({ measuremen
                     {/* Parameter */}
                     <td className="px-3 py-2.5">
                       <div className="flex items-center gap-1.5">
-                        <select
+                        <SearchableSelect
                           value={m.parameter}
-                          onChange={(e) => updateRow(index, { parameter: e.target.value })}
-                          className="bg-transparent text-sm font-semibold outline-none focus:text-primary cursor-pointer max-w-[140px] truncate"
-                        >
-                          {canonicalParameters.map((param) => (
-                            <option key={param} value={param}>
-                              {getParameterLabel(param, '', t)}
-                            </option>
-                          ))}
-                          <option value={m.parameter !== 'creatinine' && !canonicalParameters.includes(m.parameter as any) ? m.parameter : 'other'}>
-                            {m.parameter !== 'creatinine' && !canonicalParameters.includes(m.parameter as any)
-                              ? m.parameter
-                              : `— ${t('common.optional')} —`}
-                          </option>
-                        </select>
+                          onChange={(val) => updateRow(index, { parameter: val })}
+                          options={[
+                            ...canonicalParameters.map((p) => ({
+                              value: p,
+                              label: getParameterLabel(p, '', t),
+                            })),
+                            // Handle custom/other parameter
+                            ...(m.parameter !== 'creatinine' && !canonicalParameters.includes(m.parameter as any)
+                              ? [{ value: m.parameter, label: m.parameter }]
+                              : []),
+                            { value: 'other', label: `— ${t('common.optional')} —` },
+                          ]}
+                        />
                         {isAI && (
                           <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
                             isLowConf ? CONFIDENCE_STYLES.low : isMedConf ? CONFIDENCE_STYLES.medium : 'text-primary/50 bg-primary/5'

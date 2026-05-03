@@ -13,7 +13,8 @@ import {
   Zap,
   Download,
   Upload,
-  Bell
+  Bell,
+  Users
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { useAuth } from '@/hooks/useAuth';
@@ -378,9 +379,31 @@ export default function Settings() {
         </button>
       </section>
 
-      <footer className="text-center py-8">
-        <p className="text-xs text-muted-foreground">Odin Tracker v3.0.0-alpha</p>
-        <p className="text-[10px] text-muted-foreground/50 uppercase tracking-[0.2em] mt-1 font-bold">Google DeepMind Edition</p>
+      <footer className="text-center py-12 space-y-4">
+        <div className="flex items-center justify-center gap-4">
+          <a 
+            href="https://github.com/mustafasercansak/odin-tracker" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-secondary hover:bg-secondary/80 text-muted-foreground hover:text-primary transition-all font-bold text-xs"
+          >
+            <Globe size={16} />
+            GitHub
+          </a>
+          <a 
+            href="https://www.linkedin.com/in/mustafa-sercan-sak-30190684/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-secondary hover:bg-secondary/80 text-muted-foreground hover:text-primary transition-all font-bold text-xs"
+          >
+            <Users size={16} />
+            LinkedIn
+          </a>
+        </div>
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground font-medium">Odin Tracker v3.0.0-alpha</p>
+          <p className="text-[10px] text-muted-foreground/40 uppercase tracking-[0.3em] font-black">Google DeepMind Edition</p>
+        </div>
       </footer>
     </div>
   );
