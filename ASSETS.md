@@ -5,14 +5,14 @@ Here are the premium visual assets generated for your project. These follow the 
 ## 📱 App Icon
 *Minimalist silhouettes of a cat and dog integrated with a glowing medical pulse line.*
 
-![Odin Tracker App Icon](/assets/app-icon.png)
+![Odin Tracker App Icon](public/assets/app-icon.png)
 
 ---
 
 ## 🖼️ Hero Banner
 *A cinematic, high-tech background for your GitHub README or landing page.*
 
-![Odin Tracker Hero Banner](/assets/hero-banner.png)
+![Odin Tracker Hero Banner](public/assets/hero-banner.png)
 
 ---
 

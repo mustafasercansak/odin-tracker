@@ -1,8 +1,17 @@
 # 🐾 Odin Tracker
 
-![Odin Tracker Hero Banner](public/assets/hero-banner.png)
+![Odin Tracker Hero Banner](./public/assets/hero-banner.png)
 
 ### The Ultimate AI-Powered Pet Health Companion
+
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+
+> [!WARNING]
+> **Medical Disclaimer**: Odin Tracker is a tracking tool and NOT a substitute for professional veterinary advice. Always consult a vet for medical decisions.
 
 Odin Tracker is a professional-grade, privacy-first pet health management dashboard. It combines cutting-edge AI extraction for lab reports with a robust, personal data-sovereignty model.
 
@@ -16,6 +25,7 @@ Odin Tracker is a professional-grade, privacy-first pet health management dashbo
 *   **📈 Smart Trends**: Visualize your pet's health history with high-contrast, interactive charts.
 *   **💊 Medication & Vaccine Alerts**: Never miss a dose with integrated scheduling and automated logging.
 *   **📜 Professional Reports**: Generate and download comprehensive health summaries to share with your veterinarian.
+*   **📱 PWA Ready**: Install on your phone (iOS/Android) for a native app experience.
 
 ---
 
@@ -41,6 +51,22 @@ npm run dev
 *   Create a `.env` file based on `.env.example`.
 *   Set up your Firebase project and add your credentials.
 *   Configure your AI keys in the app settings to enable extraction features.
+
+---
+
+## 📱 Mobile Installation
+
+Odin Tracker is a **Progressive Web App (PWA)**. To use it on your phone:
+
+### iOS (Safari)
+1. Open the app URL in Safari.
+2. Tap the **Share** button (box with arrow).
+3. Scroll down and tap **Add to Home Screen**.
+
+### Android (Chrome)
+1. Open the app URL in Chrome.
+2. Tap the **three dots** (menu) in the corner.
+3. Tap **Install App** or **Add to Home Screen**.
 
 ---
 
