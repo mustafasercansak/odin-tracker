@@ -3,6 +3,23 @@
     "schedule": "Agenda",
     "todayTasks": "Tareas de Hoy"
   },
+  "dashboard": {
+    "activeMeds": "Medicamentos Activos",
+    "vaccinations": "Vacunaciones",
+    "labResults": "Resultados de Laboratorio",
+    "petsMonitored": "Mascotas Monitoreadas",
+    "overdue": "vencido",
+    "dueToday": "vence hoy",
+    "upcoming": "próximo",
+    "abnormal": "anormal",
+    "allOnTrack": "Todo en orden",
+    "allUpToDate": "Todo al día",
+    "allNormal": "Todo normal",
+    "activeTracking": "Seguimiento activo",
+    "scoreExcellent": "Excelente",
+    "scoreGood": "Bueno",
+    "scoreNeedsAttention": "Requiere atención"
+  },
   "insights": {
     "title": "Análisis de Salud",
     "significantIncrease": "{{param}} Aumento significativo",
@@ -11,10 +28,30 @@
     "normalDescription": "El valor de {{param}} para {{pet}} está de nuevo en el rango de referencia. ¡Excelentes noticias!",
     "noInsights": "Aún no hay suficientes datos para realizar un análisis."
   },
+  "symptoms": {
+    "checkin": {
+      "title": "Chequeo de Salud Diario",
+      "appetite": "Apetito",
+      "energy": "Nivel de energía",
+      "mood": "Estado de ánimo / Comportamiento",
+      "logNow": "Registrar estado diario",
+      "dailySummary": "Resumen de salud diario",
+      "success": "Estado diario registrado con éxito"
+    }
+  },
+  "batch": {
+    "title": "Registro por Lotes Multi-Mascota",
+    "selectPets": "Seleccionar Mascotas",
+    "success": "Registros creados con éxito para {{count}} mascotas",
+    "errors": {
+      "noPetsSelected": "Por favor, seleccione al menos una mascota"
+    }
+  },
   "common": {
     "save": "Guardar",
     "cancel": "Cancelar",
     "delete": "Eliminar",
+    "retry": "Reintentar",
     "edit": "Editar",
     "add": "Añadir",
     "close": "Cerrar",
@@ -28,13 +65,16 @@
     "noData": "Sin datos",
     "back": "Volver",
     "next": "Siguiente",
-    "required": "Obligatorio",
+    "required": "Campo obligatorio",
     "optional": "Opcional",
     "user": "Usuario",
     "active": "Activo",
     "done": "Hecho",
     "noResultsFor": "No se encontraron resultados para \"{{query}}\".",
     "yesterday": "Ayer",
+    "low": "Bajo",
+    "normal": "Normal",
+    "high": "Alto",
     "toasts": {
       "saved": "Guardado correctamente",
       "deleted": "Eliminado correctamente",
@@ -58,6 +98,11 @@
     "confirmPassword": "Confirmar contraseña",
     "displayName": "Nombre",
     "forgotPassword": "¿Olvidó su contraseña?",
+    "resetPassword": "Restablecer contraseña",
+    "resetPasswordDescription": "Ingrese su correo electrónico y le enviaremos un enlace para restablecer su contraseña.",
+    "sendResetEmail": "Enviar correo de restablecimiento",
+    "resetEmailSent": "Correo de restablecimiento enviado. Revise su bandeja de entrada.",
+    "backToLogin": "Volver al inicio de sesión",
     "noAccount": "¿No tiene una cuenta?",
     "registerNow": "Regístrese ahora",
     "hasAccount": "¿Ya tiene una cuenta?",
@@ -75,13 +120,31 @@
   "pets": {
     "title": "Mis Mascotas",
     "addPet": "Añadir Mascota",
-    "editPet": "Editar Info",
+    "editPet": "Actualizar Información",
     "deletePet": "Eliminar Mascota",
     "name": "Nombre",
     "species": "Especie",
     "breed": "Raza",
     "dateOfBirth": "Fecha de nacimiento",
     "weight": "Peso (kg)",
+    "targetWeight": "Peso objetivo (kg)",
+    "microchipId": "ID de Microchip",
+    "bloodType": "Grupo sanguíneo",
+    "allergies": "Alergias",
+    "emergency": {
+      "title": "Tarjeta de Emergencia",
+      "subtitle": "Información crítica para salvar vidas",
+      "emergencyContacts": "Contactos de Emergencia",
+      "emergencyPhone": "Teléfono",
+      "relation": "Relación",
+      "addContact": "Añadir contacto",
+      "veterinarianName": "Nombre del Veterinario",
+      "veterinarianPhone": "Teléfono del Veterinario",
+      "editCard": "Editar tarjeta",
+      "viewCard": "Ver tarjeta",
+      "noContacts": "No hay contactos de emergencia guardados",
+      "noPhone": "No hay número de teléfono"
+    },
     "notes": "Notas",
     "species_values": {
       "cat": "Gato",
@@ -126,9 +189,11 @@
       "medication": "Medicamento",
       "vet_visit": "Visita Veterinaria",
       "symptom": "Síntoma",
+      "symptom_checkin": "Chequeo Diario",
       "lab_test": "Análisis de Laboratorio",
       "weight": "Peso",
-      "vaccination": "Vacunación"
+      "vaccination": "Vacunación",
+      "milestone": "Hito"
     },
     "nRecords": "{{count}} registros",
     "nMeasurements": "{{count}} mediciones"
@@ -151,13 +216,27 @@
       "urine_ph": "pH Urinario",
       "hematocrit": "Hematocrito",
       "hemoglobin": "Hemoglobina",
+      "rbc": "Glóbulos Rojos (RBC)",
+      "mcv": "VCM",
+      "mch": "HCM",
+      "mchc": "CHCM",
+      "rdw_cv": "RDW-CV",
+      "rdw_sd": "RDW-SD",
       "wbc": "Glóbulos Blancos (WBC)",
+      "neutrophils": "Neutrófilos",
+      "lymphocytes": "Linfocitos",
+      "monocytes": "Monocitos",
+      "eosinophils": "Eosinófilos",
+      "basophils": "Basófilos",
       "platelets": "Plaquetas",
+      "mpv": "VPM",
+      "pdw": "ADE",
+      "pct": "Plaquetocrito",
       "alt": "ALT",
       "ast": "AST",
       "alkp": "ALKP",
       "glucose": "Glucosa",
-      "t4": "T4",
+      "t4": "T4 (Tiroides)",
       "bilirubin": "Bilirrubina",
       "alp": "ALP",
       "ggt": "GGT",
@@ -204,6 +283,15 @@
       "changeFile": "Cambiar",
       "removeFile": "Quitar",
       "addFile": "+ Añadir otro archivo"
+    },
+    "explanation": {
+      "title": "Análisis de Resultados IA",
+      "loading": "Analizando resultados...",
+      "processing": "Consultando Inteligencia Veterinaria",
+      "disclaimer": "Este análisis es generado por IA y tiene fines informativos únicamente. NO es un diagnóstico médico. Revise siempre estos resultados con su veterinario.",
+      "summary": "Conclusión",
+      "keyFindings": "Hallazgos clave",
+      "vetQuestions": "Preguntas para su veterinario"
     }
   },
   "medications": {
@@ -262,6 +350,7 @@
       "all": "Todos"
     },
     "noData": "Aún no hay datos de laboratorio. Añade tu primer registro.",
+    "noDataDescription": "Añade tu primer registro de laboratorio para ver las tendencias.",
     "insufficientData": "Datos insuficientes para el gráfico (se requieren al menos 2 mediciones)",
     "latestValue": "Último Valor",
     "referenceRange": "Rango de Referencia",
@@ -276,7 +365,7 @@
     "selectParameterTitle": "Ningún gráfico seleccionado",
     "selectParameterDescription": "Seleccione un parámetro de la lista anterior para ver sus tendencias y cambios.",
     "lastN": "Últimas {{n}} mediciones",
-    "labs": "Labs"
+    "labs": "Laboratorios"
   },
   "shares": {
     "title": "Acceso Compartido",
@@ -286,7 +375,9 @@
     "roles": {
       "viewer": "Lector",
       "editor": "Editor",
-      "admin": "Administrador"
+      "admin": "Administrador",
+      "vet": "Veterinario",
+      "sitter": "Cuidador"
     },
     "currentAccess": "Acceso Actual",
     "revokeAccess": "Revocar Acceso",
@@ -307,6 +398,8 @@
     "appSettings": "Ajustes de la App",
     "darkMode": "Modo Oscuro",
     "darkModeDescription": "Cambiar la apariencia al tema oscuro",
+    "notifications": "Recordatorios Inteligentes",
+    "notificationsDescription": "Reciba alertas para dosis de medicamentos y próximas vacunas",
     "theme": "Tema",
     "themes": {
       "light": "Claro",
@@ -314,6 +407,19 @@
       "system": "Sistema"
     },
     "language": "Idioma",
+    "languages": {
+      "en": "Inglés",
+      "de": "Alemán",
+      "es": "Español",
+      "fr": "Francés",
+      "it": "Italiano",
+      "ja": "Japonés",
+      "nl": "Holandés",
+      "pt": "Portugués",
+      "ru": "Ruso",
+      "tr": "Turco",
+      "zh": "Chino"
+    },
     "aiExtraction": "Extracción por IA",
     "aiProviderName": "IA Híbrida (Claude/Gemini/GPT)",
     "aiProviderDescription": "OCR de Visión Médica Avanzada",
@@ -337,13 +443,32 @@
     "anonymousShare": "Compartir valores de forma anónima",
     "editProfile": "Editar Perfil",
     "displayName": "Nombre mostrado",
-    "emailCannotBeChanged": "El correo electrónico no se puede cambiar"
+    "emailCannotBeChanged": "El correo electrónico no se puede cambiar",
+    "changePassword": "Cambiar contraseña",
+    "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar nueva contraseña",
+    "passwordChanged": "¡Contraseña actualizada con éxito!",
+    "requiresRecentLogin": "Por razones de seguridad, cierre la sesión y vuelva a iniciarla antes de cambiar su contraseña."
   },
   "tabs": {
     "healthRecords": "Salud",
     "medications": "Medicinas",
     "trends": "Gráficos",
-    "sharedAccess": "Acceso"
+    "sharedAccess": "Acceso",
+    "history": "Historial",
+    "nutrition": "Nutrición"
+  },
+  "nutrition": {
+    "title": "Nutrición y Dieta",
+    "currentFood": "Comida actual",
+    "feedingSchedule": "Horario de alimentación",
+    "supplements": "Suplementos y Premios",
+    "noFoodSpecified": "No se ha establecido una marca de comida",
+    "noScheduleSpecified": "No se ha establecido un horario",
+    "noSupplementsSpecified": "No hay suplementos o premios en la lista",
+    "noKnownAllergies": "No se han reportado alergias conocidas",
+    "disclaimer": "Consulte siempre a su veterinario antes de realizar cambios significativos en la dieta de su mascota o añadir nuevos suplementos."
   },
   "report": {
     "download": "Descargar Informe",
@@ -356,5 +481,15 @@
     "value": "Valor",
     "labTrends": "Tendencias de Laboratorio",
     "medicalHistory": "Resumen del Historial Médico"
+  },
+  "notifications": {
+    "medicationReminder": {
+      "title": "Medicamento para {{petName}}",
+      "body": "Es hora de {{medName}} (programado a las {{time}})"
+    },
+    "vaccineReminder": {
+      "title": "Vacuna para {{petName}}",
+      "body": "Hoy es la fecha de refuerzo para {{vaccineName}}"
+    }
   }
 }

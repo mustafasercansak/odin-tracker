@@ -3,6 +3,23 @@
     "schedule": "Planning",
     "todayTasks": "Taken van Vandaag"
   },
+  "dashboard": {
+    "activeMeds": "Actieve Medicatie",
+    "vaccinations": "Vaccinaties",
+    "labResults": "Labresultaten",
+    "petsMonitored": "Gemonitorde Huisdieren",
+    "overdue": "te laat",
+    "dueToday": "vandaag fällig",
+    "upcoming": "aankomend",
+    "abnormal": "abnormaal",
+    "allOnTrack": "Alles op schema",
+    "allUpToDate": "Alles bijgewerkt",
+    "allNormal": "Alles normaal",
+    "activeTracking": "Actieve tracking",
+    "scoreExcellent": "Uitstekend",
+    "scoreGood": "Goed",
+    "scoreNeedsAttention": "Aandacht nodig"
+  },
   "insights": {
     "title": "Gezondheidsinzichten",
     "significantIncrease": "{{param}} Significante stijging",
@@ -11,10 +28,30 @@
     "normalDescription": "De {{param}} waarde voor {{pet}} bevindt zich weer binnen het referentiebereik. Geweldig nieuws!",
     "noInsights": "Nog niet genoeg gegevens voor een analyse."
   },
+  "symptoms": {
+    "checkin": {
+      "title": "Dagelijkse Gezondheidscheck",
+      "appetite": "Eetlust",
+      "energy": "Energieniveau",
+      "mood": "Stemmings / Gedrag",
+      "logNow": "Log dagelijkse status",
+      "dailySummary": "Dagelijkse gezondheidscheck",
+      "success": "Dagelijkse status succesvol gelogd"
+    }
+  },
+  "batch": {
+    "title": "Batchregistratie voor meerdere dieren",
+    "selectPets": "Selecteer Huisdieren",
+    "success": "Records succesvol gelogd voor {{count}} huisdieren",
+    "errors": {
+      "noPetsSelected": "Selecteer minimaal één huisdier"
+    }
+  },
   "common": {
     "save": "Opslaan",
     "cancel": "Annuleren",
     "delete": "Verwijderen",
+    "retry": "Opnieuw proberen",
     "edit": "Bewerken",
     "add": "Toevoegen",
     "close": "Sluiten",
@@ -28,13 +65,16 @@
     "noData": "Geen gegevens",
     "back": "Terug",
     "next": "Volgende",
-    "required": "Verplicht",
+    "required": "Verplicht veld",
     "optional": "Optioneel",
     "user": "Gebruiker",
     "active": "Actief",
     "done": "Klaar",
     "noResultsFor": "Geen resultaten gevonden voor \"{{query}}\".",
     "yesterday": "Gisteren",
+    "low": "Laag",
+    "normal": "Normaal",
+    "high": "Hoog",
     "toasts": {
       "saved": "Succesvol opgeslagen",
       "deleted": "Succesvol verwijderd",
@@ -58,6 +98,11 @@
     "confirmPassword": "Bevestig Wachtwoord",
     "displayName": "Naam",
     "forgotPassword": "Wachtwoord vergeten?",
+    "resetPassword": "Wachtwoord resetten",
+    "resetPasswordDescription": "Voer je e-mailadres in en we sturen je een link om je wachtwoord te resetten.",
+    "sendResetEmail": "Reset e-mail verzenden",
+    "resetEmailSent": "Reset e-mail verzonden. Controleer je inbox.",
+    "backToLogin": "Terug naar inloggen",
     "noAccount": "Nog geen account?",
     "registerNow": "Nu registreren",
     "hasAccount": "Al een account?",
@@ -75,13 +120,31 @@
   "pets": {
     "title": "Mijn Huisdieren",
     "addPet": "Huisdier Toevoegen",
-    "editPet": "Info Bewerken",
+    "editPet": "Info bijwerken",
     "deletePet": "Huisdier Verwijderen",
     "name": "Naam",
     "species": "Soort",
     "breed": "Ras",
     "dateOfBirth": "Geboortedatum",
     "weight": "Gewicht (kg)",
+    "targetWeight": "Doelgewicht (kg)",
+    "microchipId": "Microchip ID",
+    "bloodType": "Bloedgroep",
+    "allergies": "Allergieën",
+    "emergency": {
+      "title": "Noodkaart",
+      "subtitle": "Kritieke levensreddende informatie",
+      "emergencyContacts": "Noodcontacten",
+      "emergencyPhone": "Telefoon",
+      "relation": "Relatie",
+      "addContact": "Contact toevoegen",
+      "veterinarianName": "Naam Dierenarts",
+      "veterinarianPhone": "Telefoon Dierenarts",
+      "editCard": "Kaart bewerken",
+      "viewCard": "Kaart bekijken",
+      "noContacts": "Geen noodcontacten opgeslagen",
+      "noPhone": "Geen telefoonnummer"
+    },
     "notes": "Notities",
     "species_values": {
       "cat": "Kat",
@@ -119,16 +182,18 @@
     "weightKg": "Gewicht (kg)",
     "nextDoseDate": "Datum Volgende Dosis",
     "upcomingBoosters": "Aankomende Boosters",
-    "measurements": "Laboratoriumresultaten",
+    "measurements": "Labresultaten",
     "addManually": "Handmatig toevoegen",
     "extractWithAI": "Extraheren met AI",
     "recordTypes": {
       "medication": "Medicatie",
       "vet_visit": "Dierenartsbezoek",
       "symptom": "Symptoom",
+      "symptom_checkin": "Dagelijkse check",
       "lab_test": "Laboratoriumtest",
       "weight": "Gewicht",
-      "vaccination": "Vaccinatie"
+      "vaccination": "Vaccinatie",
+      "milestone": "Mijlpaal"
     },
     "nRecords": "{{count}} records",
     "nMeasurements": "{{count}} metingen"
@@ -143,21 +208,35 @@
       "calcium": "Calcium",
       "sodium": "Natrium",
       "chloride": "Chloride",
-      "albumin": "Albumente",
+      "albumin": "Albumine",
       "total_protein": "Totaal Eiwit",
       "globulin": "Globuline",
-      "urine_specific_gravity": "Soortelijk Gewicht Urine",
+      "urine_specific_gravity": "Soortelijk Gewicht Urine (USG)",
       "upc_ratio": "UPC-ratio",
       "urine_ph": "pH Urine",
       "hematocrit": "Hematocriet",
       "hemoglobin": "Hemoglobine",
+      "rbc": "Rode Bloedcellen (RBC)",
+      "mcv": "MCV",
+      "mch": "MCH",
+      "mchc": "MCHC",
+      "rdw_cv": "RDW-CV",
+      "rdw_sd": "RDW-SD",
       "wbc": "Witte Bloedcellen (WBC)",
+      "neutrophils": "Neutrofielen",
+      "lymphocytes": "Lymfocyten",
+      "monocytes": "Monocyten",
+      "eosinophils": "Eosinofielen",
+      "basophils": "Basofielen",
       "platelets": "Bloedplaatjes",
+      "mpv": "MPV",
+      "pdw": "PDW",
+      "pct": "PCT",
       "alt": "ALT",
       "ast": "AST",
       "alkp": "ALKP",
       "glucose": "Glucose",
-      "t4": "T4",
+      "t4": "T4 (Schildklier)",
       "bilirubin": "Bilirubine",
       "alp": "ALP",
       "ggt": "GGT",
@@ -185,7 +264,7 @@
       "loading2": "AI is aan het lezen...",
       "loading3": "Resultaten voorbereiden...",
       "summary": "{{total}} waarden geëxtraheerd",
-      "lowConfidenceSummary": ", {{count}} met lage betrouwbaarheid",
+      "lowConfidenceSummary": ", {{count}} met lage betrouwbaarheid, controleer dit a.u.b.",
       "remaining": "Resterend deze maand: {{remaining}} / {{limit}}",
       "errors": {
         "quota_exceeded": "Maandelijks extractiequotum overschreden. Handmatige invoer is mogelijk.",
@@ -204,6 +283,15 @@
       "changeFile": "Wijzig",
       "removeFile": "Verwijder",
       "addFile": "+ Nog een bestand toevoegen"
+    },
+    "explanation": {
+      "title": "AI Resultaat Inzichten",
+      "loading": "Resultaten analyseren...",
+      "processing": "Veterinaire Intelligentie raadplegen",
+      "disclaimer": "Deze analyse is door AI gegenereerd en alleen bedoeld voor informatieve doeleinden. Het is GEEN medische diagnose. Bespreek deze resultaten altijd met je dierenarts.",
+      "summary": "De Kern",
+      "keyFindings": "Belangrijkste bevindingen",
+      "vetQuestions": "Vragen voor je dierenarts"
     }
   },
   "medications": {
@@ -262,6 +350,7 @@
       "all": "Alle"
     },
     "noData": "Nog geen laboratoriumgegevens. Voeg je eerste record toe.",
+    "noDataDescription": "Voeg je eerste labrecord toe om de trends te zien.",
     "insufficientData": "Onvoldoende gegevens voor grafiek (minimaal 2 metingen vereist)",
     "latestValue": "Laatste Waarde",
     "referenceRange": "Referentiebereik",
@@ -274,8 +363,9 @@
     "showAnomalous": "Alleen Alerts",
     "noParametersMatch": "Geen parameters gevonden die overeenkomen met je zoekopdracht.",
     "selectParameterTitle": "Geen grafiek geselecteerd",
+    "selectParameterDescription": "Selecteer een parameter in de lijst hierboven om de trends en veranderingen te bekijken.",
     "lastN": "Laatste {{n}} metingen",
-    "labs": "Labs"
+    "labs": "Laboratoria"
   },
   "shares": {
     "title": "Gedeelde Toegang",
@@ -285,7 +375,9 @@
     "roles": {
       "viewer": "Kijker",
       "editor": "Bewerker",
-      "admin": "Beheerder"
+      "admin": "Beheerder",
+      "vet": "Dierenarts",
+      "sitter": "Oppas"
     },
     "currentAccess": "Huidige Toegang",
     "revokeAccess": "Toegang Intrekken",
@@ -306,6 +398,8 @@
     "appSettings": "App-instellingen",
     "darkMode": "Donkere Modus",
     "darkModeDescription": "Uiterlijk wijzigen naar donker thema",
+    "notifications": "Slimme Herinneringen",
+    "notificationsDescription": "Ontvang alerts voor medicatiedoses en aankomende vaccinaties",
     "theme": "Thema",
     "themes": {
       "light": "Licht",
@@ -313,19 +407,32 @@
       "system": "Systeem"
     },
     "language": "Taal",
+    "languages": {
+      "en": "Engels",
+      "de": "Duits",
+      "es": "Spaans",
+      "fr": "Frans",
+      "it": "Italiaans",
+      "ja": "Japans",
+      "nl": "Nederlands",
+      "pt": "Portugees",
+      "ru": "Russisch",
+      "tr": "Turks",
+      "zh": "Chinees"
+    },
     "aiExtraction": "AI-extractie",
     "aiProviderName": "Hybride AI (Claude/Gemini/GPT)",
     "aiProviderDescription": "Advanced Medical Vision OCR",
     "provider": "Provider",
     "monthlyUsage": "Maandelijks gebruik: {{used}} / {{limit}}",
     "quotaResetsOn": "Quotum wordt gereset op",
-    "aiPrivacyNotice": "Je rapporten worden tijdelijk verwerkt en alleen gebruikt voor gegevensextractie. Er worden geen afbeeldingen opgeslagen.",
+    "aiPrivacyNotice": "Je rapporten worden tijdelijk verwerkt et alleen gebruikt voor gegevensextractie. Er worden geen afbeeldingen opgeslagen.",
     "dataManagement": "Gegevensbeheer",
     "exportData": "Gegevens Exporteren",
     "exportDataDescription": "Download alle huisdieren en historie in JSON",
     "exportSuccess": "Gegevens succesvol geëxporteerd",
     "exportError": "Export mislukt",
-    "importData": "Gegevens Importeren",
+    "importData": "Importeren",
     "importDataDescription": "Herstel gegevens van een back-upbestand",
     "importSuccess": "Gegevens succesvol geïmporteerd",
     "importError": "Import mislukt",
@@ -336,13 +443,32 @@
     "anonymousShare": "Laboratoriumwaarden anoniem delen",
     "editProfile": "Profiel Bewerken",
     "displayName": "Weergavenaam",
-    "emailCannotBeChanged": "E-mailadres kan niet worden gewijzigd"
+    "emailCannotBeChanged": "E-mailadres kan niet worden gewijzigd",
+    "changePassword": "Wachtwoord wijzigen",
+    "currentPassword": "Huidig wachtwoord",
+    "newPassword": "Nieuw wachtwoord",
+    "confirmPassword": "Bevestig nieuw wachtwoord",
+    "passwordChanged": "Wachtwoord succesvol bijgewerkt!",
+    "requiresRecentLogin": "Om veiligheidsredenen moet je uitloggen en opnieuw inloggen voordat je je wachtwoord kunt wijzigen."
   },
   "tabs": {
     "healthRecords": "Gezondheid",
     "medications": "Medicatie",
     "trends": "Trends",
-    "sharedAccess": "Toegang"
+    "sharedAccess": "Toegang",
+    "history": "Historie",
+    "nutrition": "Voeding"
+  },
+  "nutrition": {
+    "title": "Voeding & Dieet",
+    "currentFood": "Huidige Voeding",
+    "feedingSchedule": "Voedingsschema",
+    "supplements": "Supplementen & Snacks",
+    "noFoodSpecified": "Geen specifiek voermerk ingesteld",
+    "noScheduleSpecified": "Geen voedingsschema ingesteld",
+    "noSupplementsSpecified": "Geen supplementen of snacks vermeld",
+    "noKnownAllergies": "Geen bekende allergieën gemeld",
+    "disclaimer": "Raadpleeg altijd je dierenarts voordat je belangrijke wijzigingen aanbrengt in het dieet van je huisdier of nieuwe supplementen toevoegt."
   },
   "report": {
     "download": "Rapport Downloaden",
@@ -355,5 +481,15 @@
     "value": "Waarde",
     "labTrends": "Laboratoriumtrends",
     "medicalHistory": "Samenvatting Medische Historie"
+  },
+  "notifications": {
+    "medicationReminder": {
+      "title": "Medicatie voor {{petName}}",
+      "body": "Het is tijd voor {{medName}} (gepland om {{time}})"
+    },
+    "vaccineReminder": {
+      "title": "Vaccinatie voor {{petName}}",
+      "body": "Vandaag is de boosterdatum voor {{vaccineName}}"
+    }
   }
 }

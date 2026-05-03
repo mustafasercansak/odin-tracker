@@ -3,6 +3,23 @@
     "schedule": "Расписание",
     "todayTasks": "Задачи на сегодня"
   },
+  "dashboard": {
+    "activeMeds": "Активные лекарства",
+    "vaccinations": "Вакцинация",
+    "labResults": "Результаты анализов",
+    "petsMonitored": "Питомцев под наблюдением",
+    "overdue": "просрочено",
+    "dueToday": "сегодня",
+    "upcoming": "скоро",
+    "abnormal": "отклонения",
+    "allOnTrack": "Все по графику",
+    "allUpToDate": "Все актуально",
+    "allNormal": "Все в норме",
+    "activeTracking": "Активное наблюдение",
+    "scoreExcellent": "Отлично",
+    "scoreGood": "Хорошо",
+    "scoreNeedsAttention": "Требует внимания"
+  },
   "insights": {
     "title": "Анализ здоровья",
     "significantIncrease": "{{param}} Значительное повышение",
@@ -11,10 +28,30 @@
     "normalDescription": "Значение {{param}} для {{pet}} снова в пределах нормы. Отличные новости!",
     "noInsights": "Пока недостаточно данных для анализа."
   },
+  "symptoms": {
+    "checkin": {
+      "title": "Ежедневный осмотр",
+      "appetite": "Аппетит",
+      "energy": "Уровень энергии",
+      "mood": "Настроение / Поведение",
+      "logNow": "Отметить состояние",
+      "dailySummary": "Дневник самочувствия",
+      "success": "Состояние успешно сохранено"
+    }
+  },
+  "batch": {
+    "title": "Массовая запись для нескольких питомцев",
+    "selectPets": "Выбрать питомцев",
+    "success": "Записи успешно созданы для {{count}} питомцев",
+    "errors": {
+      "noPetsSelected": "Пожалуйста, выберите хотя бы одного питомца"
+    }
+  },
   "common": {
     "save": "Сохранить",
     "cancel": "Отмена",
     "delete": "Удалить",
+    "retry": "Повторить",
     "edit": "Изменить",
     "add": "Добавить",
     "close": "Закрыть",
@@ -28,13 +65,16 @@
     "noData": "Нет данных",
     "back": "Назад",
     "next": "Далее",
-    "required": "Обязательно",
+    "required": "Обязательное поле",
     "optional": "Необязательно",
     "user": "Пользователь",
     "active": "Активен",
     "done": "Готово",
     "noResultsFor": "Результатов по запросу \"{{query}}\" не найдено.",
     "yesterday": "Вчера",
+    "low": "Низко",
+    "normal": "Норма",
+    "high": "Высоко",
     "toasts": {
       "saved": "Успешно сохранено",
       "deleted": "Успешно удалено",
@@ -58,6 +98,11 @@
     "confirmPassword": "Подтвердите пароль",
     "displayName": "Имя",
     "forgotPassword": "Забыли пароль?",
+    "resetPassword": "Сброс пароля",
+    "resetPasswordDescription": "Введите ваш адрес электронной почты, и мы отправим вам ссылку для сброса пароля.",
+    "sendResetEmail": "Отправить письмо",
+    "resetEmailSent": "Письмо для сброса пароля отправлено. Проверьте почту.",
+    "backToLogin": "Вернуться к входу",
     "noAccount": "Нет аккаунта?",
     "registerNow": "Зарегистрироваться",
     "hasAccount": "Уже есть аккаунт?",
@@ -75,13 +120,31 @@
   "pets": {
     "title": "Мои питомцы",
     "addPet": "Добавить питомца",
-    "editPet": "Изменить данные",
+    "editPet": "Обновить данные",
     "deletePet": "Удалить питомца",
     "name": "Имя",
     "species": "Вид",
     "breed": "Порода",
     "dateOfBirth": "Дата рождения",
     "weight": "Вес (кг)",
+    "targetWeight": "Целевой вес (кг)",
+    "microchipId": "ID микрочипа",
+    "bloodType": "Группа крови",
+    "allergies": "Аллергии",
+    "emergency": {
+      "title": "Экстренная карта",
+      "subtitle": "Критически важная информация",
+      "emergencyContacts": "Экстренные контакты",
+      "emergencyPhone": "Телефон",
+      "relation": "Отношение",
+      "addContact": "Добавить контакт",
+      "veterinarianName": "Имя ветеринара",
+      "veterinarianPhone": "Телефон ветеринара",
+      "editCard": "Изменить карту",
+      "viewCard": "Посмотреть карту",
+      "noContacts": "Экстренные контакты не указаны",
+      "noPhone": "Номер телефона не указан"
+    },
     "notes": "Заметки",
     "species_values": {
       "cat": "Кошка",
@@ -126,9 +189,11 @@
       "medication": "Лекарство",
       "vet_visit": "Визит к врачу",
       "symptom": "Симптом",
+      "symptom_checkin": "Ежедневный осмотр",
       "lab_test": "Анализ крови",
       "weight": "Вес",
-      "vaccination": "Вакцинация"
+      "vaccination": "Вакцинация",
+      "milestone": "Важное событие"
     },
     "nRecords": "Записей: {{count}}",
     "nMeasurements": "Показателей: {{count}}"
@@ -146,18 +211,32 @@
       "albumin": "Альбумин",
       "total_protein": "Общий белок",
       "globulin": "Глобулин",
-      "urine_specific_gravity": "Удельный вес мочи",
+      "urine_specific_gravity": "Удельный вес мочи (USG)",
       "upc_ratio": "Соотношение Б/К в моче",
       "urine_ph": "pH мочи",
       "hematocrit": "Гематокрит",
       "hemoglobin": "Гемоглобин",
+      "rbc": "Эритроциты (RBC)",
+      "mcv": "MCV",
+      "mch": "MCH",
+      "mchc": "MCHC",
+      "rdw_cv": "RDW-CV",
+      "rdw_sd": "RDW-SD",
       "wbc": "Лейкоциты (WBC)",
+      "neutrophils": "Нейтрофилы",
+      "lymphocytes": "Лимфоциты",
+      "monocytes": "Моноциты",
+      "eosinophils": "Эозинофилы",
+      "basophils": "Базофилы",
       "platelets": "Тромбоциты",
+      "mpv": "MPV",
+      "pdw": "PDW",
+      "pct": "PCT",
       "alt": "АЛТ",
       "ast": "АСТ",
       "alkp": "ЩФ",
       "glucose": "Глюкоза",
-      "t4": "T4",
+      "t4": "T4 (Щитовидная железа)",
       "bilirubin": "Билирубин",
       "alp": "АЛП",
       "ggt": "ГГТ",
@@ -185,7 +264,7 @@
       "loading2": "ИИ читает текст...",
       "loading3": "Подготовка результатов...",
       "summary": "Извлечено значений: {{total}}",
-      "lowConfidenceSummary": ", {{count}} с низкой точностью",
+      "lowConfidenceSummary": ", {{count}} с низкой точностью, проверьте",
       "remaining": "Осталось в этом месяце: {{remaining}} / {{limit}}",
       "errors": {
         "quota_exceeded": "Месячный лимит извлечений превышен. Вы можете ввести данные вручную.",
@@ -204,6 +283,15 @@
       "changeFile": "Изменить",
       "removeFile": "Удалить",
       "addFile": "+ Добавить еще файл"
+    },
+    "explanation": {
+      "title": "Анализ результатов ИИ",
+      "loading": "Анализ результатов...",
+      "processing": "Консультация с ветеринарным интеллектом",
+      "disclaimer": "Этот анализ сгенерирован ИИ и предназначен только для информационных целей. Это НЕ медицинский диагноз. Всегда обсуждайте эти результаты с вашим ветеринаром.",
+      "summary": "Итог",
+      "keyFindings": "Ключевые выводы",
+      "vetQuestions": "Вопросы для вашего ветеринара"
     }
   },
   "medications": {
@@ -262,6 +350,7 @@
       "all": "Все"
     },
     "noData": "Данных пока нет. Добавьте свои первые анализы.",
+    "noDataDescription": "Добавьте свою первую лабораторную запись, чтобы увидеть тренды.",
     "insufficientData": "Недостаточно данных для графика (требуется минимум 2 измерения)",
     "latestValue": "Последнее значение",
     "referenceRange": "Нормальный диапазон",
@@ -286,7 +375,9 @@
     "roles": {
       "viewer": "Наблюдатель",
       "editor": "Редактор",
-      "admin": "Администратор"
+      "admin": "Администратор",
+      "vet": "Ветеринар",
+      "sitter": "Догситтер"
     },
     "currentAccess": "Текущий доступ",
     "revokeAccess": "Отозвать доступ",
@@ -307,6 +398,8 @@
     "appSettings": "Настройки приложения",
     "darkMode": "Темная тема",
     "darkModeDescription": "Переключить оформление на темную тему",
+    "notifications": "Умные напоминания",
+    "notificationsDescription": "Получайте уведомления о приеме лекарств и предстоящих прививках",
     "theme": "Тема",
     "themes": {
       "light": "Светлая",
@@ -314,6 +407,19 @@
       "system": "Системная"
     },
     "language": "Язык",
+    "languages": {
+      "en": "Английский",
+      "de": "Немецкий",
+      "es": "Испанский",
+      "fr": "Французский",
+      "it": "Итальянский",
+      "ja": "Японский",
+      "nl": "Голландский",
+      "pt": "Португальский",
+      "ru": "Русский",
+      "tr": "Турецкий",
+      "zh": "Китайский"
+    },
     "aiExtraction": "ИИ-извлечение",
     "aiProviderName": "Гибридный ИИ (Claude/Gemini/GPT)",
     "aiProviderDescription": "Продвинутое медицинское зрение OCR",
@@ -337,13 +443,32 @@
     "anonymousShare": "Делиться показателями анонимно",
     "editProfile": "Изменить профиль",
     "displayName": "Отображаемое имя",
-    "emailCannotBeChanged": "Email нельзя изменить"
+    "emailCannotBeChanged": "Email нельзя изменить",
+    "changePassword": "Сменить пароль",
+    "currentPassword": "Текущий пароль",
+    "newPassword": "Новый пароль",
+    "confirmPassword": "Подтвердите новый пароль",
+    "passwordChanged": "Пароль успешно обновлен!",
+    "requiresRecentLogin": "В целях безопасности, пожалуйста, выйдите и войдите снова перед сменой пароля."
   },
   "tabs": {
     "healthRecords": "Здоровье",
     "medications": "Лечение",
     "trends": "Графики",
-    "sharedAccess": "Доступ"
+    "sharedAccess": "Доступ",
+    "history": "История",
+    "nutrition": "Питание"
+  },
+  "nutrition": {
+    "title": "Питание и диета",
+    "currentFood": "Текущий корм",
+    "feedingSchedule": "Режим кормления",
+    "supplements": "Добавки и лакомства",
+    "noFoodSpecified": "Марка корма не указана",
+    "noScheduleSpecified": "Режим кормления не установлен",
+    "noSupplementsSpecified": "Добавки или лакомства не указаны",
+    "noKnownAllergies": "О известных аллергиях не сообщалось",
+    "disclaimer": "Всегда консультируйтесь с ветеринаром перед существенным изменением рациона питомца или добавлением новых добавок."
   },
   "report": {
     "download": "Скачать отчет",
@@ -356,5 +481,15 @@
     "value": "Значение",
     "labTrends": "Лабораторные тенденции",
     "medicalHistory": "Краткая история болезни"
+  },
+  "notifications": {
+    "medicationReminder": {
+      "title": "Лекарство для {{petName}}",
+      "body": "Пора давать {{medName}} (запланировано на {{time}})"
+    },
+    "vaccineReminder": {
+      "title": "Прививка для {{petName}}",
+      "body": "Сегодня дата ревакцинации для {{vaccineName}}"
+    }
   }
 }

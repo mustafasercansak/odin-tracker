@@ -409,7 +409,16 @@
     "language": "Language",
     "languages": {
       "en": "English",
-      "de": "German"
+      "de": "German",
+      "es": "Spanish",
+      "fr": "French",
+      "it": "Italian",
+      "ja": "Japanese",
+      "nl": "Dutch",
+      "pt": "Portuguese",
+      "ru": "Russian",
+      "tr": "Turkish",
+      "zh": "Chinese"
     },
     "aiExtraction": "AI Extraction",
     "aiProviderName": "Hybrid AI (Claude/Gemini/GPT)",

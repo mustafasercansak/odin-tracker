@@ -3,6 +3,23 @@
     "schedule": "スケジュール",
     "todayTasks": "今日のタスク"
   },
+  "dashboard": {
+    "activeMeds": "服用中のお薬",
+    "vaccinations": "予防接種",
+    "labResults": "検査結果",
+    "petsMonitored": "登録ペット数",
+    "overdue": "期限切れ",
+    "dueToday": "今日まで",
+    "upcoming": "予定",
+    "abnormal": "異常値",
+    "allOnTrack": "すべて順調",
+    "allUpToDate": "すべて最新",
+    "allNormal": "すべて正常",
+    "activeTracking": "トラッキング中",
+    "scoreExcellent": "最高",
+    "scoreGood": "良好",
+    "scoreNeedsAttention": "要注意"
+  },
   "insights": {
     "title": "健康分析",
     "significantIncrease": "{{param}} の大幅な上昇",
@@ -11,10 +28,30 @@
     "normalDescription": "{{pet}} の {{param}} の値が再び基準範囲内に戻りました。素晴らしいニュースです！",
     "noInsights": "分析に必要なデータがまだ不足しています。"
   },
+  "symptoms": {
+    "checkin": {
+      "title": "毎日の健康チェック",
+      "appetite": "食欲",
+      "energy": "元気",
+      "mood": "機嫌 / 行動",
+      "logNow": "今日の状態を記録",
+      "dailySummary": "健康状態まとめ",
+      "success": "記録を保存しました"
+    }
+  },
+  "batch": {
+    "title": "一括記録作成",
+    "selectPets": "ペットを選択",
+    "success": "{{count}} 匹の記録を保存しました",
+    "errors": {
+      "noPetsSelected": "ペットを選択してください"
+    }
+  },
   "common": {
     "save": "保存",
     "cancel": "キャンセル",
     "delete": "削除",
+    "retry": "再試行",
     "edit": "編集",
     "add": "追加",
     "close": "閉じる",
@@ -35,6 +72,9 @@
     "done": "完了",
     "noResultsFor": "「{{query}}」に一致する結果は見つかりませんでした。",
     "yesterday": "昨日",
+    "low": "低い",
+    "normal": "正常",
+    "high": "高い",
     "toasts": {
       "saved": "正常に保存されました",
       "deleted": "正常に削除されました",
@@ -58,6 +98,11 @@
     "confirmPassword": "パスワード（確認）",
     "displayName": "表示名",
     "forgotPassword": "パスワードを忘れた場合",
+    "resetPassword": "パスワードのリセット",
+    "resetPasswordDescription": "メールアドレスを入力してください。パスワードリセット用のリンクを送信します。",
+    "sendResetEmail": "リセットメールを送信",
+    "resetEmailSent": "リセットメールを送信しました。受信トレイを確認してください。",
+    "backToLogin": "ログインに戻る",
     "noAccount": "アカウントをお持ちでない場合",
     "registerNow": "今すぐ登録",
     "hasAccount": "既にアカウントをお持ちの場合",
@@ -75,13 +120,31 @@
   "pets": {
     "title": "うちの子",
     "addPet": "ペットを追加",
-    "editPet": "情報を編集",
+    "editPet": "情報を更新",
     "deletePet": "ペットを削除",
     "name": "名前",
     "species": "種類",
     "breed": "品種",
     "dateOfBirth": "誕生日",
     "weight": "体重 (kg)",
+    "targetWeight": "目標体重 (kg)",
+    "microchipId": "マイクロチップID",
+    "bloodType": "血液型",
+    "allergies": "アレルギー",
+    "emergency": {
+      "title": "緊急用カード",
+      "subtitle": "緊急時に必要な重要情報",
+      "emergencyContacts": "緊急連絡先",
+      "emergencyPhone": "電話番号",
+      "relation": "続柄",
+      "addContact": "連絡先を追加",
+      "veterinarianName": "かかりつけ医の名前",
+      "veterinarianPhone": "かかりつけ医の電話番号",
+      "editCard": "カードを編集",
+      "viewCard": "カードを表示",
+      "noContacts": "緊急連絡先が登録されていません",
+      "noPhone": "電話番号が登録されていません"
+    },
     "notes": "メモ",
     "species_values": {
       "cat": "猫",
@@ -117,7 +180,7 @@
     "fileRequirements": "最大 10MB • PDF, JPG, PNG",
     "labName": "検査機関名",
     "weightKg": "体重 (kg)",
-    "nextDoseDate": "次回の接種予定日",
+    "nextDoseDate": "次回の予定日",
     "upcomingBoosters": "今後の追加接種予定",
     "measurements": "検査結果",
     "addManually": "手動で追加",
@@ -126,9 +189,11 @@
       "medication": "投薬",
       "vet_visit": "通院",
       "symptom": "症状",
-      "lab_test": "検査結果",
+      "symptom_checkin": "健康チェック",
+      "lab_test": "血液検査",
       "weight": "体重測定",
-      "vaccination": "予防接種"
+      "vaccination": "予防接種",
+      "milestone": "成長記録"
     },
     "nRecords": "{{count}} 件の記録",
     "nMeasurements": "{{count}} 件の項目"
@@ -146,18 +211,32 @@
       "albumin": "アルブミン",
       "total_protein": "総蛋白",
       "globulin": "グロブリン",
-      "urine_specific_gravity": "尿比重",
+      "urine_specific_gravity": "尿比重 (USG)",
       "upc_ratio": "UPC比",
       "urine_ph": "尿pH",
       "hematocrit": "ヘマトクリット",
       "hemoglobin": "ヘモグロビン",
+      "rbc": "赤血球数 (RBC)",
+      "mcv": "平均赤血球容積",
+      "mch": "平均赤血球血色素量",
+      "mchc": "平均赤血球血色素濃度",
+      "rdw_cv": "赤血球分布幅",
+      "rdw_sd": "RDW-SD",
       "wbc": "白血球数 (WBC)",
+      "neutrophils": "好中球",
+      "lymphocytes": "リンパ球",
+      "monocytes": "単球",
+      "eosinophils": "好酸球",
+      "basophils": "好塩基球",
       "platelets": "血小板数",
+      "mpv": "平均血小板容積",
+      "pdw": "血小板分布幅",
+      "pct": "血小板クリット",
       "alt": "ALT",
       "ast": "AST",
       "alkp": "ALKP",
       "glucose": "血糖値",
-      "t4": "T4",
+      "t4": "T4 (甲状腺)",
       "bilirubin": "ビリルビン",
       "alp": "ALP",
       "ggt": "GGT",
@@ -204,6 +283,15 @@
       "changeFile": "変更",
       "removeFile": "削除",
       "addFile": "+ 他のファイルを追加"
+    },
+    "explanation": {
+      "title": "AI解析結果",
+      "loading": "結果を分析中...",
+      "processing": "獣医AIに相談中",
+      "disclaimer": "この分析はAIによって生成されたものであり、情報提供のみを目的としています。医学的な診断ではありません。結果については必ず獣医師にご相談ください。",
+      "summary": "まとめ",
+      "keyFindings": "主な所見",
+      "vetQuestions": "獣医師への質問案"
     }
   },
   "medications": {
@@ -262,6 +350,7 @@
       "all": "全期間"
     },
     "noData": "検査データがありません。最初の記録を追加してください。",
+    "noDataDescription": "最初の検査記録を追加すると推移が表示されます。",
     "insufficientData": "グラフ表示に必要なデータが不足しています（最低2回の測定が必要）",
     "latestValue": "最新値",
     "referenceRange": "基準範囲",
@@ -274,6 +363,7 @@
     "showAnomalous": "異常値のみ",
     "noParametersMatch": "検索条件に一致する項目はありません。",
     "selectParameterTitle": "グラフが選択されていません",
+    "selectParameterDescription": "リストから項目を選択して、推移と変化を確認してください。",
     "lastN": "直近 {{n}} 回の測定",
     "labs": "検査機関"
   },
@@ -285,7 +375,9 @@
     "roles": {
       "viewer": "閲覧者",
       "editor": "編集者",
-      "admin": "管理者"
+      "admin": "管理者",
+      "vet": "獣医師",
+      "sitter": "シッター"
     },
     "currentAccess": "現在の共有状況",
     "revokeAccess": "共有を解除",
@@ -306,6 +398,8 @@
     "appSettings": "アプリ設定",
     "darkMode": "ダークモード",
     "darkModeDescription": "外観をダークテーマに変更",
+    "notifications": "スマート通知",
+    "notificationsDescription": "お薬の時間や予防接種の予定を通知します",
     "theme": "テーマ",
     "themes": {
       "light": "ライト",
@@ -313,6 +407,19 @@
       "system": "システム"
     },
     "language": "言語",
+    "languages": {
+      "en": "英語",
+      "de": "ドイツ語",
+      "es": "スペイン語",
+      "fr": "フランス語",
+      "it": "イタリア語",
+      "ja": "日本語",
+      "nl": "オランダ語",
+      "pt": "ポルトガル語",
+      "ru": "ロシア語",
+      "tr": "トルコ語",
+      "zh": "中国語"
+    },
     "aiExtraction": "AI抽出",
     "aiProviderName": "ハイブリッドAI (Claude/Gemini/GPT)",
     "aiProviderDescription": "高度な医療ビジョンOCR",
@@ -336,13 +443,32 @@
     "anonymousShare": "数値を匿名で共有する",
     "editProfile": "プロフィール編集",
     "displayName": "表示名",
-    "emailCannotBeChanged": "メールアドレスは変更できません"
+    "emailCannotBeChanged": "メールアドレスは変更できません",
+    "changePassword": "パスワード変更",
+    "currentPassword": "現在のパスワード",
+    "newPassword": "新しいパスワード",
+    "confirmPassword": "新しいパスワード（確認）",
+    "passwordChanged": "パスワードを更新しました",
+    "requiresRecentLogin": "セキュリティのため、パスワードを変更する前に一度ログアウトして再ログインしてください。"
   },
   "tabs": {
     "healthRecords": "健康記録",
     "medications": "お薬",
     "trends": "グラフ",
-    "sharedAccess": "共有"
+    "sharedAccess": "共有",
+    "history": "履歴",
+    "nutrition": "食事"
+  },
+  "nutrition": {
+    "title": "食事とダイエット",
+    "currentFood": "今のフード",
+    "feedingSchedule": "食事の時間",
+    "supplements": "サプリメント・おやつ",
+    "noFoodSpecified": "フードの指定なし",
+    "noScheduleSpecified": "食事時間の指定なし",
+    "noSupplementsSpecified": "サプリメント等の登録なし",
+    "noKnownAllergies": "アレルギー報告なし",
+    "disclaimer": "食事の内容を変更したり、新しいサプリメントを追加したりする場合は、必ず獣医師に相談してください。"
   },
   "report": {
     "download": "レポートをダウンロード",
@@ -355,5 +481,15 @@
     "value": "値",
     "labTrends": "検査推移",
     "medicalHistory": "病歴の概要"
+  },
+  "notifications": {
+    "medicationReminder": {
+      "title": "{{petName}} の投薬時間",
+      "body": "{{medName}} の時間です（予定: {{time}}）"
+    },
+    "vaccineReminder": {
+      "title": "{{petName}} の予防接種",
+      "body": "今日は {{vaccineName}} の予定日です"
+    }
   }
 }

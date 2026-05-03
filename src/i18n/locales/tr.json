@@ -409,7 +409,16 @@
     "language": "Dil",
     "languages": {
       "en": "İngilizce",
-      "de": "Almanca"
+      "de": "Almanca",
+      "es": "İspanyolca",
+      "fr": "Fransızca",
+      "it": "İtalyanca",
+      "ja": "Japonca",
+      "nl": "Flemenkçe",
+      "pt": "Portekizce",
+      "ru": "Rusça",
+      "tr": "Türkçe",
+      "zh": "Çince"
     },
     "aiExtraction": "Yapay Zeka Ekstraksiyonu",
     "aiProviderName": "Hibrit Yapay Zeka (Claude/Gemini/GPT)",

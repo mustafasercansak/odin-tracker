@@ -3,6 +3,23 @@
     "schedule": "Tagesablauf",
     "todayTasks": "Heutige Aufgaben"
   },
+  "dashboard": {
+    "activeMeds": "Aktive Medikamente",
+    "vaccinations": "Impfungen",
+    "labResults": "Laborergebnisse",
+    "petsMonitored": "Überwachte Tiere",
+    "overdue": "überfällig",
+    "dueToday": "heute fällig",
+    "upcoming": "anstehend",
+    "abnormal": "abnormal",
+    "allOnTrack": "Alles im Plan",
+    "allUpToDate": "Alles aktuell",
+    "allNormal": "Alles normal",
+    "activeTracking": "Aktive Verfolgung",
+    "scoreExcellent": "Ausgezeichnet",
+    "scoreGood": "Gut",
+    "scoreNeedsAttention": "Aufmerksamkeit erforderlich"
+  },
   "insights": {
     "title": "Gesundheits-Einblicke",
     "significantIncrease": "{{param}} Deutlicher Anstieg",
@@ -11,10 +28,30 @@
     "normalDescription": "Der {{param}}-Wert von {{pet}} liegt wieder im Referenzbereich. Tolle Neuigkeiten!",
     "noInsights": "Noch nicht genügend Daten für eine Analyse vorhanden."
   },
+  "symptoms": {
+    "checkin": {
+      "title": "Täglicher Gesundheits-Check",
+      "appetite": "Appetit",
+      "energy": "Energieniveau",
+      "mood": "Stimmung / Verhalten",
+      "logNow": "Täglichen Status protokollieren",
+      "dailySummary": "Täglicher Gesundheits-Check",
+      "success": "Täglicher Status erfolgreich protokolliert"
+    }
+  },
+  "batch": {
+    "title": "Sammelprotokollierung",
+    "selectPets": "Tiere auswählen",
+    "success": "Erfolgreich Datensätze für {{count}} Tiere protokolliert",
+    "errors": {
+      "noPetsSelected": "Bitte wählen Sie mindestens ein Tier aus"
+    }
+  },
   "common": {
     "save": "Speichern",
     "cancel": "Abbrechen",
     "delete": "Löschen",
+    "retry": "Wiederholen",
     "edit": "Bearbeiten",
     "add": "Hinzufügen",
     "close": "Schließen",
@@ -35,6 +72,9 @@
     "done": "Fertig",
     "noResultsFor": "Keine Ergebnisse für \"{{query}}\" gefunden.",
     "yesterday": "Gestern",
+    "low": "Niedrig",
+    "normal": "Normal",
+    "high": "Hoch",
     "toasts": {
       "saved": "Erfolgreich gespeichert",
       "deleted": "Erfolgreich gelöscht",
@@ -58,6 +98,11 @@
     "confirmPassword": "Passwort bestätigen",
     "displayName": "Name",
     "forgotPassword": "Passwort vergessen",
+    "resetPassword": "Passwort zurücksetzen",
+    "resetPasswordDescription": "Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts.",
+    "sendResetEmail": "Link senden",
+    "resetEmailSent": "E-Mail zum Zurücksetzen gesendet. Prüfen Sie Ihren Posteingang.",
+    "backToLogin": "Zurück zur Anmeldung",
     "noAccount": "Noch kein Konto?",
     "registerNow": "Jetzt registrieren",
     "hasAccount": "Bereits ein Konto?",
@@ -82,6 +127,24 @@
     "breed": "Rasse",
     "dateOfBirth": "Geburtsdatum",
     "weight": "Gewicht (kg)",
+    "targetWeight": "Zielgewicht (kg)",
+    "microchipId": "Mikrochip-ID",
+    "bloodType": "Blutgruppe",
+    "allergies": "Allergien",
+    "emergency": {
+      "title": "Notfallkarte",
+      "subtitle": "Kritische lebensrettende Informationen",
+      "emergencyContacts": "Notfallkontakte",
+      "emergencyPhone": "Telefon",
+      "relation": "Beziehung",
+      "addContact": "Kontakt hinzufügen",
+      "veterinarianName": "Name des Tierarztes",
+      "veterinarianPhone": "Telefon des Tierarztes",
+      "editCard": "Karte bearbeiten",
+      "viewCard": "Karte anzeigen",
+      "noContacts": "Keine Notfallkontakte gespeichert",
+      "noPhone": "Keine Telefonnummer"
+    },
     "notes": "Notizen",
     "species_values": {
       "cat": "Katze",
@@ -126,9 +189,11 @@
       "medication": "Medikament",
       "vet_visit": "Tierarztbesuch",
       "symptom": "Symptom",
+      "symptom_checkin": "Täglicher Check",
       "lab_test": "Labortest",
       "weight": "Gewicht",
-      "vaccination": "Impfung"
+      "vaccination": "Impfung",
+      "milestone": "Meilenstein"
     },
     "nRecords": "{{count}} Einträge",
     "nMeasurements": "{{count}} Messungen"
@@ -151,8 +216,22 @@
       "urine_ph": "Harn-pH",
       "hematocrit": "Hämatokrit",
       "hemoglobin": "Hämoglobin",
+      "rbc": "Rote Blutkörperchen (RBC)",
+      "mcv": "MCV",
+      "mch": "MCH",
+      "mchc": "MCHC",
+      "rdw_cv": "RDW-CV",
+      "rdw_sd": "RDW-SD",
       "wbc": "Weiße Blutkörperchen (WBC)",
+      "neutrophils": "Neutrophile",
+      "lymphocytes": "Lymphozyten",
+      "monocytes": "Monozyten",
+      "eosinophils": "Eosinophile",
+      "basophils": "Basophile",
       "platelets": "Thrombozyten",
+      "mpv": "MPV",
+      "pdw": "PDW",
+      "pct": "PCT",
       "alt": "ALT",
       "ast": "AST",
       "alkp": "ALKP",
@@ -204,6 +283,15 @@
       "changeFile": "Ändern",
       "removeFile": "Entfernen",
       "addFile": "+ Weitere Datei hinzufügen"
+    },
+    "explanation": {
+      "title": "KI-Ergebnisanalysen",
+      "loading": "Ergebnisse werden analysiert...",
+      "processing": "Tierärztliche Intelligenz wird konsultiert",
+      "disclaimer": "Diese Analyse ist KI-generiert und dient nur zu Informationszwecken. Sie ist KEINE medizinische Diagnose. Besprechen Sie diese Ergebnisse immer mit Ihrem Tierarzt.",
+      "summary": "Das Fazit",
+      "keyFindings": "Wichtige Befunde",
+      "vetQuestions": "Fragen für Ihren Tierarzt"
     }
   },
   "medications": {
@@ -262,6 +350,7 @@
       "all": "Alle"
     },
     "noData": "Noch keine Labordaten. Fügen Sie Ihren ersten Laborbericht hinzu.",
+    "noDataDescription": "Fügen Sie Ihren ersten Laborbericht hinzu, um die Trends zu sehen.",
     "insufficientData": "Unzureichende Daten für Diagramm (mindestens 2 Messungen erforderlich)",
     "latestValue": "Letzter Wert",
     "referenceRange": "Referenzbereich",
@@ -286,7 +375,9 @@
     "roles": {
       "viewer": "Betrachter",
       "editor": "Editor",
-      "admin": "Admin"
+      "admin": "Admin",
+      "vet": "Tierarzt",
+      "sitter": "Tiersitter"
     },
     "currentAccess": "Aktueller Zugriff",
     "revokeAccess": "Zugriff widerrufen",
@@ -307,6 +398,8 @@
     "appSettings": "App-Einstellungen",
     "darkMode": "Dunkelmodus",
     "darkModeDescription": "Erscheinungsbild auf dunkles Thema umstellen",
+    "notifications": "Intelligente Erinnerungen",
+    "notificationsDescription": "Erhalten Sie Warnungen für Medikamentendosen und anstehende Impfungen",
     "theme": "Thema",
     "themes": {
       "light": "Hell",
@@ -314,6 +407,19 @@
       "system": "System"
     },
     "language": "Sprache",
+    "languages": {
+      "en": "Englisch",
+      "de": "Deutsch",
+      "es": "Spanisch",
+      "fr": "Französisch",
+      "it": "Italienisch",
+      "ja": "Japanisch",
+      "nl": "Niederländisch",
+      "pt": "Portugiesisch",
+      "ru": "Russisch",
+      "tr": "Türkisch",
+      "zh": "Chinesisch"
+    },
     "aiExtraction": "KI-Extraktion",
     "aiProviderName": "Hybrid-KI (Claude/Gemini/GPT)",
     "aiProviderDescription": "Fortgeschrittene medizinische Vision OCR",
@@ -337,13 +443,32 @@
     "anonymousShare": "Laborwerte anonym teilen",
     "editProfile": "Profil bearbeiten",
     "displayName": "Anzeigename",
-    "emailCannotBeChanged": "E-Mail-Adresse kann nicht geändert werden"
+    "emailCannotBeChanged": "E-Mail-Adresse kann nicht geändert werden",
+    "changePassword": "Passwort ändern",
+    "currentPassword": "Aktuelles Passwort",
+    "newPassword": "Neues Passwort",
+    "confirmPassword": "Neues Passwort bestätigen",
+    "passwordChanged": "Passwort erfolgreich aktualisiert!",
+    "requiresRecentLogin": "Aus Sicherheitsgründen melden Sie sich bitte ab und wieder an, bevor Sie Ihr Passwort ändern."
   },
   "tabs": {
     "healthRecords": "Gesundheit",
     "medications": "Medikamente",
     "trends": "Trends",
-    "sharedAccess": "Zugriff"
+    "sharedAccess": "Zugriff",
+    "history": "Verlauf",
+    "nutrition": "Ernährung"
+  },
+  "nutrition": {
+    "title": "Ernährung & Diät",
+    "currentFood": "Aktuelles Futter",
+    "feedingSchedule": "Fütterungsplan",
+    "supplements": "Nahrungsergänzungsmittel & Leckerlis",
+    "noFoodSpecified": "Keine spezielle Futtermarke festgelegt",
+    "noScheduleSpecified": "Kein Fütterungsplan festgelegt",
+    "noSupplementsSpecified": "Keine Nahrungsergänzungsmittel oder Leckerlis aufgeführt",
+    "noKnownAllergies": "Keine bekannten Allergien gemeldet",
+    "disclaimer": "Konsultieren Sie immer Ihren Tierarzt, bevor Sie die Ernährung Ihres Tieres wesentlich ändern oder neue Nahrungsergänzungsmittel hinzufügen."
   },
   "report": {
     "download": "Bericht herunterladen",
@@ -356,5 +481,15 @@
     "value": "Wert",
     "labTrends": "Labortrends",
     "medicalHistory": "Zusammenfassung der medizinischen Vorgeschichte"
+  },
+  "notifications": {
+    "medicationReminder": {
+      "title": "Medikament für {{petName}}",
+      "body": "Es ist Zeit für {{medName}} (geplant um {{time}})"
+    },
+    "vaccineReminder": {
+      "title": "Impfung für {{petName}}",
+      "body": "Heute ist der Auffrischungstermin für {{vaccineName}}"
+    }
   }
 }
