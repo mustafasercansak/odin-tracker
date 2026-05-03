@@ -10,6 +10,7 @@ import { useHealthRecords } from '@/hooks/queries/useHealthRecords';
 import {
   useExtractWithAnthropic,
   extractWithGemini,
+  extractWithGroq,
   mapExtractionErrorToMessage,
   type ExtractionProvider,
 } from '@/hooks/queries/useExtraction';
@@ -165,6 +166,19 @@ export const HealthRecordModal: React.FC = () => {
 
   const handleAIExtract = async () => {
     if (files.length === 0 && !fileUrl) return;
+
+    // ── Check token limits for shared keys ──
+    const state = useAppStore.getState();
+    const isUsingPersonalKey = 
+      (provider === 'google' && !!state.aiKeys?.google) ||
+      (provider === 'groq' && !!state.aiKeys?.groq) ||
+      (provider === 'anthropic' && !!state.aiKeys?.anthropic);
+
+    if (!isUsingPersonalKey && usage && usage.count >= usage.limit) {
+      toast.error(t('lab.extraction.errors.quota_exceeded'));
+      return;
+    }
+
     setExtracting(true);
     setExtractionStep(0);
 
@@ -173,6 +187,12 @@ export const HealthRecordModal: React.FC = () => {
         // ── Gemini: direct browser call, all files in one request ──
         setExtractionStep(1);
         const result = await extractWithGemini(files);
+        setExtractionStep(2);
+        applyExtractionResult(result);
+      } else if (provider === 'groq' && files.length > 0) {
+        // ── Groq: direct browser call ──
+        setExtractionStep(1);
+        const result = await extractWithGroq(files);
         setExtractionStep(2);
         applyExtractionResult(result);
       } else {
@@ -477,24 +497,50 @@ export const HealthRecordModal: React.FC = () => {
                     <div className="space-y-2.5">
                       {/* Provider toggle */}
                       <div className="flex items-center gap-1.5 p-1 bg-secondary/60 rounded-xl">
-                        {(['google', 'anthropic'] as const).map((p) => (
-                          <button
-                            key={p}
-                            type="button"
-                            onClick={() => setProvider(p)}
-                            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                              provider === p
-                                ? 'bg-card text-foreground shadow-sm'
-                                : 'text-muted-foreground hover:text-foreground'
-                            }`}
-                          >
-                            {p === 'google' ? (
-                              <span className="text-[11px]">✦ Gemini 2.5</span>
-                            ) : (
-                              <span className="text-[11px]">◆ Claude</span>
-                            )}
-                          </button>
-                        ))}
+                        {(['google', 'groq', 'anthropic'] as const).map((p) => {
+                          const state = useAppStore.getState();
+                          const hasPersonalKey = !!state.aiKeys?.[p === 'google' ? 'google' : p === 'groq' ? 'groq' : 'anthropic'];
+                          
+                          return (
+                            <button
+                              key={p}
+                              type="button"
+                              onClick={() => setProvider(p)}
+                              className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                                provider === p
+                                  ? 'bg-card text-foreground shadow-sm'
+                                  : 'text-muted-foreground hover:text-foreground'
+                              }`}
+                            >
+                              {p === 'google' ? (
+                                <>
+                                  <svg viewBox="0 0 24 24" className="w-3 h-3 fill-primary" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 24a12 12 0 1 1 12-12 12.013 12.013 0 0 1-12 12zm0-22a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2z"/>
+                                    <path d="M12.5 7.5 11 11l-3.5 1.5L11 14l1.5 3.5 1.5-3.5 3.5-1.5L14 11z"/>
+                                  </svg>
+                                  <span className="text-[10px]">Gemini 2.5</span>
+                                </>
+                              ) : p === 'groq' ? (
+                                <>
+                                  <svg viewBox="0 0 24 24" className="w-3 h-3 fill-orange-500" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                  </svg>
+                                  <span className="text-[10px]">Groq</span>
+                                </>
+                              ) : (
+                                <>
+                                  <svg viewBox="0 0 24 24" className="w-3 h-3 fill-amber-600" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
+                                  </svg>
+                                  <span className="text-[10px]">Claude</span>
+                                </>
+                              )}
+                              {hasPersonalKey && (
+                                <div className="w-1 h-1 rounded-full bg-green-500 absolute top-1 right-1" />
+                              )}
+                            </button>
+                          );
+                        })}
                       </div>
                       {/* Extract button */}
                       <button
@@ -506,7 +552,11 @@ export const HealthRecordModal: React.FC = () => {
                         {t('healthRecords.extractWithAI')}
                         {usage && (
                           <span className="text-xs opacity-70 font-medium bg-white/10 px-2 py-0.5 rounded-full">
-                            {usage.limit - usage.count}/{usage.limit}
+                            {(provider === 'google' && useAppStore.getState().aiKeys?.google) ||
+                             (provider === 'groq' && useAppStore.getState().aiKeys?.groq) ||
+                             (provider === 'anthropic' && useAppStore.getState().aiKeys?.anthropic)
+                              ? 'Unlimited'
+                              : `${usage.limit - usage.count}/${usage.limit}`}
                           </span>
                         )}
                       </button>

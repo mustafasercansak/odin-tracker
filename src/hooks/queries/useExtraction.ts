@@ -6,7 +6,7 @@ import { type ExtractionResult } from '@/schemas/extraction';
 import { retryWithBackoff } from '@/lib/ai-utils';
 import { useAppStore } from '@/store/useAppStore';
 
-export type ExtractionProvider = 'anthropic' | 'google';
+export type ExtractionProvider = 'anthropic' | 'google' | 'groq';
 
 // ─── Prompt (mirrored from cloud function) ────────────────────────────────────
 
@@ -187,6 +187,60 @@ export function useExtractWithAnthropic() {
       return result.data;
     },
   });
+}
+
+// ─── Groq Extraction call (browser-side) ────────────────────────────────────
+
+export async function extractWithGroq(files: File[]): Promise<ExtractionResult> {
+  const state = useAppStore.getState();
+  const groqKey = state.aiKeys?.groq || import.meta.env.VITE_GROQ_API_KEY;
+
+  if (!groqKey) {
+    throw new Error('Groq API Key is not set');
+  }
+
+  const file = files[0]; // Groq vision usually works better with one image at a time
+  const base64 = await fileToBase64(file);
+
+  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${groqKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'llama-3.2-11b-vision-preview',
+      messages: [
+        {
+          role: 'user',
+          content: [
+            { type: 'text', text: EXTRACTION_PROMPT },
+            {
+              type: 'image_url',
+              image_url: { url: `data:${file.type};base64,${base64}` },
+            },
+          ],
+        },
+      ],
+      response_format: { type: 'json_object' },
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    if (response.status === 429) throw new Error('quota-exceeded');
+    throw new Error(errorData.error?.message || `Groq failed: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  const parsed = JSON.parse(data.choices[0].message.content);
+
+  return {
+    ...parsed,
+    measurements: (parsed.measurements ?? []).map((m: Record<string, unknown>) =>
+      sanitizeMeasurement(m)
+    ),
+  } as ExtractionResult;
 }
 
 // ─── Error message mapping ────────────────────────────────────────────────────
