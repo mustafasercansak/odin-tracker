@@ -2,6 +2,8 @@
 
 Welcome to **Odin Tracker**, the ultimate companion for pet health management. This project is made possible thanks to the generous free-tier API opportunities provided by **Google (Gemini)**, **Anthropic (Claude)**, and **Groq**, which we use for intelligent report interpretation and data extraction.
 
+Odin Tracker is designed to be accessible to pet owners worldwide, with full support for **11+ languages**.
+
 ## 🚀 Getting Started
 
 ### 1. Environment Variables & Firebase Setup

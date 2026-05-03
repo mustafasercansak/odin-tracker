@@ -25,6 +25,7 @@ Odin Tracker is a professional-grade, privacy-first pet health management dashbo
 *   **📈 Smart Trends**: Visualize your pet's health history with high-contrast, interactive charts.
 *   **💊 Medication & Vaccine Alerts**: Never miss a dose with integrated scheduling and automated logging.
 *   **📜 Professional Reports**: Generate and download comprehensive health summaries to share with your veterinarian.
+*   **🌍 Multi-Language Support**: Fully localized in 11+ languages including English, Turkish, German, Spanish, French, and more.
 *   **📱 PWA Ready**: Install on your phone (iOS/Android) for a native app experience.
 
 ---
@@ -67,6 +68,31 @@ Odin Tracker is a **Progressive Web App (PWA)**. To use it on your phone:
 1. Open the app URL in Chrome.
 2. Tap the **three dots** (menu) in the corner.
 3. Tap **Install App** or **Add to Home Screen**.
+
+---
+
+## 🌍 Localization & Multi-Language Support
+
+Odin Tracker currently supports the following languages:
+
+*   🇺🇸 **English** (en)
+*   🇹🇷 **Türkçe** (tr)
+*   🇩🇪 **Deutsch** (de)
+*   🇪🇸 **Español** (es)
+*   🇫🇷 **Français** (fr)
+*   🇮🇹 **Italiano** (it)
+*   🇷🇺 **Русский** (ru)
+*   🇵🇹 **Português** (pt)
+*   🇳🇱 **Nederlands** (nl)
+*   🇯🇵 **日本語** (ja)
+*   🇨🇳 **简体中文** (zh)
+
+### Contributing New Languages
+If you would like to add a new language or improve an existing translation:
+1.  Navigate to `src/locales`.
+2.  Create a new folder for your language code (e.g., `it` for Italian).
+3.  Copy the `translation.json` from the `en` folder and translate the values.
+4.  Add the new language to the `i18n.ts` configuration and the `Settings.tsx` screen.
 
 ---
 

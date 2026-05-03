@@ -449,7 +449,12 @@
     "newPassword": "Новый пароль",
     "confirmPassword": "Подтвердите новый пароль",
     "passwordChanged": "Пароль успешно обновлен!",
-    "requiresRecentLogin": "В целях безопасности, пожалуйста, выйдите и войдите снова перед сменой пароля."
+    "requiresRecentLogin": "В целях безопасности, пожалуйста, выйдите и войдите снова перед сменой пароля.",
+    "aiKeys": {
+      "title": "API Keys Configuration",
+      "subtitle": "Use your own keys for unlimited analysis",
+      "privacyNote": "Your API keys are stored locally on this device and are never sent to our servers. They are used only to communicate directly with AI providers."
+    }
   },
   "tabs": {
     "healthRecords": "Здоровье",

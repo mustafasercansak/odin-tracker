@@ -449,7 +449,12 @@
     "newPassword": "Nuova password",
     "confirmPassword": "Conferma nuova password",
     "passwordChanged": "Password aggiornata con successo!",
-    "requiresRecentLogin": "Per ragioni di sicurezza, effettua il logout e riaccedi prima di modificare la password."
+    "requiresRecentLogin": "Per ragioni di sicurezza, effettua il logout e riaccedi prima di modificare la password.",
+    "aiKeys": {
+      "title": "API Keys Configuration",
+      "subtitle": "Use your own keys for unlimited analysis",
+      "privacyNote": "Your API keys are stored locally on this device and are never sent to our servers. They are used only to communicate directly with AI providers."
+    }
   },
   "tabs": {
     "healthRecords": "Salute",

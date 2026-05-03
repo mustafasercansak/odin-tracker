@@ -449,7 +449,12 @@
     "newPassword": "新しいパスワード",
     "confirmPassword": "新しいパスワード（確認）",
     "passwordChanged": "パスワードを更新しました",
-    "requiresRecentLogin": "セキュリティのため、パスワードを変更する前に一度ログアウトして再ログインしてください。"
+    "requiresRecentLogin": "セキュリティのため、パスワードを変更する前に一度ログアウトして再ログインしてください。",
+    "aiKeys": {
+      "title": "API Keys Configuration",
+      "subtitle": "Use your own keys for unlimited analysis",
+      "privacyNote": "Your API keys are stored locally on this device and are never sent to our servers. They are used only to communicate directly with AI providers."
+    }
   },
   "tabs": {
     "healthRecords": "健康記録",

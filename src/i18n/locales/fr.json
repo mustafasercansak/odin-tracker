@@ -449,7 +449,12 @@
     "newPassword": "Nouveau mot de passe",
     "confirmPassword": "Confirmer le nouveau mot de passe",
     "passwordChanged": "Mot de passe mis à jour avec succès !",
-    "requiresRecentLogin": "Pour des raisons de sécurité, veuillez vous déconnecter et vous reconnecter avant de changer votre mot de passe."
+    "requiresRecentLogin": "Pour des raisons de sécurité, veuillez vous déconnecter et vous reconnecter avant de changer votre mot de passe.",
+    "aiKeys": {
+      "title": "API Keys Configuration",
+      "subtitle": "Use your own keys for unlimited analysis",
+      "privacyNote": "Your API keys are stored locally on this device and are never sent to our servers. They are used only to communicate directly with AI providers."
+    }
   },
   "tabs": {
     "healthRecords": "Santé",

@@ -449,7 +449,12 @@
     "newPassword": "Nova Senha",
     "confirmPassword": "Confirmar Nova Senha",
     "passwordChanged": "Senha atualizada com sucesso!",
-    "requiresRecentLogin": "Por motivos de segurança, saia e entre novamente antes de alterar sua senha."
+    "requiresRecentLogin": "Por motivos de segurança, saia e entre novamente antes de alterar sua senha.",
+    "aiKeys": {
+      "title": "API Keys Configuration",
+      "subtitle": "Use your own keys for unlimited analysis",
+      "privacyNote": "Your API keys are stored locally on this device and are never sent to our servers. They are used only to communicate directly with AI providers."
+    }
   },
   "tabs": {
     "healthRecords": "Saúde",

@@ -449,7 +449,12 @@
     "newPassword": "新密码",
     "confirmPassword": "确认新密码",
     "passwordChanged": "密码更新成功！",
-    "requiresRecentLogin": "出于安全原因，请在更改密码前退出并重新登录。"
+    "requiresRecentLogin": "出于安全原因，请在更改密码前退出并重新登录。",
+    "aiKeys": {
+      "title": "API Keys Configuration",
+      "subtitle": "Use your own keys for unlimited analysis",
+      "privacyNote": "Your API keys are stored locally on this device and are never sent to our servers. They are used only to communicate directly with AI providers."
+    }
   },
   "tabs": {
     "healthRecords": "健康记录",

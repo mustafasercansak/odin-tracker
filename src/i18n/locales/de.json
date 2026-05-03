@@ -449,7 +449,12 @@
     "newPassword": "Neues Passwort",
     "confirmPassword": "Neues Passwort bestätigen",
     "passwordChanged": "Passwort erfolgreich aktualisiert!",
-    "requiresRecentLogin": "Aus Sicherheitsgründen melden Sie sich bitte ab und wieder an, bevor Sie Ihr Passwort ändern."
+    "requiresRecentLogin": "Aus Sicherheitsgründen melden Sie sich bitte ab und wieder an, bevor Sie Ihr Passwort ändern.",
+    "aiKeys": {
+      "title": "API Keys Configuration",
+      "subtitle": "Use your own keys for unlimited analysis",
+      "privacyNote": "Your API keys are stored locally on this device and are never sent to our servers. They are used only to communicate directly with AI providers."
+    }
   },
   "tabs": {
     "healthRecords": "Gesundheit",
