@@ -36,7 +36,11 @@ export const LabExplanationModal: React.FC<LabExplanationModalProps> = ({ record
       const result = await explainLabResults(record, pet, age, i18n.language);
       setExplanation(result);
     } catch (err: any) {
-      setError(err.message || 'AI analysis failed');
+      if (err.message === 'AI_QUOTA_EXCEEDED') {
+        setError(t('lab.extraction.errors.quota_exceeded'));
+      } else {
+        setError(t('lab.extraction.errors.extraction_failed'));
+      }
     } finally {
       setLoading(false);
     }

@@ -427,6 +427,11 @@
     "monthlyUsage": "Monthly usage: {{used}} / {{limit}}",
     "quotaResetsOn": "Quota resets on",
     "aiPrivacyNotice": "Your lab reports are processed temporarily and used only for data extraction. Images are not stored.",
+    "aiKeys": {
+      "title": "API Keys Configuration",
+      "subtitle": "Use your own keys for unlimited analysis",
+      "privacyNote": "Your API keys are stored locally on this device and are never sent to our servers. They are used only to communicate directly with AI providers."
+    },
     "dataManagement": "Data Management",
     "exportData": "Export Data",
     "exportDataDescription": "Download all your pets and medical history as JSON",

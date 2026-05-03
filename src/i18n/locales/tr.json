@@ -427,6 +427,11 @@
     "monthlyUsage": "Aylık kullanım: {{used}} / {{limit}}",
     "quotaResetsOn": "Sıfırlanma tarihi",
     "aiPrivacyNotice": "Lab raporlarınız geçici olarak işlenir ve sadece veri çıkarma amacıyla kullanılır. Görseller saklanmaz.",
+    "aiKeys": {
+      "title": "API Anahtarları Yapılandırması",
+      "subtitle": "Sınırsız analiz için kendi anahtarlarınızı kullanın",
+      "privacyNote": "API anahtarlarınız bu cihazda yerel olarak saklanır ve asla sunucularımıza gönderilmez. Yalnızca doğrudan yapay zeka sağlayıcılarıyla iletişim kurmak için kullanılırlar."
+    },
     "dataManagement": "Veri Yönetimi",
     "exportData": "Verileri Dışa Aktar",
     "exportDataDescription": "Tüm hayvanlarını ve tıbbi geçmişini JSON olarak indir",

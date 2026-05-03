@@ -171,7 +171,7 @@ export default function Home() {
       {pets.length > 0 && <HealthInsights pets={pets} />}
 
       {/* Global Daily Schedule */}
-      <section className="glass-panel rounded-4xl p-8 border-border shadow-sm relative overflow-hidden">
+      <section id="daily-schedule" className="glass-panel rounded-4xl p-8 border-border shadow-sm relative overflow-hidden">
         {/* Animated Background Pulse for the whole section */}
         <div className="absolute -top-24 -left-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-pulse"></div>
         
@@ -370,7 +370,7 @@ export default function Home() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div id="pets-list" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredPets.length === 0 && searchQuery && (
             <div className="md:col-span-2 lg:col-span-3 py-20 text-center glass-panel rounded-4xl border-dashed">
               <Search size={48} className="mx-auto text-primary mb-4 opacity-50" />

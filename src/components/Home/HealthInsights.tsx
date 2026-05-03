@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Sparkles, TrendingUp, CheckCircle2 } from 'lucide-react';
 import { useAllLabRecords } from '@/hooks/queries/useHealthRecords';
 import { type Pet } from '@/schemas/pet';
@@ -11,6 +12,7 @@ interface HealthInsightsProps {
 
 export const HealthInsights: React.FC<HealthInsightsProps> = ({ pets }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const petIds = pets.map(p => p.id);
   const { labRecords, isLoading } = useAllLabRecords(petIds);
 
@@ -98,10 +100,11 @@ export const HealthInsights: React.FC<HealthInsightsProps> = ({ pets }) => {
         {insights.map((insight, idx) => (
           <div 
             key={`insight-${idx}`}
-            className={`p-4 rounded-2xl border flex gap-4 items-start transition-all hover:scale-[1.01] ${
+            onClick={() => navigate(`/pet/${insight.petId}`)}
+            className={`p-4 rounded-2xl border flex gap-4 items-start transition-all hover:scale-[1.01] cursor-pointer active:scale-[0.99] ${
               insight.type === 'warning' 
-                ? 'bg-destructive/5 border-destructive/20' 
-                : 'bg-green-500/5 border-green-500/20'
+                ? 'bg-destructive/5 border-destructive/20 hover:border-destructive/40' 
+                : 'bg-green-500/5 border-green-500/20 hover:border-green-500/40'
             }`}
           >
             <div className={`p-2 rounded-xl flex-shrink-0 ${

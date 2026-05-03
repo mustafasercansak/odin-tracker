@@ -15,6 +15,13 @@ interface AppState {
   trendsSelectedLabs: string[];
   recordsSelectedLabs: string[];
   notificationsEnabled: boolean;
+  aiKeys: {
+    google?: string;
+    openai?: string;
+    anthropic?: string;
+    groq?: string;
+  };
+  preferredAIProvider: 'auto' | 'google' | 'openai' | 'anthropic' | 'groq';
 
   // Non-persisted state
   isOnline: boolean;
@@ -31,6 +38,8 @@ interface AppState {
   setTrendsSelectedLabs: (labs: string[]) => void;
   setRecordsSelectedLabs: (labs: string[]) => void;
   setNotificationsEnabled: (enabled: boolean) => void;
+  setAIKeys: (keys: Partial<AppState['aiKeys']>) => void;
+  setPreferredAIProvider: (provider: AppState['preferredAIProvider']) => void;
   setIsOnline: (status: boolean) => void;
   setSearchQuery: (query: string) => void;
   setActiveModal: (modalName: string | null, data?: any) => void;
@@ -48,6 +57,8 @@ export const useAppStore = create<AppState>()(
       trendsSelectedLabs: [],
       recordsSelectedLabs: [],
       notificationsEnabled: false,
+      aiKeys: {},
+      preferredAIProvider: 'auto',
 
       // Initial non-persisted state
       isOnline: navigator.onLine,
@@ -64,6 +75,8 @@ export const useAppStore = create<AppState>()(
       setTrendsSelectedLabs: (trendsSelectedLabs) => set({ trendsSelectedLabs }),
       setRecordsSelectedLabs: (recordsSelectedLabs) => set({ recordsSelectedLabs }),
       setNotificationsEnabled: (notificationsEnabled) => set({ notificationsEnabled }),
+      setAIKeys: (newKeys) => set((state) => ({ aiKeys: { ...state.aiKeys, ...newKeys } })),
+      setPreferredAIProvider: (preferredAIProvider) => set({ preferredAIProvider }),
       setIsOnline: (isOnline) => set({ isOnline }),
       setSearchQuery: (searchQuery) => set({ searchQuery }),
       setActiveModal: (activeModal, modalData = null) => set({ activeModal, modalData }),
@@ -81,6 +94,8 @@ export const useAppStore = create<AppState>()(
         trendsSelectedLabs: state.trendsSelectedLabs,
         recordsSelectedLabs: state.recordsSelectedLabs,
         notificationsEnabled: state.notificationsEnabled,
+        aiKeys: state.aiKeys,
+        preferredAIProvider: state.preferredAIProvider,
       }),
     }
   )

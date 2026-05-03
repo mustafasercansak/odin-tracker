@@ -3,8 +3,8 @@ import { httpsCallable } from 'firebase/functions';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { functions } from '@/lib/firebase';
 import { type ExtractionResult } from '@/schemas/extraction';
-
-export type ExtractionProvider = 'anthropic' | 'google';
+import { retryWithBackoff } from '@/lib/ai-utils';
+import { useAppStore } from '@/store/useAppStore';
 
 // ─── Prompt (mirrored from cloud function) ────────────────────────────────────
 
@@ -110,13 +110,17 @@ function sanitizeMeasurement(m: Record<string, unknown>) {
 // ─── Direct Gemini call (browser-side, no Cloud Function) ────────────────────
 
 export async function extractWithGemini(files: File[]): Promise<ExtractionResult> {
-  const apiKey = import.meta.env.VITE_GOOGLE_AI_API_KEY as string | undefined;
-  if (!apiKey) {
-    throw new Error('VITE_GOOGLE_AI_API_KEY is not set in .env');
+  const state = useAppStore.getState();
+  const googleKey = state.aiKeys?.google || import.meta.env.VITE_GOOGLE_AI_API_KEY;
+
+  if (!googleKey) {
+    throw new Error('VITE_GOOGLE_AI_API_KEY is not set');
   }
 
-  const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+  const genAI = new GoogleGenerativeAI(googleKey);
+  
+  // List of models to try in order of preference
+  const modelsToTry = ['gemini-1.5-flash', 'gemini-1.5-flash-8b', 'gemini-2.0-flash-exp'];
 
   const fileParts = await Promise.all(
     files.map(async (file) => {
@@ -125,17 +129,45 @@ export async function extractWithGemini(files: File[]): Promise<ExtractionResult
     })
   );
 
-  const result = await model.generateContent([EXTRACTION_PROMPT, ...fileParts]);
-  const text = result.response.text();
-  const raw = text.replace(/```json\n?|\n?```/g, '').trim();
-  const parsed = JSON.parse(raw);
+  let lastError: any;
 
-  return {
-    ...parsed,
-    measurements: (parsed.measurements ?? []).map((m: Record<string, unknown>) =>
-      sanitizeMeasurement(m)
-    ),
-  } as ExtractionResult;
+  for (const modelName of modelsToTry) {
+    try {
+      const model = genAI.getGenerativeModel({ model: modelName });
+      
+      const result = await retryWithBackoff(async () => {
+        const resp = await model.generateContent([EXTRACTION_PROMPT, ...fileParts]);
+        return resp;
+      }, 2, 1000);
+
+      const text = result.response.text();
+      const raw = text.replace(/```json\n?|\n?```/g, '').trim();
+      const parsed = JSON.parse(raw);
+
+      return {
+        ...parsed,
+        measurements: (parsed.measurements ?? []).map((m: Record<string, unknown>) =>
+          sanitizeMeasurement(m)
+        ),
+      } as ExtractionResult;
+    } catch (error: any) {
+      lastError = error;
+      const isQuotaError = error.message?.includes('429') || error.message?.includes('quota');
+      
+      if (isQuotaError) {
+        console.warn(`Extraction model ${modelName} quota exceeded, trying fallback...`);
+        continue;
+      }
+      
+      break;
+    }
+  }
+
+  console.error('All extraction models failed:', lastError);
+  if (lastError?.message?.includes('429')) {
+    throw new Error('quota-exceeded');
+  }
+  throw lastError;
 }
 
 // ─── Cloud Function call (Anthropic via Firebase) ────────────────────────────
@@ -161,6 +193,7 @@ export function mapExtractionErrorToMessage(code: string): string {
   const normalized = (code || '').replace(/^functions\//, '');
   switch (normalized) {
     case 'resource-exhausted':
+    case 'quota-exceeded':
       return 'lab.extraction.errors.quota_exceeded';
     case 'permission-denied':
     case 'unauthenticated':

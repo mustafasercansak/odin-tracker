@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { type Pet } from '@/schemas/pet';
 import { useAllMedications } from '@/hooks/queries/useMedications';
 import { useAllLabRecords, useAllVaccinationRecords } from '@/hooks/queries/useHealthRecords';
@@ -19,6 +20,7 @@ interface DashboardStatsProps {
 
 export const DashboardStats: React.FC<DashboardStatsProps> = ({ pets }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const petIds = React.useMemo(() => pets.map(p => p.id), [pets]);
   
   const { data: allMedications } = useAllMedications(petIds);
@@ -119,6 +121,7 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({ pets }) => {
           : t('dashboard.allOnTrack'),
       alert: stats.overdueMeds > 0,
       color: 'bg-blue-500/10 text-blue-500',
+      path: '/medications'
     },
     {
       icon: <Syringe size={20} />,
@@ -131,6 +134,7 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({ pets }) => {
           : t('dashboard.allUpToDate'),
       alert: stats.overdueVaccines > 0,
       color: 'bg-purple-500/10 text-purple-500',
+      path: '/' // Schedule is on home, maybe scroll to it later or just keep on home
     },
     {
       icon: <Activity size={20} />,
@@ -141,6 +145,7 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({ pets }) => {
         : t('dashboard.allNormal'),
       alert: stats.abnormalCount > 0,
       color: 'bg-amber-500/10 text-amber-500',
+      path: '/trends'
     },
     {
       icon: <Shield size={20} />,
@@ -149,6 +154,7 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({ pets }) => {
       sub: t('dashboard.activeTracking'),
       alert: false,
       color: 'bg-primary/10 text-primary',
+      path: '/'
     },
   ];
 
@@ -156,7 +162,13 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({ pets }) => {
     <section className="space-y-6 animate-in fade-in slide-in-from-top-4 duration-500">
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
         {/* Health Score Ring */}
-        <div className="col-span-2 lg:col-span-1 glass-panel rounded-3xl p-6 border-border flex flex-col items-center justify-center relative overflow-hidden group hover:border-primary/30 transition-all">
+        <div 
+          onClick={() => {
+            const el = document.getElementById('daily-schedule');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
+          className="col-span-2 lg:col-span-1 glass-panel rounded-3xl p-6 border-border flex flex-col items-center justify-center relative overflow-hidden group hover:border-primary/30 transition-all cursor-pointer active:scale-95"
+        >
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="relative">
             <svg className="w-24 h-24 -rotate-90" viewBox="0 0 100 100">
@@ -185,7 +197,17 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({ pets }) => {
         {cards.map((card, idx) => (
           <div 
             key={idx}
-            className="glass-panel rounded-3xl p-5 border-border relative overflow-hidden group hover:border-primary/30 transition-all"
+            onClick={() => {
+              if (card.path === '/') {
+                const el = document.getElementById(card.label === t('dashboard.vaccinations') ? 'daily-schedule' : 'pets-list');
+                if (el) {
+                  el.scrollIntoView({ behavior: 'smooth' });
+                  return;
+                }
+              }
+              if (card.path) navigate(card.path);
+            }}
+            className={`glass-panel rounded-3xl p-5 border-border relative overflow-hidden group hover:border-primary/30 transition-all ${card.path ? 'cursor-pointer active:scale-95' : ''}`}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="relative z-10">

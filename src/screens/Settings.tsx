@@ -268,6 +268,22 @@ export default function Settings() {
               {t('settings.aiPrivacyNotice')}
             </p>
           </div>
+
+          <button 
+            onClick={() => setActiveModal('ai_keys')}
+            className="w-full flex items-center justify-between p-4 bg-secondary/20 hover:bg-secondary/40 border border-border/50 rounded-2xl transition-all group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:scale-110 transition-transform">
+                <ShieldCheck size={20} />
+              </div>
+              <div className="text-left">
+                <p className="text-sm font-bold">{t('settings.aiKeys.title')}</p>
+                <p className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">{t('settings.aiKeys.subtitle')}</p>
+              </div>
+            </div>
+            <ChevronRight size={18} className="text-muted-foreground group-hover:translate-x-1 transition-transform" />
+          </button>
         </div>
       </section>
 
