@@ -89,7 +89,8 @@
       "fileUploadFailed": "Bestandsupload mislukt, record wordt toch opgeslagen.",
       "deletedWithUndo": "Item verwijderd. Je kunt dit ongedaan maken."
     },
-    "logout": "Uitloggen"
+    "logout": "Uitloggen",
+    "confirmDelete": "Weet je zeker dat je dit wilt verwijderen?"
   },
   "auth": {
     "login": "Inloggen",
@@ -195,10 +196,19 @@
       "lab_test": "Laboratoriumtest",
       "weight": "Gewicht",
       "vaccination": "Vaccinatie",
-      "milestone": "Mijlpaal"
+      "milestone": "Mijlpaal",
+      "vitals": "Vitale Functies"
     },
     "nRecords": "{{count}} records",
-    "nMeasurements": "{{count}} metingen"
+    "nMeasurements": "{{count}} metingen",
+    "vitals": {
+      "heartRate": "Hartslag",
+      "respiratoryRate": "Ademhalingsfrequenz",
+      "temperature": "Temperatuur",
+      "bpm": "BPM",
+      "rr": "Adem/min",
+      "tempUnit": "°C"
+    }
   },
   "lab": {
     "parameters": {
@@ -392,7 +402,8 @@
     "errors": {
       "userNotFound": "Gebruiker niet gevonden",
       "alreadyShared": "Al gedeeld"
-    }
+    },
+    "confirmRevoke": "Weet je zeker dat je de toegang voor deze gebruiker wilt intrekken?"
   },
   "settings": {
     "title": "Instellingen",
@@ -453,9 +464,9 @@
     "passwordChanged": "Wachtwoord succesvol bijgewerkt!",
     "requiresRecentLogin": "Om veiligheidsredenen moet je uitloggen en opnieuw inloggen voordat je je wachtwoord kunt wijzigen.",
     "aiKeys": {
-      "title": "API Keys Configuration",
-      "subtitle": "Use your own keys for unlimited analysis",
-      "privacyNote": "Your API keys are stored locally on this device and are never sent to our servers. They are used only to communicate directly with AI providers."
+      "title": "API Keys Configuratie",
+      "subtitle": "Gebruik je eigen keys voor onbeperkte analyse",
+      "privacyNote": "Je API-sleutels worden lokaal op dit apparaat opgeslagen en nooit naar onze servers verzonden. Ze worden alleen gebruikt om rechtstreeks met AI-providers te communiceren."
     }
   },
   "tabs": {

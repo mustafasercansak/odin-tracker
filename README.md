@@ -13,22 +13,21 @@
 > [!WARNING]
 > **Medical Disclaimer**: Odin Tracker is a tracking tool and NOT a substitute for professional veterinary advice. Always consult a vet for medical decisions.
 
-Odin Tracker is a professional-grade, privacy-first pet health management dashboard. It combines cutting-edge AI extraction for lab reports with a robust, personal data-sovereignty model.
+Odin Tracker is a professional grade, privacy first pet health management dashboard. It combines cutting edge AI extraction for lab reports with a robust, personal data sovereignty model.
 
----
 
 ## ✨ Key Features
 
-*   **🧠 Multi-Provider AI Extraction**: Upload lab reports (PDF/Photo) and let Gemini, Groq, or Claude automatically extract medical values (Creatinine, BUN, SDMA, etc.).
-*   **🛡️ Privacy-First (BYOK)**: "Bring Your Own Key" model ensures your data never touches our servers. Your medical analysis happens via your own API keys.
-*   **📂 Data Sovereignty**: Built on Firestore, allowing you to use your own personal database to protect your sensitive information.
-*   **📈 Smart Trends**: Visualize your pet's health history with high-contrast, interactive charts.
-*   **💊 Medication & Vaccine Alerts**: Never miss a dose with integrated scheduling and automated logging.
-*   **📜 Professional Reports**: Generate and download comprehensive health summaries to share with your veterinarian.
-*   **🌍 Multi-Language Support**: Fully localized in 11+ languages including English, Turkish, German, Spanish, French, and more.
-*   **📱 PWA Ready**: Install on your phone (iOS/Android) for a native app experience.
+🧠 Multi Provider AI Extraction: Upload lab reports (PDF/Photo) and let Gemini, Groq, or Claude automatically extract medical values (Creatinine, BUN, SDMA, etc.).
+🛡️ Privacy First (BYOK): "Bring Your Own Key" model ensures your data never touches our servers. Your medical analysis happens via your own API keys.
+📂 Data Sovereignty: Built on Firestore, allowing you to use your own personal database to protect your sensitive information.
+📈 Smart Trends: Visualize your pet's health history with high contrast, interactive charts.
+💓 Vitals Tracking: Monitor critical health indicators like Heart Rate, Respiratory Rate, and Temperature with specialized logging.
+💊 Medication & Vaccine Alerts: Never miss a dose with integrated scheduling and automated logging.
+📜 Professional Reports: Generate and download comprehensive health summaries to share with your veterinarian.
+🌍 Multi Language Support: Fully localized in 11+ languages including English, Turkish, German, Spanish, French, and more.
+📱 PWA Ready: Install on your phone (iOS/Android) for a native app experience.
 
----
 
 ## 📸 Application Preview
 
@@ -36,17 +35,15 @@ Odin Tracker is a professional-grade, privacy-first pet health management dashbo
 | :---: | :---: | :---: |
 | ![Dashboard](./public/assets/screenshots/dashboard.png) | ![AI Insights](./public/assets/screenshots/ai-insights.png) | ![Trends](./public/assets/screenshots/trends.png) |
 
----
 
 ## 📚 Documentation
 
 We provide extensive documentation for both pet owners and veterinary professionals:
 
-*   **[Full User & Developer Guide (EN/TR)](GUIDE.md)**: Setup, AI configuration, and feature walkthroughs.
-*   **[Visual Assets Gallery](ASSETS.md)**: Explore the design language and branding assets.
-*   **[License Terms](LICENSE.md)**: Free for individuals/non-profits; paid for professionals.
+📖 [Full User & Developer Guide (EN/TR)](GUIDE.md): Setup, AI configuration, and feature walkthroughs.
+🖼️ [Visual Assets Gallery](ASSETS.md): Explore the design language and branding assets.
+⚖️ [License Terms](LICENSE.md): Free for individuals/non-profits; paid for professionals.
 
----
 
 ## 🚀 Quick Start
 
@@ -61,9 +58,8 @@ To run Odin Tracker, you need to connect it to your own **Firebase** project. Th
 
 ![Odin Tracker Dashboard](./public/assets/screenshots/dashboard.png)
 
-1.  **Create a Firebase Project**: Go to the [Firebase Console](https://console.firebase.google.com/) and create a new project.
+1. Create a Firebase Project: Go to the [Firebase Console](https://console.firebase.google.com/) and create a new project.
 
----
 
 ## 📱 Mobile Installation
 
@@ -77,9 +73,8 @@ Odin Tracker is a **Progressive Web App (PWA)**. To use it on your phone:
 ### Android (Chrome)
 1. Open the app URL in Chrome.
 2. Tap the **three dots** (menu) in the corner.
-3. Tap **Install App** or **Add to Home Screen**.
+3. Tap Install App or Add to Home Screen.
 
----
 
 ## 🌍 Localization & Multi-Language Support
 
@@ -99,23 +94,14 @@ Odin Tracker currently supports the following languages:
 
 ### Contributing New Languages
 If you would like to add a new language or improve an existing translation:
-1.  Navigate to `src/locales`.
-2.  Create a new folder for your language code (e.g., `it` for Italian).
-3.  Copy the `translation.json` from the `en` folder and translate the values.
-4.  Add the new language to the `i18n.ts` configuration and the `Settings.tsx` screen.
+10. Add the new language to the i18n.ts configuration and the Settings.tsx screen.
 
----
 
 ## 🙏 Acknowledgments
 
 Special thanks to the following providers for their incredible free-tier API opportunities, which power the intelligent features of Odin Tracker:
-*   **Google (Gemini)**: Powers the primary data extraction and health interpretation.
-*   **Anthropic (Claude)**: Provides deep medical insights and report analysis.
-*   **Groq**: Enables ultra-fast lab result processing and data transfers.
+We are grateful for these tools that allow us to provide professional grade pet health tracking to everyone for free.
 
-We are grateful for these tools that allow us to provide professional-grade pet health tracking to everyone for free.
-
----
 
 ## 🤝 Connect & Support
 
@@ -130,7 +116,7 @@ For community support or contributions, please reach out via LinkedIn or GitHub.
 
 ## ⚖️ License
 
-Licensed under the **PolyForm Noncommercial 1.0.0**. 
-*   **Individuals & Non-profits**: Free.
-*   **Professionals**: Commercial use is not permitted under this license.
+Licensed under the PolyForm Noncommercial 1.0.0.
+📜 Individuals & Non profits: Free.
+📜 Professionals: Commercial use is not permitted under this license.
 See [LICENSE.md](LICENSE.md) for full details.

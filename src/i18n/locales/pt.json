@@ -89,7 +89,8 @@
       "fileUploadFailed": "Falha no upload do arquivo, o registro será salvo mesmo assim.",
       "deletedWithUndo": "Registro excluído. Você pode desfazer esta ação."
     },
-    "logout": "Sair"
+    "logout": "Sair",
+    "confirmDelete": "Are you sure you want to delete this?"
   },
   "auth": {
     "login": "Entrar",
@@ -195,10 +196,19 @@
       "lab_test": "Exame de Lab",
       "weight": "Peso",
       "vaccination": "Vacinação",
-      "milestone": "Momento Marcante"
+      "milestone": "Momento Marcante",
+      "vitals": "Sinais Vitais"
     },
     "nRecords": "{{count}} registros",
-    "nMeasurements": "{{count}} medições"
+    "nMeasurements": "{{count}} medições",
+    "vitals": {
+      "heartRate": "Frequência Cardíaca",
+      "respiratoryRate": "Frequência Respiratória",
+      "temperature": "Temperatura",
+      "bpm": "BPM",
+      "rr": "Resp/min",
+      "tempUnit": "°C"
+    }
   },
   "lab": {
     "parameters": {
@@ -392,7 +402,8 @@
     "errors": {
       "userNotFound": "Usuário não encontrado",
       "alreadyShared": "Já compartilhado"
-    }
+    },
+    "confirmRevoke": "Are you sure you want to revoke access for this user?"
   },
   "settings": {
     "title": "Configurações",

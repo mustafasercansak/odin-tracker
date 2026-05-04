@@ -89,7 +89,8 @@
       "fileUploadFailed": "Datei-Upload fehlgeschlagen, Datensatz wird trotzdem gespeichert.",
       "deletedWithUndo": "Eintrag gelöscht. Sie können dies rückgängig machen."
     },
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "confirmDelete": "Are you sure you want to delete this?"
   },
   "auth": {
     "login": "Anmelden",
@@ -195,10 +196,19 @@
       "lab_test": "Labortest",
       "weight": "Gewicht",
       "vaccination": "Impfung",
-      "milestone": "Meilenstein"
+      "milestone": "Meilenstein",
+      "vitals": "Vitalwerte"
     },
     "nRecords": "{{count}} Einträge",
-    "nMeasurements": "{{count}} Messungen"
+    "nMeasurements": "{{count}} Messungen",
+    "vitals": {
+      "heartRate": "Herzfrequenz",
+      "respiratoryRate": "Atemfrequenz",
+      "temperature": "Temperatur",
+      "bpm": "S/min",
+      "rr": "Atem/min",
+      "tempUnit": "°C"
+    }
   },
   "lab": {
     "parameters": {
@@ -392,7 +402,8 @@
     "errors": {
       "userNotFound": "Benutzer nicht gefunden",
       "alreadyShared": "Bereits freigegeben"
-    }
+    },
+    "confirmRevoke": "Are you sure you want to revoke access for this user?"
   },
   "settings": {
     "title": "Einstellungen",

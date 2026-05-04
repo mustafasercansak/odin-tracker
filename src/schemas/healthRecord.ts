@@ -10,6 +10,7 @@ export const recordTypeSchema = z.enum([
   'vaccination',
   'symptom_checkin',
   'milestone',
+  'vitals',
 ])
 
 export type RecordType = z.infer<typeof recordTypeSchema>
@@ -69,6 +70,12 @@ export const healthRecordSchema = z.discriminatedUnion('recordType', [
     recordType: z.literal('milestone'),
     milestoneType: z.string().optional(),
   }),
+  baseRecordSchema.extend({
+    recordType: z.literal('vitals'),
+    heartRate: z.number().optional(),
+    respiratoryRate: z.number().optional(),
+    temperature: z.number().optional(),
+  }),
 ])
 
 export type HealthRecord = z.infer<typeof healthRecordSchema>
@@ -95,8 +102,11 @@ export const healthRecordInputSchema = z.object({
   mood: z.enum(['low', 'normal', 'high']).optional(),
   digestiveStatus: z.string().optional(),
   milestoneType: z.string().optional(),
+  heartRate: z.number().optional(),
+  respiratoryRate: z.number().optional(),
+  temperature: z.number().optional(),
 }).superRefine((data, ctx) => {
-  if (data.recordType !== 'lab_test' && data.description.trim() === '') {
+  if (data.recordType !== 'lab_test' && data.recordType !== 'vitals' && data.description.trim() === '') {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       path: ['description'],

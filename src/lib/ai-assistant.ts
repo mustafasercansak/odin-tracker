@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenAI } from '@google/genai';
 import type { Pet } from '@/schemas/pet';
 import type { LabTestRecord } from '@/schemas/healthRecord';
 import { retryWithBackoff } from './ai-utils';
@@ -84,18 +84,20 @@ export async function explainLabResults(record: LabTestRecord, pet: Pet, age: st
   
   const tryGoogle = async () => {
     if (!googleKey) throw new Error('No Google key');
-    const genAI = new GoogleGenerativeAI(googleKey);
-    const googleModels = ['gemini-1.5-flash', 'gemini-1.5-flash-8b'];
+    const ai = new GoogleGenAI({ apiKey: googleKey });
+    const googleModels = ['gemini-3-flash-preview', 'gemini-3.1-flash-lite-preview', 'gemini-2.5-flash'];
     let googleError: any;
     
     for (const modelName of googleModels) {
       try {
-        const model = genAI.getGenerativeModel({ model: modelName });
         const result = await retryWithBackoff(async () => {
-          const resp = await model.generateContent(prompt);
+          const resp = await ai.models.generateContent({
+            model: modelName,
+            contents: prompt,
+          });
           return resp;
         }, 1, 500);
-        const text = result.response.text();
+        const text = result.text || '';
         return JSON.parse(text.replace(/```json\n?|\n?```/g, '').trim());
       } catch (e: any) {
         googleError = e;

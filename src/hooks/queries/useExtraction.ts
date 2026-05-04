@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { httpsCallable } from 'firebase/functions';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenAI } from '@google/genai';
 import { functions } from '@/lib/firebase';
 import { type ExtractionResult } from '@/schemas/extraction';
 import { retryWithBackoff } from '@/lib/ai-utils';
@@ -119,10 +119,10 @@ export async function extractWithGemini(files: File[]): Promise<ExtractionResult
     throw new Error('VITE_GOOGLE_AI_API_KEY is not set');
   }
 
-  const genAI = new GoogleGenerativeAI(googleKey);
+  const ai = new GoogleGenAI({ apiKey: googleKey });
   
   // List of models to try in order of preference
-  const modelsToTry = ['gemini-1.5-flash', 'gemini-1.5-flash-8b', 'gemini-2.0-flash-exp'];
+  const modelsToTry = ['gemini-3-flash-preview', 'gemini-3.1-flash-lite-preview', 'gemini-2.5-flash'];
 
   const fileParts = await Promise.all(
     files.map(async (file) => {
@@ -135,14 +135,23 @@ export async function extractWithGemini(files: File[]): Promise<ExtractionResult
 
   for (const modelName of modelsToTry) {
     try {
-      const model = genAI.getGenerativeModel({ model: modelName });
-      
       const result = await retryWithBackoff(async () => {
-        const resp = await model.generateContent([EXTRACTION_PROMPT, ...fileParts]);
+        const resp = await ai.models.generateContent({
+          model: modelName,
+          contents: [
+            {
+              role: 'user',
+              parts: [
+                { text: EXTRACTION_PROMPT },
+                ...fileParts
+              ]
+            }
+          ]
+        });
         return resp;
       }, 2, 1000);
 
-      const text = result.response.text();
+      const text = result.text || '';
       const raw = text.replace(/```json\n?|\n?```/g, '').trim();
       const parsed = JSON.parse(raw);
 

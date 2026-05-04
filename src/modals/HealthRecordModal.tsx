@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
-import { Save, Upload, Sparkles, FileText, X, CheckCircle2, FlaskConical, Syringe, Stethoscope, Pill, Scale, PartyPopper, HeartPulse } from 'lucide-react';
+import { Save, Upload, Sparkles, FileText, X, CheckCircle2, FlaskConical, Syringe, Stethoscope, Pill, Scale, PartyPopper, HeartPulse, Activity } from 'lucide-react';
 import { Modal } from '@/components/Modal';
 import { useAppStore } from '@/store/useAppStore';
 import { useHealthRecords } from '@/hooks/queries/useHealthRecords';
@@ -91,6 +91,9 @@ export const HealthRecordModal: React.FC = () => {
         appetite: (recordToEdit as any).appetite,
         energy: (recordToEdit as any).energy,
         mood: (recordToEdit as any).mood,
+        heartRate: (recordToEdit as any).heartRate,
+        respiratoryRate: (recordToEdit as any).respiratoryRate,
+        temperature: (recordToEdit as any).temperature,
       });
       setFileUrl(recordToEdit.fileUrl || null);
     } else if (modalData) {
@@ -281,6 +284,11 @@ export const HealthRecordModal: React.FC = () => {
       }
       if (data.recordType === 'vaccination' && data.nextDoseDate) payload.nextDoseDate = data.nextDoseDate;
       if (data.recordType === 'medication' && data.medicationId) payload.medicationId = data.medicationId;
+      if (data.recordType === 'vitals') {
+        if (typeof data.heartRate === 'number') payload.heartRate = data.heartRate;
+        if (typeof data.respiratoryRate === 'number') payload.respiratoryRate = data.respiratoryRate;
+        if (typeof data.temperature === 'number') payload.temperature = data.temperature;
+      }
 
       console.log('Sending payload to Firebase:', payload);
 
@@ -345,16 +353,18 @@ export const HealthRecordModal: React.FC = () => {
           <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1.5">
             {t('healthRecords.recordType')}
           </label>
-          <div className="grid grid-cols-3 gap-1.5">
-            {(['lab_test', 'vet_visit', 'medication', 'weight', 'vaccination', 'symptom_checkin', 'milestone'] as const).map((type) => {
+          <div className="grid grid-cols-4 gap-1.5">
+            {(['lab_test', 'vet_visit', 'medication', 'weight', 'vaccination', 'vitals', 'symptom_checkin', 'milestone'] as const).map((type) => {
               const Icon = 
                 type === 'lab_test' ? FlaskConical :
                 type === 'vet_visit' ? Stethoscope :
                 type === 'medication' ? Pill :
                 type === 'weight' ? Scale :
                 type === 'vaccination' ? Syringe :
+                type === 'vitals' ? HeartPulse :
+                type === 'symptom_checkin' ? Activity :
                 type === 'milestone' ? PartyPopper :
-                HeartPulse;
+                Activity;
 
               return (
                 <button
@@ -518,7 +528,7 @@ export const HealthRecordModal: React.FC = () => {
                                     <path d="M12 24a12 12 0 1 1 12-12 12.013 12.013 0 0 1-12 12zm0-22a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2z"/>
                                     <path d="M12.5 7.5 11 11l-3.5 1.5L11 14l1.5 3.5 1.5-3.5 3.5-1.5L14 11z"/>
                                   </svg>
-                                  <span className="text-[10px]">Gemini 2.5</span>
+                                  <span className="text-[10px]">Gemini 3 Flash</span>
                                 </>
                               ) : p === 'groq' ? (
                                 <>
@@ -754,6 +764,62 @@ export const HealthRecordModal: React.FC = () => {
                     />
                   )}
                 />
+              </div>
+            )}
+
+            {recordType === 'vitals' && (
+              <div className="space-y-4 animate-in slide-in-from-top-2 duration-200">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1.5">
+                      {t('healthRecords.vitals.heartRate')}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="number"
+                        {...register('heartRate', { valueAsNumber: true })}
+                        className="w-full pl-3 pr-12 py-2.5 rounded-xl bg-input border border-border focus:ring-2 focus:ring-primary outline-none text-sm"
+                        placeholder="0"
+                      />
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-muted-foreground">
+                        {t('healthRecords.vitals.bpm')}
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1.5">
+                      {t('healthRecords.vitals.respiratoryRate')}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="number"
+                        {...register('respiratoryRate', { valueAsNumber: true })}
+                        className="w-full pl-3 pr-12 py-2.5 rounded-xl bg-input border border-border focus:ring-2 focus:ring-primary outline-none text-sm"
+                        placeholder="0"
+                      />
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-muted-foreground">
+                        {t('healthRecords.vitals.rr')}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1.5">
+                    {t('healthRecords.vitals.temperature')}
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      step="0.1"
+                      {...register('temperature', { valueAsNumber: true })}
+                      className="w-full pl-3 pr-12 py-2.5 rounded-xl bg-input border border-border focus:ring-2 focus:ring-primary outline-none text-sm"
+                      placeholder="0.0"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-muted-foreground">
+                      {t('healthRecords.vitals.tempUnit')}
+                    </span>
+                  </div>
+                </div>
               </div>
             )}
 

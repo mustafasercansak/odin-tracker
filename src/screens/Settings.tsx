@@ -163,9 +163,9 @@ export default function Settings() {
                   const permission = await Notification.requestPermission();
                   if (permission === 'granted') {
                     setNotificationsEnabled(true);
-                    toast.success(t('notificationsEnabled'));
+                    toast.success(t('medications.notificationsEnabled'));
                   } else {
-                    toast.error(t('notificationsDenied'));
+                    toast.error(t('medications.notificationsDenied'));
                   }
                 } else {
                   setNotificationsEnabled(false);

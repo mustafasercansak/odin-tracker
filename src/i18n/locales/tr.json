@@ -59,6 +59,7 @@
     "error": "Hata",
     "success": "Başarılı",
     "confirm": "Onayla",
+    "confirmDelete": "Bunu silmek istediğinizden emin misiniz?",
     "search": "Ara",
     "filter": "Filtrele",
     "all": "Hepsi",
@@ -195,10 +196,19 @@
       "lab_test": "Laboratuvar Sonucu",
       "weight": "Kilo",
       "vaccination": "Aşı",
-      "milestone": "Kilometre Taşı"
+      "milestone": "Kilometre Taşı",
+      "vitals": "Yaşamsal Bulgular"
     },
     "nRecords": "{{count}} kayıt",
-    "nMeasurements": "{{count}} değer"
+    "nMeasurements": "{{count}} değer",
+    "vitals": {
+      "heartRate": "Nabız",
+      "respiratoryRate": "Solunum Sayısı",
+      "temperature": "Ateş",
+      "bpm": "Atım/dk",
+      "rr": "Nefes/dk",
+      "tempUnit": "°C"
+    }
   },
   "lab": {
     "parameters": {
@@ -392,7 +402,8 @@
     "errors": {
       "userNotFound": "Kullanıcı bulunamadı",
       "alreadyShared": "Zaten paylaşıldı"
-    }
+    },
+    "confirmRevoke": "Bu kullanıcının erişimini kaldırmak istediğinizden emin misiniz?"
   },
   "settings": {
     "title": "Ayarlar",

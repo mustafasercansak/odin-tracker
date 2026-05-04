@@ -89,7 +89,8 @@
       "fileUploadFailed": "文件上传失败，但记录仍将保存。",
       "deletedWithUndo": "记录已删除。您可以撤销此操作。"
     },
-    "logout": "退出登录"
+    "logout": "退出登录",
+    "confirmDelete": "Are you sure you want to delete this?"
   },
   "auth": {
     "login": "登录",
@@ -195,10 +196,19 @@
       "lab_test": "实验室化验",
       "weight": "体重",
       "vaccination": "疫苗接种",
-      "milestone": "里程碑"
+      "milestone": "里程碑",
+      "vitals": "生命体征"
     },
     "nRecords": "{{count}} 条记录",
-    "nMeasurements": "{{count}} 个项目"
+    "nMeasurements": "{{count}} 个项目",
+    "vitals": {
+      "heartRate": "心率",
+      "respiratoryRate": "呼吸频率",
+      "temperature": "体温",
+      "bpm": "次/分",
+      "rr": "次/分",
+      "tempUnit": "°C"
+    }
   },
   "lab": {
     "parameters": {
@@ -392,7 +402,8 @@
     "errors": {
       "userNotFound": "未找到用户",
       "alreadyShared": "已共享"
-    }
+    },
+    "confirmRevoke": "Are you sure you want to revoke access for this user?"
   },
   "settings": {
     "title": "设置",

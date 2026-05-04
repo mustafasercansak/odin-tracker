@@ -3,27 +3,33 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import { 
-  ChevronLeft, 
-  Edit2, 
+  Calendar, 
+  Weight, 
+  Shield, 
   Plus, 
+  FileText, 
   Activity, 
-  Pill, 
-  TrendingUp, 
+  Search, 
+  Brain, 
+  Building2, 
+  Edit3, 
+  Share2, 
+  Mail, 
+  Trash2, 
+  FlaskConical,
+  Stethoscope,
+  Pill,
+  Scale,
+  Syringe,
+  PartyPopper,
+  HeartPulse,
+  ChevronLeft,
+  Edit2,
+  TrendingUp,
   Users,
-  Calendar,
-  Weight,
-  FileText,
   FileDown,
-  Search,
-  Trash2,
-  Shield,
-  Mail,
-  Share2,
-  Edit3,
-  Building2,
   ShieldAlert,
   Clock,
-  Brain,
   Utensils
 } from 'lucide-react';
 import { usePets } from '@/hooks/queries/usePets';
@@ -145,7 +151,7 @@ export default function PetDetail() {
     }
 
     return filtered;
-  }, [records, searchQuery, recordsSelectedLabs]);
+  }, [records, searchQuery, recordsSelectedLabs, pendingDeletions]);
 
   const toggleLabFilter = (lab: string) => {
     if (recordsSelectedLabs.includes(lab)) {
@@ -453,8 +459,17 @@ export default function PetDetail() {
                       <div className="flex items-start justify-between">
                         <div className="flex items-start gap-4">
                           <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-primary">
-                            {/* Record type icon logic here */}
-                            <Activity size={20} />
+                            {(() => {
+                              const type = record.recordType;
+                              if (type === 'lab_test') return <FlaskConical size={20} />;
+                              if (type === 'medication') return <Pill size={20} />;
+                              if (type === 'weight') return <Scale size={20} />;
+                              if (type === 'vaccination') return <Syringe size={20} />;
+                              if (type === 'vet_visit') return <Stethoscope size={20} />;
+                              if (type === 'vitals') return <HeartPulse size={20} />;
+                              if (type === 'milestone') return <PartyPopper size={20} />;
+                              return <Activity size={20} />;
+                            })()}
                           </div>
                           <div>
                             <h4 className="font-bold group-hover:text-primary transition-colors flex items-center gap-2">
@@ -497,6 +512,31 @@ export default function PetDetail() {
                                 <span className="text-[10px] text-muted-foreground font-bold">...</span>
                               )}
                             </div>
+                          </div>
+                        )}
+                        {record.recordType === 'vitals' && (
+                          <div className="flex flex-wrap justify-end gap-2 mt-1">
+                            {(record as any).heartRate && (
+                              <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-red-500/10 border border-red-500/20 text-[10px]">
+                                <span className="font-bold text-red-500/80">{t('healthRecords.vitals.heartRate')}:</span>
+                                <span className="font-black text-foreground">{(record as any).heartRate}</span>
+                                <span className="text-[8px] opacity-70">{t('healthRecords.vitals.bpm')}</span>
+                              </div>
+                            )}
+                            {(record as any).respiratoryRate && (
+                              <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-[10px]">
+                                <span className="font-bold text-blue-500/80">{t('healthRecords.vitals.respiratoryRate')}:</span>
+                                <span className="font-black text-foreground">{(record as any).respiratoryRate}</span>
+                                <span className="text-[8px] opacity-70">{t('healthRecords.vitals.rr')}</span>
+                              </div>
+                            )}
+                            {(record as any).temperature && (
+                              <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-[10px]">
+                                <span className="font-bold text-amber-500/80">{t('healthRecords.vitals.temperature')}:</span>
+                                <span className="font-black text-foreground">{(record as any).temperature}</span>
+                                <span className="text-[8px] opacity-70">{t('healthRecords.vitals.tempUnit')}</span>
+                              </div>
+                            )}
                           </div>
                         )}
                       </div>
@@ -629,7 +669,7 @@ export default function PetDetail() {
                     {user?.uid === pet.ownerId && (
                       <button 
                         onClick={() => {
-                          if (window.confirm(t('common.confirmDelete'))) {
+                          if (window.confirm(t('shares.confirmRevoke'))) {
                             revokeAccess.mutate(share.id);
                           }
                         }}

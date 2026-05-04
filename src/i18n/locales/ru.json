@@ -89,7 +89,8 @@
       "fileUploadFailed": "Ошибка загрузки файла, запись будет сохранена без него.",
       "deletedWithUndo": "Запись удалена. Вы можете отменить это действие."
     },
-    "logout": "Выйти"
+    "logout": "Выйти",
+    "confirmDelete": "Are you sure you want to delete this?"
   },
   "auth": {
     "login": "Войти",
@@ -195,10 +196,19 @@
       "lab_test": "Анализ крови",
       "weight": "Вес",
       "vaccination": "Вакцинация",
-      "milestone": "Важное событие"
+      "milestone": "Важное событие",
+      "vitals": "Жизненные показатели"
     },
     "nRecords": "Записей: {{count}}",
-    "nMeasurements": "Показателей: {{count}}"
+    "nMeasurements": "Показателей: {{count}}",
+    "vitals": {
+      "heartRate": "Пульс",
+      "respiratoryRate": "Частота дыхания",
+      "temperature": "Температура",
+      "bpm": "уд/мин",
+      "rr": "дых/мин",
+      "tempUnit": "°C"
+    }
   },
   "lab": {
     "parameters": {
@@ -392,7 +402,8 @@
     "errors": {
       "userNotFound": "Пользователь не найден",
       "alreadyShared": "Уже открыто"
-    }
+    },
+    "confirmRevoke": "Are you sure you want to revoke access for this user?"
   },
   "settings": {
     "title": "Настройки",
