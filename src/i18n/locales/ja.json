@@ -472,7 +472,7 @@
   "tabs": {
     "healthRecords": "健康記録",
     "medications": "お薬",
-    "trends": "グラフ",
+    "trends": "分析",
     "sharedAccess": "共有",
     "history": "履歴",
     "nutrition": "食事"
@@ -509,5 +509,24 @@
       "title": "{{petName}} の予防接種",
       "body": "今日は {{vaccineName}} の予定日です"
     }
+  },
+  "assistant": {
+    "title": "AI健康アシスタント",
+    "subtitle": "ペットの健康データについて質問する。",
+    "placeholder": "質問を入力... (例: 最新の検査結果を要約して)",
+    "disclaimer": "これはAIアシスタントです。専門的な獣医の診断に代わるものではありません。医療的な決定については常に獣医に相談してください。",
+    "suggestedQuestions": {
+      "summary": "最新の検査結果を要約して",
+      "trends": "腎機能の傾向はどうなっていますか？",
+      "meds": "薬の相互作用について教えて",
+      "vet": "獣医に何を聞くべきですか？"
+    },
+    "noData": "分析する医療データが見つかりませんでした。",
+    "thinking": "Odinが考えています...",
+    "errors": {
+      "noApiKey": "設定でGoogle AI APIキーを追加してください。",
+      "failed": "応答の取得に失敗しました。"
+    },
+    "navTitle": "Odin AI"
   }
 }

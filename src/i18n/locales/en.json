@@ -352,7 +352,7 @@
     "adherence": "Adherence"
   },
   "trends": {
-    "title": "Trend Charts",
+    "title": "Analytics Charts",
     "timeRange": "Time Range",
     "parameters": "Parameters",
     "timeRanges": {
@@ -375,7 +375,7 @@
     "showAnomalous": "Only Alerts",
     "noParametersMatch": "No parameters match your search.",
     "selectParameterTitle": "No Chart Selected",
-    "selectParameterDescription": "Select a parameter from the list above to view its trends and changes.",
+    "selectParameterDescription": "Select a parameter from the list above to view its measurements and changes.",
     "lastN": "Last {{n}} measurements",
     "labs": "Laboratories"
   },
@@ -472,7 +472,7 @@
   "tabs": {
     "healthRecords": "Health",
     "medications": "Meds",
-    "trends": "Trends",
+    "trends": "Analytics",
     "sharedAccess": "Access",
     "history": "History",
     "nutrition": "Nutrition"
@@ -497,7 +497,7 @@
     "petInfo": "Pet Information",
     "field": "Field",
     "value": "Value",
-    "labTrends": "Lab Trends",
+    "labTrends": "Laboratory Analytics",
     "medicalHistory": "Medical History Summary"
   },
   "notifications": {
@@ -508,6 +508,25 @@
     "vaccineReminder": {
       "title": "Vaccination for {{petName}}",
       "body": "Today is the booster date for {{vaccineName}}"
+    }
+  },
+  "assistant": {
+    "title": "AI Health Assistant",
+    "navTitle": "Odin AI",
+    "subtitle": "Ask questions about your pet's health data.",
+    "placeholder": "Ask a question... (e.g., Summarize the last lab results)",
+    "disclaimer": "This is an AI assistant. It is NOT a substitute for professional veterinary advice. Always consult your vet for medical decisions.",
+    "suggestedQuestions": {
+      "summary": "Summarize my pet's latest lab tests",
+      "trends": "How are the kidney trends looking?",
+      "meds": "Tell me about medication interactions",
+      "vet": "What should I ask the vet?"
+    },
+    "noData": "No medical data found to analyze.",
+    "thinking": "Odin is thinking...",
+    "errors": {
+      "noApiKey": "Please add a Google AI API key in settings.",
+      "failed": "Failed to get a response."
     }
   }
 }

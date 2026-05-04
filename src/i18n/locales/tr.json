@@ -352,7 +352,7 @@
     "adherence": "Uyum Oranı"
   },
   "trends": {
-    "title": "Trend Grafikleri",
+    "title": "Analiz Grafikleri",
     "timeRange": "Zaman Aralığı",
     "parameters": "Parametreler",
     "timeRanges": {
@@ -375,7 +375,7 @@
     "showAnomalous": "Sadece Alertler",
     "noParametersMatch": "Aramanızla eşleşen parametre bulunamadı.",
     "selectParameterTitle": "Grafik Seçilmedi",
-    "selectParameterDescription": "Trendleri ve değişimleri incelemek için yukarıdaki listeden parametre seçin.",
+    "selectParameterDescription": "Değerleri ve değişimleri incelemek için yukarıdaki listeden parametre seçin.",
     "lastN": "Son {{n}} ölçüm",
     "labs": "Lablar"
   },
@@ -472,7 +472,7 @@
   "tabs": {
     "healthRecords": "Sağlık",
     "medications": "İlaçlar",
-    "trends": "Trendler",
+    "trends": "Analizler",
     "sharedAccess": "Erişim",
     "history": "Geçmiş",
     "nutrition": "Beslenme"
@@ -497,7 +497,7 @@
     "petInfo": "Hayvan Bilgileri",
     "field": "Alan",
     "value": "Değer",
-    "labTrends": "Laboratuvar Trendleri",
+    "labTrends": "Laboratuvar Analizleri",
     "medicalHistory": "Tıbbi Geçmiş Özeti"
   },
   "notifications": {
@@ -508,6 +508,25 @@
     "vaccineReminder": {
       "title": "{{petName}} için Aşı Vakti",
       "body": "Bugün {{vaccineName}} hatırlatma dozu günü"
+    }
+  },
+  "assistant": {
+    "title": "Yapay Zeka Sağlık Danışmanı",
+    "navTitle": "Odin AI",
+    "subtitle": "Evcil hayvanınızın sağlık verileri hakkında sorular sorun.",
+    "placeholder": "Bir soru sorun... (Örn: Son tahlilleri özetle)",
+    "disclaimer": "Bu bir yapay zeka asistanıdır. Tıbbi tavsiye yerine geçmez. Önemli kararlar için daima veterinerinize danışın.",
+    "suggestedQuestions": {
+      "summary": "Son tahlillerimi özetle",
+      "trends": "Böbrek değerlerim nasıl ilerliyor?",
+      "meds": "İlaç etkileşimleri hakkında bilgi ver",
+      "vet": "Veterinere ne sormalıyım?"
+    },
+    "noData": "Analiz edilecek tıbbi veri bulunamadı.",
+    "thinking": "Odin düşünüyor...",
+    "errors": {
+      "noApiKey": "Lütfen ayarlardan bir Google AI API anahtarı ekleyin.",
+      "failed": "Yanıt alınamadı."
     }
   }
 }

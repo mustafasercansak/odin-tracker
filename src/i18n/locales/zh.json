@@ -472,7 +472,7 @@
   "tabs": {
     "healthRecords": "健康记录",
     "medications": "药物管理",
-    "trends": "趋势图表",
+    "trends": "分析",
     "sharedAccess": "共享访问",
     "history": "历史记录",
     "nutrition": "营养管理"
@@ -509,5 +509,24 @@
       "title": "{{petName}} 的疫苗提醒",
       "body": "今天是 {{vaccineName}} 的加强免疫日期"
     }
+  },
+  "assistant": {
+    "title": "AI 健康助手",
+    "subtitle": "询问有关宠物健康数据的问题。",
+    "placeholder": "输入问题... (例如：总结最近的化验结果)",
+    "disclaimer": "这是一个 AI 助手。它不能替代专业的兽医建议。在做出医疗决定之前，请务必咨询您的兽医。",
+    "suggestedQuestions": {
+      "summary": "总结我宠物最近的化验结果",
+      "trends": "肾功能趋势看起来如何？",
+      "meds": "告诉我有关药物相互作用的信息",
+      "vet": "我应该问兽医什么问题？"
+    },
+    "noData": "未找到可供分析的医疗数据。",
+    "thinking": "Odin 正在思考...",
+    "errors": {
+      "noApiKey": "请在设置中添加 Google AI API 密钥。",
+      "failed": "获取回复失败。"
+    },
+    "navTitle": "Odin AI"
   }
 }

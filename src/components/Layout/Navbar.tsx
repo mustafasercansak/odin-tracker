@@ -6,7 +6,8 @@ import {
   TrendingUp, 
   Settings,
   Globe,
-  Users
+  Users,
+  Brain
 } from 'lucide-react';
 
 import { useAppStore } from '@/store/useAppStore';
@@ -17,6 +18,7 @@ export const Navbar: React.FC = () => {
 
   const navItems = [
     { to: '/', icon: Home, label: t('tabs.healthRecords') },
+    { to: '/assistant', icon: Brain, label: t('assistant.navTitle') },
     { 
       to: selectedPetId ? `/pet/${selectedPetId}` : '/trends', 
       icon: TrendingUp, 
@@ -26,7 +28,7 @@ export const Navbar: React.FC = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border/50 px-4 pb-safe pt-2 md:relative md:border-t-0 md:border-r md:w-64 md:h-screen md:flex-col md:pt-12 md:px-8">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-t border-border/50 px-2 pb-safe pt-2 md:relative md:border-t-0 md:border-r md:w-64 md:h-screen md:flex-col md:pt-12 md:px-8 md:bg-background">
       <div className="hidden md:block mb-12 px-2">
         <h1 className="text-2xl font-bold text-foreground tracking-tight flex items-center gap-2 serif">
           <div className="w-6 h-6 rounded-sm bg-primary flex items-center justify-center text-primary-foreground italic">O</div>
@@ -40,18 +42,20 @@ export const Navbar: React.FC = () => {
             key={to}
             to={to}
             className={({ isActive }) => `
-              flex flex-col items-center gap-1.5 px-4 py-2 rounded-lg transition-all duration-300
-              md:flex-row md:gap-4 md:px-4 md:py-2.5
+              flex flex-col items-center gap-1 px-2 py-2 rounded-xl transition-all duration-300 min-w-[70px]
+              md:flex-row md:gap-4 md:px-4 md:py-2.5 md:min-w-0
               ${isActive 
-                ? 'text-foreground bg-primary/10 serif italic' 
+                ? 'text-foreground bg-primary/10 serif italic shadow-sm' 
                 : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
               }
             `}
           >
             {({ isActive }) => (
               <>
-                <Icon size={16} strokeWidth={isActive ? 2.5 : 1.5} className={isActive ? 'text-primary' : ''} />
-                <span className="text-[10px] font-bold md:text-[13px] md:font-medium tracking-wide uppercase md:normal-case">{label}</span>
+                <Icon size={18} strokeWidth={isActive ? 2.5 : 1.5} className={isActive ? 'text-primary' : ''} />
+                <span className="text-[8px] font-black md:text-[13px] md:font-medium tracking-tighter md:tracking-wide uppercase md:normal-case text-center md:text-left truncate w-full md:w-auto">
+                  {label}
+                </span>
               </>
             )}
           </NavLink>

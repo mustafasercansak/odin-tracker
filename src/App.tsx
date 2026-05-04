@@ -10,6 +10,7 @@ import PetDetail from './screens/PetDetail';
 import Settings from './screens/Settings';
 import Medications from './screens/Medications';
 import Trends from './screens/Trends';
+import HealthAssistant from './screens/HealthAssistant';
 import { PetModal } from './modals/PetModal';
 import { HealthRecordModal } from './modals/HealthRecordModal';
 import { MedicationModal } from './modals/MedicationModal';
@@ -115,6 +116,7 @@ function App() {
             <Route path="pet/:id" element={<PetDetail />} />
             <Route path="medications" element={<Medications />} />
             <Route path="trends" element={<Trends />} />
+            <Route path="assistant" element={<HealthAssistant />} />
             <Route path="settings" element={<Settings />} />
           </Route>
 

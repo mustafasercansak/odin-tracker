@@ -472,7 +472,7 @@
   "tabs": {
     "healthRecords": "Gesundheit",
     "medications": "Medikamente",
-    "trends": "Trends",
+    "trends": "Analysen",
     "sharedAccess": "Zugriff",
     "history": "Verlauf",
     "nutrition": "Ernährung"
@@ -509,5 +509,24 @@
       "title": "Impfung für {{petName}}",
       "body": "Heute ist der Auffrischungstermin für {{vaccineName}}"
     }
+  },
+  "assistant": {
+    "title": "KI-Gesundheitsassistent",
+    "subtitle": "Fragen zu den Gesundheitsdaten Ihres Haustieres.",
+    "placeholder": "Stellen Sie eine Frage... (z. B. Fasse die letzten Laborergebnisse zusammen)",
+    "disclaimer": "Dies ist ein KI-Assistent. Er ist KEIN Ersatz für eine professionelle tierärztliche Beratung. Konsultieren Sie bei medizinischen Entscheidungen immer Ihren Tierarzt.",
+    "suggestedQuestions": {
+      "summary": "Fasse die letzten Laborergebnisse zusammen",
+      "trends": "Wie sehen die Nierentrends aus?",
+      "meds": "Informiere mich über Wechselwirkungen von Medikamenten",
+      "vet": "Was soll ich den Tierarzt fragen?"
+    },
+    "noData": "Keine medizinischen Daten zur Analyse gefunden.",
+    "thinking": "Odin denkt nach...",
+    "errors": {
+      "noApiKey": "Bitte fügen Sie einen Google AI API-Key in den Einstellungen hinzu.",
+      "failed": "Antwort konnte nicht geladen werden."
+    },
+    "navTitle": "Odin AI"
   }
 }

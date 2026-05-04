@@ -472,7 +472,7 @@
   "tabs": {
     "healthRecords": "Gezondheid",
     "medications": "Medicatie",
-    "trends": "Trends",
+    "trends": "Analyses",
     "sharedAccess": "Toegang",
     "history": "Historie",
     "nutrition": "Voeding"
@@ -509,5 +509,24 @@
       "title": "Vaccinatie voor {{petName}}",
       "body": "Vandaag is de boosterdatum voor {{vaccineName}}"
     }
+  },
+  "assistant": {
+    "title": "AI Gezondheidsassistent",
+    "subtitle": "Stel vragen over de gezondheidsgegevens van je huisdier.",
+    "placeholder": "Stel een vraag... (bijv. Vat de laatste labresultaten samen)",
+    "disclaimer": "Dit is een AI-assistent. Het is GEEN vervanging voor professioneel veterinair advies. Raadpleeg altijd je dierenarts voor medische beslissingen.",
+    "suggestedQuestions": {
+      "summary": "Vat de laatste labresultaten van mijn huisdier samen",
+      "trends": "Hoe zien de niertrends eruit?",
+      "meds": "Vertel me over medicatie-interacties",
+      "vet": "Wat moet I de dierenarts vragen?"
+    },
+    "noData": "Geen medische gegevens gevonden om te analyseren.",
+    "thinking": "Odin denkt na...",
+    "errors": {
+      "noApiKey": "Voeg een Google AI API-sleutel toe in de instellingen.",
+      "failed": "Ophalen van een reactie mislukt."
+    },
+    "navTitle": "Odin AI"
   }
 }

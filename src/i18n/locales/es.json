@@ -472,7 +472,7 @@
   "tabs": {
     "healthRecords": "Salud",
     "medications": "Medicinas",
-    "trends": "Gráficos",
+    "trends": "Análisis",
     "sharedAccess": "Acceso",
     "history": "Historial",
     "nutrition": "Nutrición"
@@ -509,5 +509,24 @@
       "title": "Vacuna para {{petName}}",
       "body": "Hoy es la fecha de refuerzo para {{vaccineName}}"
     }
+  },
+  "assistant": {
+    "title": "Asistente de Salud IA",
+    "subtitle": "Haz preguntas sobre los datos de salud de tu mascota.",
+    "placeholder": "Haz una pregunta... (p. ej., Resume los últimos resultados de laboratorio)",
+    "disclaimer": "Este es un asistente de IA. NO es un sustituto del consejo veterinario profesional. Consulta siempre a tu veterinario para decisiones médicas.",
+    "suggestedQuestions": {
+      "summary": "Resume los últimos resultados de laboratorio de mi mascota",
+      "trends": "¿Cómo van las tendencias renales?",
+      "meds": "Dime sobre las interacciones de los medicamentos",
+      "vet": "¿Qué debería preguntarle al veterinario?"
+    },
+    "noData": "No se encontraron datos médicos para analizar.",
+    "thinking": "Odin está pensando...",
+    "errors": {
+      "noApiKey": "Por favor, añade una clave de API de Google AI en los ajustes.",
+      "failed": "Error al obtener una respuesta."
+    },
+    "navTitle": "Odin AI"
   }
 }
