@@ -1,10 +1,8 @@
 import { useState } from 'react';
-import { GoogleGenAI } from '@google/genai';
 import { useAppStore } from '@/store/useAppStore';
 import { usePets } from './usePets';
 import { useLabRecords } from './useHealthRecords';
 import { useMedications } from './useMedications';
-import { retryWithBackoff } from '@/lib/ai-utils';
 
 export interface Message {
   role: 'user' | 'model';
@@ -28,10 +26,6 @@ export function useHealthAssistant(petId: string) {
       const pet = pets.find(p => p.id === petId);
       if (!pet) throw new Error('PET_NOT_FOUND');
 
-      const ai = new GoogleGenAI({ apiKey: googleKey });
-      const model = 'gemini-3-flash-preview';
-
-      // Limit data to avoid context overflow and keep it relevant
       const labContext = labRecords.slice(0, 5).map(r => ({
         date: r.recordDate,
         lab: r.labName,
@@ -45,58 +39,74 @@ export function useHealthAssistant(petId: string) {
       }));
 
       const systemPrompt = `
-You are Odin, a specialized veterinary health assistant. 
-Your goal is to help pet owners understand their pet's health data based on the records provided.
-
-Pet Profile:
-Name: ${pet.name}
-Species: ${pet.species}
-Breed: ${pet.breed || 'Unknown'}
-Weight: ${pet.weightKg}kg
-
-Medical Context (Last 5 records):
-Active Medications: ${JSON.stringify(medContext)}
-Recent Lab Results: ${JSON.stringify(labContext)}
-
-Instructions:
-1. Be empathetic, professional, and supportive.
-2. Use the medical context provided to answer questions specifically for this pet.
-3. If asked about trends, look at the provided lab results.
-4. ALWAYS add a short disclaimer that you are an AI and not a vet.
-5. Keep responses concise but thorough.
-6. Respond in the same language as the user.
+You are Odin, a 2026 veterinary AI assistant. 
+Pet: ${pet.name} (${pet.species}, ${pet.breed}, ${pet.weightKg}kg)
+Meds: ${JSON.stringify(medContext)}
+Labs: ${JSON.stringify(labContext)}
+Instructions: Be empathetic, professional and concise. Add a short medical disclaimer.
       `.trim();
 
-      // Convert history to SDK format
-      const contents = history.map(h => ({
-        role: h.role,
-        parts: [{ text: h.content }]
-      }));
+      // STEP 1: DYNAMICALLY FIND AVAILABLE MODELS
+      const listUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${googleKey}`;
+      const listResponse = await fetch(listUrl);
+      const listData = await listResponse.json();
+      
+      const availableModels = listData.models?.map((m: any) => m.name) || [];
+      console.log('Available Google Models:', availableModels);
 
-      // Add current message
-      contents.push({
-        role: 'user',
-        parts: [{ text: message }]
+      // STEP 2: PICK THE BEST ONE (Preference: 3.1-flash > 2.0-flash > 1.5-flash > pro)
+      const priority = ['3.1-flash', '2.0-flash', '1.5-flash', 'pro'];
+      let selectedModel = '';
+      
+      for (const p of priority) {
+        const found = availableModels.find((m: string) => m.toLowerCase().includes(p));
+        if (found) {
+          selectedModel = found;
+          break;
+        }
+      }
+
+      if (!selectedModel) {
+        selectedModel = availableModels[0] || 'models/gemini-1.5-flash';
+      }
+
+      console.log('Odin selected model:', selectedModel);
+
+      // STEP 3: EXECUTE WITH DYNAMIC MODEL
+      const url = `https://generativelanguage.googleapis.com/v1beta/${selectedModel}:generateContent?key=${googleKey}`;
+      
+      const contents = [
+        ...history.map(msg => ({
+          role: msg.role === 'user' ? 'user' : 'model',
+          parts: [{ text: msg.content }]
+        })),
+        {
+          role: 'user',
+          parts: [{ text: `[SYSTEM: ${systemPrompt}]\n\nQuestion: ${message}` }]
+        }
+      ];
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents })
       });
 
-      const result = await retryWithBackoff(async () => {
-        return await ai.models.generateContent({
-          model,
-          config: {
-            systemInstruction: systemPrompt,
-          },
-          contents
-        });
-      }, 1, 1000);
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error?.message || 'Gemini Error');
+      }
 
-      return result.text || '';
+      const data = await response.json();
+      return data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response';
+
+    } catch (error: any) {
+      console.error('Odin AI Error:', error);
+      throw error;
     } finally {
       setIsLoading(false);
     }
   };
 
-  return {
-    askAssistant,
-    isLoading
-  };
+  return { askAssistant, isLoading };
 }
