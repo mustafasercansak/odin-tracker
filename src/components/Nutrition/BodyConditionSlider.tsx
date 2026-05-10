@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Activity, Save } from 'lucide-react';
+import { Activity, Save, Info } from 'lucide-react';
 import type { Pet } from '@/schemas/pet';
 import { usePets } from '@/hooks/queries/usePets';
 import toast from 'react-hot-toast';
@@ -23,7 +23,16 @@ export const BodyConditionSlider: React.FC<{ pet: Pet }> = ({ pet }) => {
     return { label: 'Obez (Obese)', color: 'text-destructive', bg: 'bg-destructive', border: 'border-destructive/30', fill: 'bg-destructive/20' };
   };
 
+  const getScoreDescription = (val: number) => {
+    if (val <= 2) return t('nutrition.bcs.desc_1_2');
+    if (val === 3) return t('nutrition.bcs.desc_3');
+    if (val <= 5) return t('nutrition.bcs.desc_4_5');
+    if (val <= 7) return t('nutrition.bcs.desc_6_7');
+    return t('nutrition.bcs.desc_8_9');
+  };
+
   const details = getScoreDetails(score);
+  const description = getScoreDescription(score);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -86,6 +95,14 @@ export const BodyConditionSlider: React.FC<{ pet: Pet }> = ({ pet }) => {
             <span>İdeal (5)</span>
             <span>Obez (9)</span>
           </div>
+        </div>
+
+        {/* Guidance Text */}
+        <div className="bg-white/40 dark:bg-black/20 rounded-2xl p-4 flex gap-3 border border-white/20">
+          <Info size={18} className={`${details.color} shrink-0 mt-0.5`} />
+          <p className="text-xs font-medium leading-relaxed text-foreground/80 italic">
+            {description}
+          </p>
         </div>
 
         {/* Visual Indicator (CSS Shapes simulating body width) */}

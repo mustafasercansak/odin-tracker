@@ -481,6 +481,13 @@
     "nutrition": "Beslenme"
   },
   "nutrition": {
+    "bcs": {
+      "desc_1_2": "Çok Zayıf: Kemikler uzaktan belli olur, hiç yağ dokusu yoktur.",
+      "desc_3": "Zayıf: Kaburgalar kolayca hissedilir ve görülür. Bel belirgindir.",
+      "desc_4_5": "İdeal: Kaburgalar hissedilir ama görülmez. Bel ve karın hattı idealdir.",
+      "desc_6_7": "Kilolu: Kaburgaları hissetmek için bastırmak gerekir. Bel hattı belirsizdir.",
+      "desc_8_9": "Obez: Kaburgalar hissedilmez. Bel yoktur, belirgin yağlanma vardır."
+    },
     "calculator": {
       "title": "Günlük Kalori (DER) Hesaplayıcı",
       "needsWeight": "Lütfen kalori hesabı için evcil hayvanınızın kilosunu güncelleyin.",

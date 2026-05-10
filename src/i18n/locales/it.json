@@ -481,6 +481,13 @@
     "nutrition": "Nutrizione"
   },
   "nutrition": {
+    "bcs": {
+      "desc_1_2": "Severely Underweight: Bones visible from distance, no body fat.",
+      "desc_3": "Underweight: Ribs easily felt and visible. Clear waist.",
+      "desc_4_5": "Ideal: Ribs felt but not visible. Clear waist and abdominal tuck.",
+      "desc_6_7": "Overweight: Ribs felt with pressure. Waist is barely visible.",
+      "desc_8_9": "Obese: Ribs not felt. No waist. Heavy fat deposits."
+    },
     "calculator": {
       "title": "Daily Calorie (DER) Calculator",
       "needsWeight": "Please update your pet's weight to calculate calories.",
