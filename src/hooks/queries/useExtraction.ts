@@ -131,6 +131,6 @@ export async function extractWithGroq(files: File[]): Promise<ExtractionResult> 
   } as ExtractionResult;
 }
 
-export function mapExtractionErrorToMessage(code: string): string {
+export function mapExtractionErrorToMessage(_code: string): string {
   return 'lab.extraction.errors.extraction_failed';
 }

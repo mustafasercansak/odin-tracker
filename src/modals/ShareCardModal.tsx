@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Download, Heart, Sparkles, Activity } from 'lucide-react';
+import { Download, Heart, Activity } from 'lucide-react';
 import html2canvas from 'html2canvas-pro';
 import { Modal } from '@/components/Modal';
 import { useAppStore } from '@/store/useAppStore';

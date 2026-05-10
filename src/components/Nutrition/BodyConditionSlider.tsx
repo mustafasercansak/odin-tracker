@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Activity, Info, Save } from 'lucide-react';
+import { Activity, Save } from 'lucide-react';
 import type { Pet } from '@/schemas/pet';
 import { usePets } from '@/hooks/queries/usePets';
 import toast from 'react-hot-toast';

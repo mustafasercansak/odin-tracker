@@ -5,7 +5,7 @@ import type { Pet } from '@/schemas/pet';
 import type { HealthRecord } from '@/schemas/healthRecord';
 import type { Medication } from '@/schemas/medication';
 import { isDoseOverdue } from '@/lib/medication-helpers';
-import { isPast, subYears } from 'date-fns';
+import { subYears } from 'date-fns';
 
 interface PetBadgesProps {
   pet: Pet;
