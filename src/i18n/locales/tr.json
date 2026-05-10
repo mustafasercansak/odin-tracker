@@ -146,7 +146,9 @@
       "editCard": "Kartı Düzenle",
       "viewCard": "Kartı Görüntüle",
       "noContacts": "Acil iletişim kişisi girilmemiş",
-      "noPhone": "Telefon girilmemiş"
+      "noPhone": "Telefon girilmemiş",
+      "qrDescription": "Tarayıcı (Kamera) ile okutulduğunda evcil hayvanınızın acil durum bilgileri doğrudan telefona rehber kişisi (VCard) olarak eklenir.",
+      "qrVCard": "QR VCard"
     },
     "notes": "Notlar",
     "species_values": {
@@ -349,7 +351,8 @@
     "missedDoseAlert": "Geciken Doz Uyarısı",
     "missedDoseDescription": "{{name}} ilacının dozu gecikmiş görünüyor. Lütfen en kısa sürede uygulayın.",
     "dueToday": "Bugün Yapılacaklar",
-    "adherence": "Uyum Oranı"
+    "adherence": "Uyum Oranı",
+    "exportCalendar": "Takvime Aktar"
   },
   "trends": {
     "title": "Analiz Grafikleri",
@@ -478,6 +481,29 @@
     "nutrition": "Beslenme"
   },
   "nutrition": {
+    "calculator": {
+      "title": "Günlük Kalori (DER) Hesaplayıcı",
+      "needsWeight": "Lütfen kalori hesabı için evcil hayvanınızın kilosunu güncelleyin.",
+      "rer": "RER (Dinlenme)",
+      "der": "DER (Hedef)",
+      "activityLevel": "Aktivite Seviyesi",
+      "foodCalories": "Mama Kalorisi (kcal / 100g)",
+      "dailyAmount": "Günlük {{amount}}g"
+    },
+    "factors": {
+      "cat": {
+        "neutered": "Kısırlaştırılmış",
+        "intact": "Kısırlaştırılmamış",
+        "inactive": "Düşük Aktivite",
+        "weightLoss": "Kilo Kaybı"
+      },
+      "dog": {
+        "neutered": "Kısırlaştırılmış",
+        "intact": "Kısırlaştırılmamış",
+        "inactive": "Düşük Aktivite",
+        "weightLoss": "Kilo Kaybı"
+      }
+    },
     "title": "Beslenme ve Diyet",
     "currentFood": "Mevcut Mama",
     "feedingSchedule": "Beslenme Düzeni",
@@ -527,6 +553,18 @@
     "errors": {
       "noApiKey": "Lütfen ayarlardan bir Google AI API anahtarı ekleyin.",
       "failed": "Yanıt alınamadı."
+    }
+  },
+  "badges": {
+    "shield": "Koruma Kalkanı",
+    "star": "Süper Bakıcı",
+    "bot": "Teknoloji Kurdu"
+  },
+  "share": {
+    "card": {
+      "title": "Sağlık Kartı (Sosyal Medya)",
+      "subtitle": "Evcil hayvanınızın sağlık özetini Instagram veya WhatsApp'ta sevdiklerinizle paylaşın!",
+      "download": "PNG Olarak İndir & Paylaş"
     }
   }
 }

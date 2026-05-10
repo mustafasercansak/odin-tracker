@@ -146,7 +146,9 @@
       "editCard": "Edit Card",
       "viewCard": "View Card",
       "noContacts": "No emergency contacts saved",
-      "noPhone": "No phone number"
+      "noPhone": "No phone number",
+      "qrDescription": "When scanned with a camera, your pet's emergency info is directly saved to the phone as a VCard contact.",
+      "qrVCard": "QR VCard"
     },
     "notes": "Notes",
     "species_values": {
@@ -349,7 +351,8 @@
     "missedDoseAlert": "Missed Dose Alert",
     "missedDoseDescription": "Dose of {{name}} seems to be missed. Please apply it as soon as possible.",
     "dueToday": "Due Today",
-    "adherence": "Adherence"
+    "adherence": "Adherence",
+    "exportCalendar": "Export to Calendar"
   },
   "trends": {
     "title": "Analytics Charts",
@@ -478,15 +481,38 @@
     "nutrition": "Nutrition"
   },
   "nutrition": {
-    "title": "Nutrition & Diet",
-    "currentFood": "Current Food",
-    "feedingSchedule": "Feeding Schedule",
-    "supplements": "Supplements & Treats",
-    "noFoodSpecified": "No specific food brand set",
-    "noScheduleSpecified": "No feeding schedule set",
-    "noSupplementsSpecified": "No supplements or treats listed",
-    "noKnownAllergies": "No known allergies reported",
-    "disclaimer": "Always consult your vet before making significant changes to your pet's diet or adding new supplements."
+    "calculator": {
+      "title": "Daily Calorie (DER) Calculator",
+      "needsWeight": "Please update your pet's weight to calculate calories.",
+      "rer": "RER (Resting)",
+      "der": "DER (Target)",
+      "activityLevel": "Activity Level",
+      "foodCalories": "Food Calories (kcal / 100g)",
+      "dailyAmount": "Daily {{amount}}g"
+    },
+    "factors": {
+      "cat": {
+        "neutered": "Neutered Adult",
+        "intact": "Intact Adult",
+        "inactive": "Inactive / Obese Prone",
+        "weightLoss": "Weight Loss"
+      },
+      "dog": {
+        "neutered": "Neutered Adult",
+        "intact": "Intact Adult",
+        "inactive": "Inactive / Obese Prone",
+        "weightLoss": "Weight Loss"
+      }
+    },
+    "title": "Ernährung & Diät",
+    "currentFood": "Aktuelles Futter",
+    "feedingSchedule": "Fütterungsplan",
+    "supplements": "Nahrungsergänzungsmittel & Leckerlis",
+    "noFoodSpecified": "Keine spezielle Futtermarke festgelegt",
+    "noScheduleSpecified": "Kein Fütterungsplan festgelegt",
+    "noSupplementsSpecified": "Keine Nahrungsergänzungsmittel oder Leckerlis aufgeführt",
+    "noKnownAllergies": "Keine bekannten Allergien gemeldet",
+    "disclaimer": "Konsultieren Sie immer Ihren Tierarzt, bevor Sie die Ernährung Ihres Tieres wesentlich ändern oder neue Nahrungsergänzungsmittel hinzufügen."
   },
   "report": {
     "download": "Download Report",
@@ -527,6 +553,18 @@
     "errors": {
       "noApiKey": "Please add a Google AI API key in settings.",
       "failed": "Failed to get a response."
+    }
+  },
+  "badges": {
+    "shield": "Protection Shield",
+    "star": "Super Carer",
+    "bot": "Tech Wizard"
+  },
+  "share": {
+    "card": {
+      "title": "Health Card (Social Media)",
+      "subtitle": "Share your pet's health summary with friends on Instagram or WhatsApp!",
+      "download": "Download & Share PNG"
     }
   }
 }

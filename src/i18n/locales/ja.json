@@ -146,7 +146,9 @@
       "editCard": "カードを編集",
       "viewCard": "カードを表示",
       "noContacts": "緊急連絡先が登録されていません",
-      "noPhone": "電話番号が登録されていません"
+      "noPhone": "電話番号が登録されていません",
+      "qrDescription": "When scanned with a camera, your pet's emergency info is directly saved to the phone as a VCard contact.",
+      "qrVCard": "QR VCard"
     },
     "notes": "メモ",
     "species_values": {
@@ -349,7 +351,8 @@
     "missedDoseAlert": "服用忘れアラート",
     "missedDoseDescription": "{{name}} の服用時間を過ぎています。できるだけ早く服用させてください。",
     "dueToday": "今日の予定",
-    "adherence": "遵守率"
+    "adherence": "遵守率",
+    "exportCalendar": "Export to Calendar"
   },
   "trends": {
     "title": "推移グラフ",
@@ -478,15 +481,38 @@
     "nutrition": "食事"
   },
   "nutrition": {
-    "title": "食事とダイエット",
-    "currentFood": "今のフード",
-    "feedingSchedule": "食事の時間",
-    "supplements": "サプリメント・おやつ",
-    "noFoodSpecified": "フードの指定なし",
-    "noScheduleSpecified": "食事時間の指定なし",
-    "noSupplementsSpecified": "サプリメント等の登録なし",
-    "noKnownAllergies": "アレルギー報告なし",
-    "disclaimer": "食事の内容を変更したり、新しいサプリメントを追加したりする場合は、必ず獣医師に相談してください。"
+    "calculator": {
+      "title": "Daily Calorie (DER) Calculator",
+      "needsWeight": "Please update your pet's weight to calculate calories.",
+      "rer": "RER (Resting)",
+      "der": "DER (Target)",
+      "activityLevel": "Activity Level",
+      "foodCalories": "Food Calories (kcal / 100g)",
+      "dailyAmount": "Daily {{amount}}g"
+    },
+    "factors": {
+      "cat": {
+        "neutered": "Neutered Adult",
+        "intact": "Intact Adult",
+        "inactive": "Inactive / Obese Prone",
+        "weightLoss": "Weight Loss"
+      },
+      "dog": {
+        "neutered": "Neutered Adult",
+        "intact": "Intact Adult",
+        "inactive": "Inactive / Obese Prone",
+        "weightLoss": "Weight Loss"
+      }
+    },
+    "title": "Ernährung & Diät",
+    "currentFood": "Aktuelles Futter",
+    "feedingSchedule": "Fütterungsplan",
+    "supplements": "Nahrungsergänzungsmittel & Leckerlis",
+    "noFoodSpecified": "Keine spezielle Futtermarke festgelegt",
+    "noScheduleSpecified": "Kein Fütterungsplan festgelegt",
+    "noSupplementsSpecified": "Keine Nahrungsergänzungsmittel oder Leckerlis aufgeführt",
+    "noKnownAllergies": "Keine bekannten Allergien gemeldet",
+    "disclaimer": "Konsultieren Sie immer Ihren Tierarzt, bevor Sie die Ernährung Ihres Tieres wesentlich ändern oder neue Nahrungsergänzungsmittel hinzufügen."
   },
   "report": {
     "download": "レポートをダウンロード",
@@ -528,5 +554,17 @@
       "failed": "応答の取得に失敗しました。"
     },
     "navTitle": "Odin AI"
+  },
+  "badges": {
+    "shield": "Protection Shield",
+    "star": "Super Carer",
+    "bot": "Tech Wizard"
+  },
+  "share": {
+    "card": {
+      "title": "Health Card (Social Media)",
+      "subtitle": "Share your pet's health summary with friends on Instagram or WhatsApp!",
+      "download": "Download & Share PNG"
+    }
   }
 }

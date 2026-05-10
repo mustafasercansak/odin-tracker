@@ -1,10 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Pill, Plus, Clock, CheckCircle2, AlertCircle, ChevronRight } from 'lucide-react';
+import { Pill, Plus, Clock, CheckCircle2, AlertCircle, ChevronRight, CalendarDays } from 'lucide-react';
 import { format, parseISO, isSameDay, isPast } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
 import toast from 'react-hot-toast';
+import { saveAs } from 'file-saver';
 import { usePets } from '@/hooks/queries/usePets';
 import { useAllMedications, useMedications } from '@/hooks/queries/useMedications';
 import { useHealthRecords } from '@/hooks/queries/useHealthRecords';
@@ -79,6 +80,45 @@ export default function Medications() {
     }
   };
 
+  const handleExportCalendar = () => {
+    if (!todaySchedule || todaySchedule.length === 0) {
+      toast.error(t('medications.noSchedule'));
+      return;
+    }
+
+    let icsContent = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Odin Tracker//TR',
+      'CALSCALE:GREGORIAN'
+    ];
+
+    todaySchedule.forEach(med => {
+      const pet = petsMap[med.petId];
+      if (!med.nextDoseDue) return;
+      
+      const d = parseISO(med.nextDoseDue);
+      const startDate = d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+      const endDate = new Date(d.getTime() + 15 * 60000).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'; 
+
+      icsContent = icsContent.concat([
+        'BEGIN:VEVENT',
+        `DTSTAMP:${startDate}`,
+        `DTSTART:${startDate}`,
+        `DTEND:${endDate}`,
+        `SUMMARY:💊 ${pet?.name} - ${med.name}`,
+        `DESCRIPTION:${t('medications.dose')}: ${med.dosage} \\n${t('common.frequency')}: ${t(`medications.frequencies.${med.frequency}`)}`,
+        'END:VEVENT'
+      ]);
+    });
+
+    icsContent.push('END:VCALENDAR');
+
+    const blob = new Blob([icsContent.join('\\r\\n')], { type: 'text/calendar;charset=utf-8' });
+    saveAs(blob, 'medication-schedule.ics');
+    toast.success(t('common.toasts.saved') + ' (ICS)');
+  };
+
   if (petsLoading || medsLoading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
@@ -114,6 +154,14 @@ export default function Medications() {
             {format(new Date(), 'PPPP', { locale: dateLocale })}
           </p>
         </div>
+        <button
+          onClick={handleExportCalendar}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-card font-bold text-sm hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground"
+          title={t('medications.exportCalendar')}
+        >
+          <CalendarDays size={16} />
+          <span className="hidden sm:inline">.ICS</span>
+        </button>
       </header>
 
       {/* Stats row */}

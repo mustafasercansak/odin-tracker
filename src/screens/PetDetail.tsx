@@ -49,6 +49,7 @@ import { HistoryTimeline } from '@/components/Medical/HistoryTimeline';
 import { SymptomLogger } from '@/components/Medical/SymptomLogger';
 import { NutritionTab } from '@/components/Nutrition/NutritionTab';
 import { VetDashboard } from '@/components/Medical/VetDashboard';
+import { PetBadges } from '@/components/PetBadges';
 
 type TabType = 'health_records' | 'medications' | 'trends' | 'shared_access' | 'history' | 'nutrition';
 
@@ -284,6 +285,14 @@ export default function PetDetail() {
               )}
               <span className="hidden sm:inline">{t('report.download')}</span>
             </button>
+            <button 
+              onClick={() => setActiveModal('share_card', { petId: pet.id })}
+              className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-tr from-pink-500 to-orange-500 hover:opacity-90 text-white transition-all text-sm font-semibold shadow-lg shadow-orange-500/20"
+              title="Sosyal Medyada Paylaş"
+            >
+              <Share2 size={18} />
+              <span className="hidden sm:inline">Paylaş</span>
+            </button>
             {canEdit && (
               <button 
                 onClick={() => setActiveModal('pet_edit', pet)}
@@ -354,6 +363,8 @@ export default function PetDetail() {
                 </div>
               )}
             </div>
+            {/* Gamification Badges */}
+            <PetBadges pet={pet} records={records} medications={medications} />
           </div>
         </div>
       </div>

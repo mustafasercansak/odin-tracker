@@ -146,7 +146,9 @@
       "editCard": "Karte bearbeiten",
       "viewCard": "Karte anzeigen",
       "noContacts": "Keine Notfallkontakte gespeichert",
-      "noPhone": "Keine Telefonnummer"
+      "noPhone": "Keine Telefonnummer",
+      "qrDescription": "When scanned with a camera, your pet's emergency info is directly saved to the phone as a VCard contact.",
+      "qrVCard": "QR VCard"
     },
     "notes": "Notizen",
     "species_values": {
@@ -349,7 +351,8 @@
     "missedDoseAlert": "Verpasste Dosis Warnung",
     "missedDoseDescription": "Die Dosis von {{name}} scheint verpasst worden zu sein. Bitte so bald wie möglich anwenden.",
     "dueToday": "Heute fällig",
-    "adherence": "Einhaltung"
+    "adherence": "Einhaltung",
+    "exportCalendar": "Export to Calendar"
   },
   "trends": {
     "title": "Trend-Diagramme",
@@ -478,6 +481,29 @@
     "nutrition": "Ernährung"
   },
   "nutrition": {
+    "calculator": {
+      "title": "Daily Calorie (DER) Calculator",
+      "needsWeight": "Please update your pet's weight to calculate calories.",
+      "rer": "RER (Resting)",
+      "der": "DER (Target)",
+      "activityLevel": "Activity Level",
+      "foodCalories": "Food Calories (kcal / 100g)",
+      "dailyAmount": "Daily {{amount}}g"
+    },
+    "factors": {
+      "cat": {
+        "neutered": "Neutered Adult",
+        "intact": "Intact Adult",
+        "inactive": "Inactive / Obese Prone",
+        "weightLoss": "Weight Loss"
+      },
+      "dog": {
+        "neutered": "Neutered Adult",
+        "intact": "Intact Adult",
+        "inactive": "Inactive / Obese Prone",
+        "weightLoss": "Weight Loss"
+      }
+    },
     "title": "Ernährung & Diät",
     "currentFood": "Aktuelles Futter",
     "feedingSchedule": "Fütterungsplan",
@@ -528,5 +554,17 @@
       "failed": "Antwort konnte nicht geladen werden."
     },
     "navTitle": "Odin AI"
+  },
+  "badges": {
+    "shield": "Protection Shield",
+    "star": "Super Carer",
+    "bot": "Tech Wizard"
+  },
+  "share": {
+    "card": {
+      "title": "Health Card (Social Media)",
+      "subtitle": "Share your pet's health summary with friends on Instagram or WhatsApp!",
+      "download": "Download & Share PNG"
+    }
   }
 }

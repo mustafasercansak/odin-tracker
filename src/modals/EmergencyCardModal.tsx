@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
-import { ShieldAlert, Phone, AlertCircle, Hash, Droplet, Stethoscope, Edit2, Save, X, Plus, User } from 'lucide-react';
+import { ShieldAlert, Phone, AlertCircle, Hash, Droplet, Stethoscope, Edit2, Save, X, Plus, User, QrCode, ArrowLeft } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
 import { Modal } from '@/components/Modal';
 import { useAppStore } from '@/store/useAppStore';
 import { usePets } from '@/hooks/queries/usePets';
@@ -27,6 +28,7 @@ export const EmergencyCardModal: React.FC = () => {
   const { activeModal, modalData, setActiveModal } = useAppStore();
   const { pets, updatePet } = usePets();
   const [editing, setEditing] = useState(false);
+  const [showQR, setShowQR] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const pet = pets.find(p => p.id === modalData?.petId);
@@ -67,10 +69,42 @@ export const EmergencyCardModal: React.FC = () => {
   const handleClose = () => {
     setActiveModal(null);
     setEditing(false);
+    setShowQR(false);
   };
 
   const contacts: EmergencyContact[] = (pet as any).emergencyContacts || [];
   const veterinarianPhone = (pet as any).veterinarianPhone;
+
+  const generateVCard = () => {
+    const lines = [
+      'BEGIN:VCARD',
+      'VERSION:3.0',
+      `N:${pet.name} (SOS);;;;`,
+      `FN:${pet.name} (Emergency SOS)`,
+    ];
+
+    if (contacts.length > 0 && contacts[0].phone) {
+      lines.push(`TEL;TYPE=CELL:${contacts[0].phone}`);
+    }
+    
+    if (veterinarianPhone) {
+      lines.push(`TEL;TYPE=WORK,VOICE:${veterinarianPhone}`);
+    }
+
+    const notes = [
+      `Microchip: ${pet.microchipId || 'None'}`,
+      `Blood Type: ${pet.bloodType || 'None'}`,
+      `Allergies: ${pet.allergies || 'None'}`,
+    ];
+    if ((pet as any).veterinarianName) {
+      notes.push(`Vet: ${(pet as any).veterinarianName}`);
+    }
+    
+    lines.push(`NOTE:${notes.join('\\n')}`);
+    lines.push('END:VCARD');
+
+    return lines.join('\\n');
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose} title={t('pets.emergency.title')}>
@@ -210,6 +244,35 @@ export const EmergencyCardModal: React.FC = () => {
             </button>
           </div>
         </form>
+      ) : showQR ? (
+        /* ── QR Code View ── */
+        <div className="space-y-6 flex flex-col items-center pb-4">
+          <div className="text-center space-y-2">
+            <h2 className="text-xl font-black tracking-tight">{t('pets.emergency.title')} QR</h2>
+            <p className="text-sm text-muted-foreground max-w-[250px]">
+              {t('pets.emergency.qrDescription')}
+            </p>
+          </div>
+          
+          <div className="bg-white p-6 rounded-3xl shadow-xl shadow-primary/10 border border-border">
+            <QRCodeSVG 
+              value={generateVCard()} 
+              size={200}
+              level="M"
+              includeMargin={false}
+              fgColor="#000000"
+              bgColor="#ffffff"
+            />
+          </div>
+
+          <button
+            onClick={() => setShowQR(false)}
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border border-border font-bold text-sm hover:bg-secondary transition-colors"
+          >
+            <ArrowLeft size={16} />
+            {t('common.back')}
+          </button>
+        </div>
       ) : (
         /* ── View Mode ── */
         <div className="space-y-4">
@@ -314,21 +377,30 @@ export const EmergencyCardModal: React.FC = () => {
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <button
-              onClick={() => setEditing(true)}
-              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl border border-border font-bold text-sm hover:bg-secondary transition-colors"
+              onClick={() => setShowQR(true)}
+              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-primary/10 text-primary font-bold text-sm hover:bg-primary/20 transition-colors"
             >
-              <Edit2 size={15} />
-              {t('pets.emergency.editCard')}
+              <QrCode size={16} />
+              {t('pets.emergency.qrVCard')}
             </button>
-            <button
-              onClick={() => window.print()}
-              className="flex-1 flex items-center justify-center gap-2 py-3 bg-foreground text-background rounded-2xl font-bold text-sm hover:opacity-90 transition-all"
-            >
-              <ShieldAlert size={15} />
-              {t('report.download')} PDF
-            </button>
+            <div className="flex gap-3 flex-1">
+              <button
+                onClick={() => setEditing(true)}
+                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl border border-border font-bold text-sm hover:bg-secondary transition-colors"
+              >
+                <Edit2 size={15} />
+                {t('pets.emergency.editCard')}
+              </button>
+              <button
+                onClick={() => window.print()}
+                className="flex-1 flex items-center justify-center gap-2 py-3 bg-foreground text-background rounded-2xl font-bold text-sm hover:opacity-90 transition-all"
+              >
+                <ShieldAlert size={15} />
+                PDF
+              </button>
+            </div>
           </div>
         </div>
       )}

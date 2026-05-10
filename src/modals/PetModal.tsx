@@ -43,7 +43,8 @@ export const PetModal: React.FC = () => {
         species: pet.species,
         breed: pet.breed || '',
         dateOfBirth: pet.dateOfBirth || '',
-        weightKg: pet.weightKg || 0,
+        weightKg: pet.weightKg || undefined,
+        targetWeightKg: pet.targetWeightKg || undefined,
         microchipId: pet.microchipId || '',
         passportNumber: pet.passportNumber || '',
         bloodType: pet.bloodType || '',
@@ -60,7 +61,8 @@ export const PetModal: React.FC = () => {
         name: '',
         breed: '',
         dateOfBirth: '',
-        weightKg: 0,
+        weightKg: undefined,
+        targetWeightKg: undefined,
         microchipId: '',
         passportNumber: '',
         bloodType: '',
@@ -196,23 +198,22 @@ export const PetModal: React.FC = () => {
             />
           </div>
 
-          <Controller
-            name="dateOfBirth"
-            control={control}
-            render={({ field }) => (
-              <CustomDateInput
-                label={t('pets.dateOfBirth')}
-                value={field.value || ''}
-                onChange={field.onChange}
-                error={errors.dateOfBirth?.message}
-              />
-            )}
-          />
-
-          {/* Weight & Goal */}
-          <div className="grid grid-cols-2 gap-3">
+          {/* Date & Weights */}
+          <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Controller
+              name="dateOfBirth"
+              control={control}
+              render={({ field }) => (
+                <CustomDateInput
+                  label={t('pets.dateOfBirth')}
+                  value={field.value || ''}
+                  onChange={field.onChange}
+                  error={errors.dateOfBirth?.message}
+                />
+              )}
+            />
             <div>
-              <label className="block text-sm font-semibold mb-1.5">{t('pets.weight')}</label>
+              <label className="block text-sm font-semibold mb-1.5 whitespace-nowrap">{t('pets.weight')}</label>
               <input
                 type="number"
                 step="0.1"
@@ -222,7 +223,7 @@ export const PetModal: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold mb-1.5">{t('pets.targetWeight')}</label>
+              <label className="block text-sm font-semibold mb-1.5 whitespace-nowrap">{t('pets.targetWeight')}</label>
               <input
                 type="number"
                 step="0.1"

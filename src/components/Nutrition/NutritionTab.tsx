@@ -2,6 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Pet } from '@/schemas/pet';
 import { Utensils, Clock, Plus, AlertTriangle, ShieldCheck, Info } from 'lucide-react';
+import { CalorieCalculator } from './CalorieCalculator';
+import { BodyConditionSlider } from './BodyConditionSlider';
 
 interface NutritionTabProps {
   pet: Pet;
@@ -109,6 +111,11 @@ export const NutritionTab: React.FC<NutritionTabProps> = ({ pet, canEdit, onEdit
             )}
           </div>
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <CalorieCalculator pet={pet} />
+        <BodyConditionSlider pet={pet} />
       </div>
 
       {/* Info Card */}
